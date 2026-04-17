@@ -81,18 +81,82 @@ export default function AboutPage() {
                     priority
                   />
                   {/* Overlay badge */}
-                  <div className="absolute bottom-5 left-5 right-5 glass-light border border-emerald-200 rounded-2xl px-5 py-4">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-xl bg-emerald-500 flex items-center justify-center">
-                        <HeartHandshake className="w-5 h-5 text-white" />
+                  <div
+                    className="absolute bottom-5 left-5 right-5 rounded-2xl px-5 py-4"
+                    style={{
+                      background: "rgba(255,255,255,0.92)",
+                      backdropFilter: "blur(20px)",
+                      WebkitBackdropFilter: "blur(20px)",
+                      border: "1.5px solid rgba(16,185,129,0.25)",
+                      boxShadow: "0 8px 32px rgba(15,23,42,0.12)",
+                    }}
+                  >
+                    <div className="flex items-center gap-3.5">
+                      {/* Icon with pulse ring */}
+                      <div className="relative flex-shrink-0">
+                        <div
+                          className="absolute inset-0 rounded-xl"
+                          style={{
+                            background: "rgba(16,185,129,0.2)",
+                            animation: "pulseRing 2.2s ease-in-out infinite",
+                          }}
+                        />
+                        <div
+                          className="relative w-11 h-11 rounded-xl flex items-center justify-center"
+                          style={{
+                            background: "linear-gradient(135deg, #10B981, #0D9488)",
+                            boxShadow: "0 4px 14px rgba(13,148,136,0.4)",
+                          }}
+                        >
+                          <HeartHandshake className="w-5 h-5 text-white" />
+                        </div>
                       </div>
                       <div>
-                        <p className="font-montserrat font-bold text-slate-900 text-sm">
+                        <p
+                          style={{
+                            fontFamily: "var(--font-figtree)",
+                            fontWeight: 800,
+                            color: "#0F172A",
+                            fontSize: "0.95rem",
+                            lineHeight: 1.2,
+                          }}
+                        >
                           Connecting Ghana
                         </p>
-                        <p className="text-slate-500 text-xs font-inter">
+                        <p
+                          style={{
+                            fontFamily: "var(--font-noto)",
+                            color: "#475569",
+                            fontSize: "0.78rem",
+                            marginTop: "0.2rem",
+                            fontWeight: 500,
+                          }}
+                        >
                           Doctor-verified content only
                         </p>
+                      </div>
+                      {/* Live indicator */}
+                      <div className="ml-auto flex items-center gap-1.5">
+                        <span
+                          className="w-2 h-2 rounded-full"
+                          style={{
+                            background: "#10B981",
+                            boxShadow: "0 0 0 3px rgba(16,185,129,0.2)",
+                            animation: "pulseRing 2s ease-in-out infinite",
+                          }}
+                        />
+                        <span
+                          style={{
+                            fontFamily: "var(--font-noto)",
+                            fontSize: "0.65rem",
+                            fontWeight: 700,
+                            color: "#10B981",
+                            textTransform: "uppercase",
+                            letterSpacing: "0.08em",
+                          }}
+                        >
+                          Live
+                        </span>
                       </div>
                     </div>
                   </div>

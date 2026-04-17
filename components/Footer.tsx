@@ -16,8 +16,8 @@ const NAV = [
 ];
 
 const LEGAL = [
-  { label: "Privacy Policy",  href: "#" },
-  { label: "Terms of Service",href: "#" },
+  { label: "Privacy Policy",  href: "/privacy-policy"   },
+  { label: "Terms of Service",href: "/terms-of-service" },
 ];
 
 const SOCIALS = [
@@ -108,14 +108,14 @@ export default function Footer() {
             <ul style={{ display: "flex", flexDirection: "column", gap: "0.625rem", marginBottom: "1.5rem" }}>
               {LEGAL.map(({ label, href }) => (
                 <li key={label}>
-                  <a
+                  <Link
                     href={href}
                     style={{ fontFamily: "var(--font-noto)", fontWeight: 500, fontSize: "0.9rem", color: "rgba(255,255,255,0.72)", transition: "color 0.15s" }}
                     onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = "#FFFFFF")}
                     onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.72)")}
                   >
                     {label}
-                  </a>
+                  </Link>
                 </li>
               ))}
               <li>

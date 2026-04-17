@@ -69,7 +69,7 @@ export default function HeroSectionOne() {
       {/* PART 1 — Full-bleed hero banner 
           Dynamic padding-top to clear navbar at all scales
       */}
-      <div className="w-full pt-18 min-[2500px]:pt-60 leading-[0]">
+      <div className="w-full pt-18 min-[2500px]:pt-40 leading-[0]">
         <Image
           src="/hero-section.png"
           alt="4 Our Life — Healthcare Simplified"

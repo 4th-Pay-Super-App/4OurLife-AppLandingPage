@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Building2,
@@ -206,30 +207,6 @@ export default function RegisterFacilityPage() {
             ) : (
               // Form
               <motion.div key="form" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-                {/* Progress Steps */}
-                <div className="flex items-center gap-3 mb-12">
-                  {[
-                    "Facility Details",
-                    "Contact Info",
-                    "Additional Info",
-                  ].map((step, i) => (
-                    <div key={step} className="flex-1 text-center">
-                      <div
-                        className={`h-1 rounded-full mb-2 ${
-                          i === 0
-                            ? "bg-emerald-500"
-                            : i === 1
-                            ? "bg-emerald-200"
-                            : "bg-slate-100"
-                        }`}
-                      />
-                      <span className="text-xs font-inter text-slate-400">
-                        {step}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-
                 <form onSubmit={handleSubmit} className="space-y-6">
                   {/* Facility Name */}
                   <div className="space-y-2">
@@ -464,13 +441,13 @@ export default function RegisterFacilityPage() {
 
                   <p className="text-center text-slate-400 font-inter text-xs mt-4">
                     By submitting, you agree to our{" "}
-                    <a href="#" className="text-emerald-600 hover:underline">
+                    <Link href="/terms-of-service" className="text-emerald-600 hover:underline">
                       Terms of Service
-                    </a>{" "}
+                    </Link>{" "}
                     and{" "}
-                    <a href="#" className="text-emerald-600 hover:underline">
+                    <Link href="/privacy-policy" className="text-emerald-600 hover:underline">
                       Privacy Policy
-                    </a>
+                    </Link>
                     .
                   </p>
                 </form>
