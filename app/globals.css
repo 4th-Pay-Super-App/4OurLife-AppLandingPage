@@ -1,0 +1,281 @@
+@import "tailwindcss";
+
+/* ============================================================
+   Tailwind v4 Theme Tokens — 4 Our Life Landing
+   ============================================================ */
+@theme {
+  /* ── Brand Palette ── */
+  --color-brand-primary:  #0F172A;   /* Slate 950   — authority, trust        */
+  --color-brand-accent:   #0D9488;   /* Teal 600    — medical, calm, fresh     */
+  --color-brand-accent2:  #0F766E;   /* Teal 700    — hover / deeper teal      */
+  --color-brand-soft:     #CCFBF1;   /* Teal 100    — light tint              */
+  --color-brand-soft2:    #F0FDFA;   /* Teal 50     — very light tint         */
+  --color-brand-cream:    #F5F1EE;   /* Warm cream  — main page bg             */
+  --color-brand-cream2:   #EDE8E3;   /* Deeper cream— dividers / hovers        */
+  --color-brand-bg:       #F5F1EE;   /* Alias for body bg                     */
+  --color-brand-hero:     #FFFFFF;   /* Hero section bg                       */
+  --color-brand-footer:   #0D9488;   /* Footer bg = accent teal               */
+
+  /* ── Standard palette (kept for utilities) ── */
+  --color-white:        #FFFFFF;
+  --color-slate-50:     #f8fafc;
+  --color-slate-100:    #f1f5f9;
+  --color-slate-200:    #e2e8f0;
+  --color-slate-300:    #cbd5e1;
+  --color-slate-400:    #94a3b8;
+  --color-slate-500:    #64748b;
+  --color-slate-600:    #475569;
+  --color-slate-700:    #334155;
+  --color-slate-800:    #1e293b;
+  --color-slate-900:    #0f172a;
+  --color-teal-100:     #ccfbf1;
+  --color-teal-200:     #99f6e4;
+  --color-teal-400:     #2dd4bf;
+  --color-teal-500:     #14b8a6;
+  --color-teal-600:     #0d9488;
+  --color-teal-700:     #0f766e;
+  --color-teal-800:     #115e59;
+  --color-teal-900:     #134e4a;
+  --color-emerald-400:  #34d399;
+  --color-yellow-400:   #facc15;
+  --color-yellow-500:   #eab308;
+
+  /* ── Fonts ── */
+  --font-inter:    "Inter",    sans-serif;
+  --font-figtree:  "Figtree",  sans-serif;
+  --font-noto:     "Noto Sans",sans-serif;
+
+  /* ── Radius tokens ── */
+  --radius-4xl: 2rem;
+  --radius-5xl: 2.5rem;
+  --radius-6xl: 3rem;
+
+  /* ── Keyframes ── */
+  @keyframes float {
+    0%, 100% { transform: translateY(0px);   }
+    50%       { transform: translateY(-18px); }
+  }
+  @keyframes floatB {
+    0%, 100% { transform: translateY(0px) rotate(-6deg);  }
+    50%       { transform: translateY(-14px) rotate(-6deg); }
+  }
+  @keyframes floatC {
+    0%, 100% { transform: translateY(0px) rotate(6deg);  }
+    50%       { transform: translateY(-22px) rotate(6deg); }
+  }
+  @keyframes marquee {
+    0%   { transform: translateX(0);    }
+    100% { transform: translateX(-50%); }
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(28px); }
+    to   { opacity: 1; transform: translateY(0);    }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  @keyframes scaleIn {
+    from { opacity: 0; transform: scale(0.93); }
+    to   { opacity: 1; transform: scale(1);    }
+  }
+  @keyframes shimmer {
+    0%   { background-position: -200% 0; }
+    100% { background-position:  200% 0; }
+  }
+  @keyframes pulseRing {
+    0%, 100% { transform: scale(1);    opacity: 0.45; }
+    50%       { transform: scale(1.08); opacity: 0;    }
+  }
+  @keyframes countUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0);    }
+  }
+}
+
+/* ============================================================
+   Base Reset
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-inter), sans-serif;
+  background-color: #F5F1EE;
+  color: #0F172A;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================================
+   Layout
+   ============================================================ */
+.container-width {
+  width: 100%;
+  max-width: 1900px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+@media (min-width: 1024px) {
+  .container-width {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+/* ============================================================
+   Shadow helpers (CSS classes so Tailwind JIT can't strip them)
+   ============================================================ */
+.shadow-teal     { box-shadow: 0 8px 32px -8px rgba(13,148,136,0.35); }
+.shadow-teal-lg  { box-shadow: 0 20px 60px -12px rgba(13,148,136,0.45); }
+.shadow-glass    { box-shadow: 0 8px 32px rgba(15,23,42,0.07); }
+.shadow-card     { box-shadow: 0 4px 24px rgba(15,23,42,0.06); }
+.shadow-card-lg  { box-shadow: 0 20px 60px rgba(15,23,42,0.10); }
+.shadow-dark     { box-shadow: 0 24px 80px rgba(0,0,0,0.38); }
+.shadow-phone    { box-shadow: 0 40px 100px rgba(0,0,0,0.50),
+                               inset 0 0 0 1px rgba(255,255,255,0.07); }
+.shadow-cream    { box-shadow: 0 8px 40px rgba(15,23,42,0.05); }
+
+/* ============================================================
+   Glass helpers
+   ============================================================ */
+.glass {
+  background: rgba(255,255,255,0.06);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(255,255,255,0.10);
+}
+.glass-cream {
+  background: rgba(245,241,238,0.80);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(13,148,136,0.10);
+}
+.glass-white {
+  background: rgba(255,255,255,0.80);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(13,148,136,0.10);
+}
+
+/* ============================================================
+   Gradient Text
+   ============================================================ */
+.gradient-text {
+  background: linear-gradient(135deg, #0D9488 0%, #2dd4bf 55%, #0f766e 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.gradient-text-dark {
+  background: linear-gradient(135deg, #0F172A 0%, #334155 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ============================================================
+   Grid / Dot backgrounds
+   ============================================================ */
+.grid-bg {
+  background-image:
+    linear-gradient(rgba(13,148,136,0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(13,148,136,0.045) 1px, transparent 1px);
+  background-size: 52px 52px;
+}
+.grid-bg-dark {
+  background-image:
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 52px 52px;
+}
+.dot-bg {
+  background-image: radial-gradient(circle, rgba(13,148,136,0.12) 1.5px, transparent 1.5px);
+  background-size: 28px 28px;
+}
+
+/* ============================================================
+   Phone frame
+   ============================================================ */
+.phone-frame {
+  position: relative;
+  border-radius: 2.75rem;
+  border: 7px solid #0F172A;
+  background: #0F172A;
+  box-shadow: 0 40px 100px rgba(0,0,0,0.50),
+              inset 0 0 0 1px rgba(255,255,255,0.06);
+  overflow: hidden;
+}
+.phone-notch {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 35%;
+  height: 20px;
+  background: #0F172A;
+  border-radius: 0 0 0.875rem 0.875rem;
+  z-index: 20;
+  pointer-events: none;
+}
+
+/* ============================================================
+   Animations
+   ============================================================ */
+.float-anim  { animation: float  4.5s ease-in-out infinite; }
+.float-anim2 { animation: floatB 5.2s ease-in-out infinite 0.6s; }
+.float-anim3 { animation: floatC 5.8s ease-in-out infinite 1.2s; }
+
+/* ============================================================
+   Marquee
+   ============================================================ */
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 28s linear infinite;
+  will-change: transform;
+}
+.marquee-track:hover { animation-play-state: paused; }
+
+/* ============================================================
+   Step numbers (How it Works)
+   ============================================================ */
+.step-num {
+  font-family: var(--font-figtree);
+  font-weight: 900;
+  font-size: 4rem;
+  line-height: 1;
+  color: rgba(13,148,136,0.12);
+  user-select: none;
+  letter-spacing: -0.05em;
+}
+
+/* ============================================================
+   Scrollbar
+   ============================================================ */
+::-webkit-scrollbar        { width: 5px; }
+::-webkit-scrollbar-track  { background: #F5F1EE; }
+::-webkit-scrollbar-thumb  { background: #0D9488; border-radius: 99px; }
+
+/* ============================================================
+   Typography helpers
+   ============================================================ */
+.hero-headline {
+  letter-spacing: -0.035em;
+  line-height: 1.03;
+}
+.section-headline {
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+}
+
+/* ============================================================
+   Utility radius (for rounded-5xl etc. used in JSX)
+   ============================================================ */
+.rounded-4xl { border-radius: 2rem; }
+.rounded-5xl { border-radius: 2.5rem; }
+.rounded-6xl { border-radius: 3rem; }
