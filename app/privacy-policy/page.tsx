@@ -20,12 +20,12 @@ import AnimatedSection from "@/components/AnimatedSection";
 
 // ─── Sections Data ────────────────────────────────────────────
 const SECTIONS = [
-  { id: "introduction",  label: "Introduction",           icon: ShieldCheck },
-  { id: "collect",       label: "Information We Collect",  icon: Database    },
-  { id: "usage",         label: "How We Use Information",  icon: Eye         },
-  { id: "security",      label: "Data Security",           icon: Lock        },
-  { id: "retention",     label: "Data Retention",          icon: Clock       },
-  { id: "contact",       label: "Contact Us",              icon: Mail        },
+  { id: "introduction", label: "Introduction", icon: ShieldCheck },
+  { id: "collect", label: "Information We Collect", icon: Database },
+  { id: "usage", label: "How We Use Information", icon: Eye },
+  { id: "security", label: "Data Security", icon: Lock },
+  { id: "retention", label: "Data Retention", icon: Clock },
+  { id: "contact", label: "Contact Us", icon: Mail },
 ];
 
 export default function PrivacyPolicyPage() {
@@ -67,8 +67,7 @@ export default function PrivacyPolicyPage() {
                 fontSize: "clamp(2rem, 4.5vw, 3.5rem)",
               }}
             >
-              Privacy{" "}
-              <span className="gradient-text">Policy</span>
+              Privacy <span className="gradient-text">Policy</span>
             </h1>
             <p
               className="text-lg max-w-2xl mx-auto leading-relaxed"
@@ -77,8 +76,9 @@ export default function PrivacyPolicyPage() {
                 color: "rgba(255,255,255,0.6)",
               }}
             >
-              4 Our Life is committed to protecting your privacy and the security
-              of your personal health data. This policy complies with the{" "}
+              4 Our Life is committed to protecting your privacy and the
+              security of your personal health data. This policy complies with
+              the{" "}
               <span style={{ color: "#2dd4bf" }}>
                 Data Protection Act, 2012 (Act 843) of Ghana.
               </span>
@@ -98,9 +98,8 @@ export default function PrivacyPolicyPage() {
 
       {/* ── Content ──────────────────────────────────────── */}
       <section className="py-20" style={{ background: "#F5F1EE" }}>
-        <div className="max-w-6xl mx-auto px-6 lg:px-8">
+        <div className="max-w-[1400px] mx-auto px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-[260px_1fr] gap-12">
-
             {/* ── Sticky TOC ── */}
             <aside className="hidden lg:block">
               <div
@@ -128,12 +127,16 @@ export default function PrivacyPolicyPage() {
                         className="group flex items-center gap-3 px-3 py-2 rounded-xl transition-all duration-150"
                         style={{ color: "#475569" }}
                         onMouseEnter={(e) => {
-                          (e.currentTarget as HTMLElement).style.background = "#F0FDFA";
-                          (e.currentTarget as HTMLElement).style.color = "#0D9488";
+                          (e.currentTarget as HTMLElement).style.background =
+                            "#F0FDFA";
+                          (e.currentTarget as HTMLElement).style.color =
+                            "#0D9488";
                         }}
                         onMouseLeave={(e) => {
-                          (e.currentTarget as HTMLElement).style.background = "transparent";
-                          (e.currentTarget as HTMLElement).style.color = "#475569";
+                          (e.currentTarget as HTMLElement).style.background =
+                            "transparent";
+                          (e.currentTarget as HTMLElement).style.color =
+                            "#475569";
                         }}
                       >
                         <Icon size={14} className="flex-shrink-0" />
@@ -151,7 +154,10 @@ export default function PrivacyPolicyPage() {
                   ))}
                 </ul>
 
-                <div className="mt-6 pt-6" style={{ borderTop: "1px solid #EDE8E3" }}>
+                <div
+                  className="mt-6 pt-6"
+                  style={{ borderTop: "1px solid #EDE8E3" }}
+                >
                   <Link
                     href="/terms-of-service"
                     className="group flex items-center gap-2 transition-colors duration-150"
@@ -170,8 +176,7 @@ export default function PrivacyPolicyPage() {
             </aside>
 
             {/* ── Main Content ── */}
-            <div className="space-y-8">
-
+            <div className="space-y-8 max-w-[960px]">
               {/* 1. Introduction */}
               <AnimatedSection delay={0.05}>
                 <div
@@ -209,13 +214,13 @@ export default function PrivacyPolicyPage() {
                       fontSize: "0.95rem",
                     }}
                   >
-                    4 Our Life is committed to protecting your privacy and ensuring
-                    the security of your personal information, particularly your
-                    health data. This Privacy Policy explains how 4th Pay Ltd
-                    ("we," "us," or "our") collects, uses, and safeguards your
-                    information when you use the 4 Our Life mobile application and
-                    website. This policy complies with the Data Protection Act,
-                    2012 (Act 843) of Ghana.
+                    4 Our Life is committed to protecting your privacy and
+                    ensuring the security of your personal information,
+                    particularly your health data. This Privacy Policy explains
+                    how 4th Pay Ltd ("we," "us," or "our") collects, uses, and
+                    safeguards your information when you use the 4 Our Life
+                    mobile application and website. This policy complies with
+                    the Data Protection Act, 2012 (Act 843) of Ghana.
                   </p>
                 </div>
               </AnimatedSection>
@@ -267,7 +272,10 @@ export default function PrivacyPolicyPage() {
                       <div
                         key={item.title}
                         className="flex gap-4 p-4 rounded-2xl"
-                        style={{ background: "#F5F1EE", border: "1px solid #EDE8E3" }}
+                        style={{
+                          background: "#F5F1EE",
+                          border: "1px solid #EDE8E3",
+                        }}
                       >
                         <div
                           className="w-2 h-2 rounded-full mt-2 flex-shrink-0"
@@ -408,10 +416,22 @@ export default function PrivacyPolicyPage() {
                   </p>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     {[
-                      { title: "AES-256 Encryption", desc: "In transit and at rest" },
-                      { title: "Multi-Factor Auth", desc: "Biometric & PIN protection" },
-                      { title: "Strict Access Controls", desc: "Role-based permissions" },
-                      { title: "Breach Notification", desc: "Within 72 hours per GDPR" },
+                      {
+                        title: "AES-256 Encryption",
+                        desc: "In transit and at rest",
+                      },
+                      {
+                        title: "Multi-Factor Auth",
+                        desc: "Biometric & PIN protection",
+                      },
+                      {
+                        title: "Strict Access Controls",
+                        desc: "Role-based permissions",
+                      },
+                      {
+                        title: "Breach Notification",
+                        desc: "Within 72 hours per GDPR",
+                      },
                     ].map((item) => (
                       <div
                         key={item.title}
@@ -490,10 +510,19 @@ export default function PrivacyPolicyPage() {
                   </div>
                   <div className="space-y-3">
                     {[
-                      { type: "Account Data",   period: "Life of account + 2 years" },
-                      { type: "Health Data",    period: "Life of account + 3 years" },
+                      {
+                        type: "Account Data",
+                        period: "Life of account + 2 years",
+                      },
+                      {
+                        type: "Health Data",
+                        period: "Life of account + 3 years",
+                      },
                       { type: "Marketing Data", period: "Until you opt-out" },
-                      { type: "Technical Logs", period: "90 days rolling window" },
+                      {
+                        type: "Technical Logs",
+                        period: "90 days rolling window",
+                      },
                     ].map((row) => (
                       <div
                         key={row.type}
@@ -541,7 +570,10 @@ export default function PrivacyPolicyPage() {
                 >
                   <h2
                     className="font-black text-white mb-2"
-                    style={{ fontFamily: "var(--font-figtree)", fontSize: "1.5rem" }}
+                    style={{
+                      fontFamily: "var(--font-figtree)",
+                      fontSize: "1.5rem",
+                    }}
                   >
                     Contact Us
                   </h2>

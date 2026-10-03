@@ -1,42 +1,71 @@
 import type { Metadata } from "next";
+import localFont from "next/font/local";
+import { createPageMetadata, SITE_URL } from "@/lib/seo";
 import "./globals.css";
 
+const openSans = localFont({
+  src: [
+    { path: "./fonts/OpenSans-Regular.ttf", weight: "400", style: "normal" },
+    { path: "./fonts/OpenSans-Medium.ttf", weight: "500", style: "normal" },
+    { path: "./fonts/OpenSans-Bold.ttf", weight: "700", style: "normal" },
+  ],
+  variable: "--font-sans",
+  display: "swap",
+});
+
+const quincy = localFont({
+  src: [
+    { path: "./fonts/QuincyCF-Regular.ttf", weight: "400", style: "normal" },
+    { path: "./fonts/QuincyCF-Medium.ttf", weight: "500", style: "normal" },
+    { path: "./fonts/QuincyCF-Bold.ttf", weight: "700", style: "normal" },
+  ],
+  variable: "--font-display",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
-  title: "4 Our Life — Your Healthcare Companion for Ghana",
-  description:
-    "Locate hospitals, track medications, and get verified wellness tips — all in one secure place. 4 Our Life is the comprehensive healthcare ecosystem for Ghana.",
+  ...createPageMetadata({
+    title: "Healthcare access, made clearer",
+    description:
+      "Find hospitals, specialists and ambulance services in Ghana. Manage health reminders, explore trusted guidance and connect with care providers in one app.",
+    path: "/",
+  }),
+  metadataBase: SITE_URL,
   keywords: [
     "Ghana health app",
     "healthcare Ghana",
     "hospital locator Ghana",
-    "medication tracker",
-    "wellness app Ghana",
+    "medication reminders",
+    "health services Ghana",
     "4 Our Life",
   ],
-  openGraph: {
-    title: "4 Our Life — Your Healthcare Companion for Ghana",
-    description:
-      "A comprehensive healthcare ecosystem connecting patients with top-rated facilities, managing medications, and providing expert wellness guidance.",
-    type: "website",
-    siteName: "4 Our Life",
-  },
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <html lang="en" className="scroll-smooth">
+    // `no-js` is swapped for `js` by the inline script below. It exists so the
+    // scroll-reveal animations can present their finished state when JavaScript
+    // is unavailable, instead of leaving headings permanently hidden.
+    // `suppressHydrationWarning` is required because that script mutates <html>
+    // before React hydrates.
+    <html
+      lang="en"
+      className={`no-js ${openSans.variable} ${quincy.variable}`}
+      suppressHydrationWarning
+    >
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        {/* Critical fonts first — Figtree (headings), Noto Sans (body), Inter (UI) */}
-        <link
-          href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800;900&family=Noto+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap"
-          rel="stylesheet"
+        {/* Runs before first paint so there is no flash of the fallback state. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `document.documentElement.classList.replace('no-js','js')`,
+          }}
         />
       </head>
-      <body className="antialiased min-h-screen" style={{ background: "#F5F1EE" }}>
-        {children}
-      </body>
+      <body className="antialiased min-h-screen">{children}</body>
     </html>
   );
 }

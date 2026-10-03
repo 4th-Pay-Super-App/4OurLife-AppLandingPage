@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -13,12 +12,14 @@ import {
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import AnimatedSection from "@/components/AnimatedSection";
+import { createPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "About Us — 4 Our Life | Bridging the Gap in Ghanaian Healthcare",
+export const metadata = createPageMetadata({
+  title: "About 4 Our Life",
   description:
-    "Learn about 4 Our Life's mission to democratize healthcare access in Ghana. Built to connect every Ghanaian to quality providers, accurate knowledge, and secure data management.",
-};
+    "Learn how 4 Our Life helps people in Ghana discover health services and helps care teams reach and support their communities.",
+  path: "/about",
+});
 
 // ─── Core Pillars ─────────────────────────────────────────────────────────────
 const pillars = [
@@ -27,7 +28,11 @@ const pillars = [
     title: "Reliability",
     desc: "Every piece of health information on 4 Our Life is verified by certified Ghanaian medical professionals. No misinformation. No guesswork.",
     color: "from-emerald-500 to-teal-500",
-    points: ["Verified by MDs", "Real-time updates", "Sourced from Ghana Health Service"],
+    points: [
+      "Verified by MDs",
+      "Real-time updates",
+      "Sourced from Ghana Health Service",
+    ],
   },
   {
     icon: ShieldCheck,
@@ -62,7 +67,7 @@ export default function AboutPage() {
           HERO SECTION
       ══════════════════════════════════════════════ */}
       <section className="pt-32 pb-20 bg-white">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+        <div className="max-w-[1400px] mx-auto px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             {/* Left — Image */}
             <AnimatedSection direction="left">
@@ -104,7 +109,8 @@ export default function AboutPage() {
                         <div
                           className="relative w-11 h-11 rounded-xl flex items-center justify-center"
                           style={{
-                            background: "linear-gradient(135deg, #10B981, #0D9488)",
+                            background:
+                              "linear-gradient(135deg, #10B981, #0D9488)",
                             boxShadow: "0 4px 14px rgba(13,148,136,0.4)",
                           }}
                         >
@@ -184,9 +190,10 @@ export default function AboutPage() {
                 accurate health information in Ghana shouldn&apos;t be hard.
               </p>
               <p className="text-slate-500 font-inter text-base leading-relaxed mb-8">
-                We built this platform because we lived the problem. Long queues,
-                outdated clinic lists, forgotten medications, unverified health
-                advice — 4 Our Life solves all of this in the palm of your hand.
+                We built this platform because we lived the problem. Long
+                queues, outdated clinic lists, forgotten medications, unverified
+                health advice — 4 Our Life solves all of this in the palm of
+                your hand.
               </p>
 
               {/* Values pills */}
@@ -215,7 +222,7 @@ export default function AboutPage() {
         <div className="absolute inset-0 grid-bg opacity-40" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[300px] bg-emerald-500/5 rounded-full blur-3xl" />
 
-        <div className="relative z-10 max-w-5xl mx-auto px-6 lg:px-8 text-center">
+        <div className="relative z-10 max-w-[1400px] mx-auto px-6 lg:px-8 text-center">
           <AnimatedSection direction="up">
             <div className="flex items-center justify-center gap-3 mb-8">
               <div className="w-12 h-12 rounded-2xl bg-emerald-500/20 border border-emerald-400/30 flex items-center justify-center">
@@ -230,7 +237,9 @@ export default function AboutPage() {
               style={{ fontSize: "clamp(1.8rem, 4vw, 3rem)" }}
             >
               &ldquo;To{" "}
-              <span className="gradient-text">democratize healthcare access</span>{" "}
+              <span className="gradient-text">
+                democratize healthcare access
+              </span>{" "}
               by connecting every Ghanaian to quality providers, accurate
               knowledge, and secure data management.&rdquo;
             </h2>
@@ -251,7 +260,7 @@ export default function AboutPage() {
         <div className="absolute -top-20 -left-20 w-80 h-80 bg-emerald-200/30 rounded-full blur-3xl" />
         <div className="absolute -bottom-20 -right-20 w-80 h-80 bg-teal-200/30 rounded-full blur-3xl" />
 
-        <div className="relative z-10 max-w-5xl mx-auto px-6 lg:px-8 text-center">
+        <div className="relative z-10 max-w-[1400px] mx-auto px-6 lg:px-8 text-center">
           <AnimatedSection direction="up">
             <div className="flex items-center justify-center gap-3 mb-8">
               <div className="w-12 h-12 rounded-2xl bg-emerald-100 border border-emerald-300 flex items-center justify-center">
@@ -266,8 +275,8 @@ export default function AboutPage() {
               style={{ fontSize: "clamp(1.8rem, 4vw, 3.2rem)" }}
             >
               <span className="gradient-text">
-                A healthier Ghana where professional medical guidance and facility
-                discovery are just a tap away.
+                A healthier Ghana where professional medical guidance and
+                facility discovery are just a tap away.
               </span>
             </h2>
             <p className="text-slate-600 font-inter text-lg max-w-2xl mx-auto leading-relaxed">
@@ -283,7 +292,7 @@ export default function AboutPage() {
           CORE PILLARS
       ══════════════════════════════════════════════ */}
       <section className="py-28 bg-white relative overflow-hidden">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+        <div className="max-w-[1400px] mx-auto px-6 lg:px-8">
           <AnimatedSection direction="up" className="text-center mb-20">
             <div className="inline-flex items-center gap-2 bg-slate-100 border border-slate-200 rounded-full px-4 py-2 mb-5">
               <span className="text-slate-600 text-xs font-inter font-semibold tracking-wide uppercase">
@@ -294,8 +303,7 @@ export default function AboutPage() {
               className="font-montserrat font-black text-slate-900"
               style={{ fontSize: "clamp(2rem, 4vw, 3rem)" }}
             >
-              Our{" "}
-              <span className="gradient-text">Core Pillars</span>
+              Our <span className="gradient-text">Core Pillars</span>
             </h2>
           </AnimatedSection>
 
@@ -303,7 +311,11 @@ export default function AboutPage() {
             {pillars.map((pillar, i) => {
               const Icon = pillar.icon;
               return (
-                <AnimatedSection key={pillar.title} delay={i * 0.15} direction="up">
+                <AnimatedSection
+                  key={pillar.title}
+                  delay={i * 0.15}
+                  direction="up"
+                >
                   <div className="shimmer-card bg-white border border-slate-100 rounded-4xl p-8 h-full hover:border-emerald-200 hover:shadow-card-hover transition-all duration-300 group">
                     {/* Icon */}
                     <div
@@ -322,7 +334,9 @@ export default function AboutPage() {
                       {pillar.points.map((pt) => (
                         <li key={pt} className="flex items-center gap-2.5">
                           <CheckCircle2 className="w-4 h-4 text-emerald-500 flex-shrink-0" />
-                          <span className="text-slate-600 font-inter text-sm">{pt}</span>
+                          <span className="text-slate-600 font-inter text-sm">
+                            {pt}
+                          </span>
                         </li>
                       ))}
                     </ul>
@@ -341,7 +355,7 @@ export default function AboutPage() {
         <div className="absolute inset-0 grid-bg opacity-30" />
         <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/8 rounded-full blur-3xl" />
 
-        <div className="relative z-10 max-w-4xl mx-auto px-6 lg:px-8 text-center">
+        <div className="relative z-10 max-w-[1400px] mx-auto px-6 lg:px-8 text-center">
           <AnimatedSection direction="up">
             <h2
               className="font-montserrat font-black text-white mb-5"

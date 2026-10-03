@@ -5,45 +5,45 @@
    ============================================================ */
 @theme {
   /* ── Brand Palette ── */
-  --color-brand-primary:  #0F172A;   /* Slate 950   — authority, trust        */
-  --color-brand-accent:   #0D9488;   /* Teal 600    — medical, calm, fresh     */
-  --color-brand-accent2:  #0F766E;   /* Teal 700    — hover / deeper teal      */
-  --color-brand-soft:     #CCFBF1;   /* Teal 100    — light tint              */
-  --color-brand-soft2:    #F0FDFA;   /* Teal 50     — very light tint         */
-  --color-brand-cream:    #F5F1EE;   /* Warm cream  — main page bg             */
-  --color-brand-cream2:   #EDE8E3;   /* Deeper cream— dividers / hovers        */
-  --color-brand-bg:       #F5F1EE;   /* Alias for body bg                     */
-  --color-brand-hero:     #FFFFFF;   /* Hero section bg                       */
-  --color-brand-footer:   #0D9488;   /* Footer bg = accent teal               */
+  --color-brand-primary: #17251c;
+  --color-brand-accent: #47be7d;
+  --color-brand-accent2: #2e9e63;
+  --color-brand-soft: #ebf8f0;
+  --color-brand-soft2: #f3faf5;
+  --color-brand-cream: #f5f5f0;
+  --color-brand-cream2: #e9eee7;
+  --color-brand-bg: #f5f5f0;
+  --color-brand-hero: #ffffff; /* Hero section bg                       */
+  --color-brand-footer: #1f7a4b;
 
   /* ── Standard palette (kept for utilities) ── */
-  --color-white:        #FFFFFF;
-  --color-slate-50:     #f8fafc;
-  --color-slate-100:    #f1f5f9;
-  --color-slate-200:    #e2e8f0;
-  --color-slate-300:    #cbd5e1;
-  --color-slate-400:    #94a3b8;
-  --color-slate-500:    #64748b;
-  --color-slate-600:    #475569;
-  --color-slate-700:    #334155;
-  --color-slate-800:    #1e293b;
-  --color-slate-900:    #0f172a;
-  --color-teal-100:     #ccfbf1;
-  --color-teal-200:     #99f6e4;
-  --color-teal-400:     #2dd4bf;
-  --color-teal-500:     #14b8a6;
-  --color-teal-600:     #0d9488;
-  --color-teal-700:     #0f766e;
-  --color-teal-800:     #115e59;
-  --color-teal-900:     #134e4a;
-  --color-emerald-400:  #34d399;
-  --color-yellow-400:   #facc15;
-  --color-yellow-500:   #eab308;
+  --color-white: #ffffff;
+  --color-slate-50: #f8fafc;
+  --color-slate-100: #f1f5f9;
+  --color-slate-200: #e2e8f0;
+  --color-slate-300: #cbd5e1;
+  --color-slate-400: #94a3b8;
+  --color-slate-500: #64748b;
+  --color-slate-600: #475569;
+  --color-slate-700: #334155;
+  --color-slate-800: #1e293b;
+  --color-slate-900: #0f172a;
+  --color-teal-100: #ccfbf1;
+  --color-teal-200: #99f6e4;
+  --color-teal-400: #2dd4bf;
+  --color-teal-500: #14b8a6;
+  --color-teal-600: #0d9488;
+  --color-teal-700: #0f766e;
+  --color-teal-800: #115e59;
+  --color-teal-900: #134e4a;
+  --color-emerald-400: #34d399;
+  --color-yellow-400: #facc15;
+  --color-yellow-500: #eab308;
 
   /* ── Fonts ── */
-  --font-inter:    "Inter",    sans-serif;
-  --font-figtree:  "Figtree",  sans-serif;
-  --font-noto:     "Noto Sans",sans-serif;
+  --font-inter: "Inter", sans-serif;
+  --font-figtree: "Figtree", sans-serif;
+  --font-noto: "Noto Sans", sans-serif;
 
   /* ── Radius tokens ── */
   --radius-4xl: 2rem;
@@ -52,61 +52,140 @@
 
   /* ── Keyframes ── */
   @keyframes float {
-    0%, 100% { transform: translateY(0px);   }
-    50%       { transform: translateY(-18px); }
+    0%,
+    100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-18px);
+    }
   }
   @keyframes floatB {
-    0%, 100% { transform: translateY(0px) rotate(-6deg);  }
-    50%       { transform: translateY(-14px) rotate(-6deg); }
+    0%,
+    100% {
+      transform: translateY(0px) rotate(-6deg);
+    }
+    50% {
+      transform: translateY(-14px) rotate(-6deg);
+    }
   }
   @keyframes floatC {
-    0%, 100% { transform: translateY(0px) rotate(6deg);  }
-    50%       { transform: translateY(-22px) rotate(6deg); }
+    0%,
+    100% {
+      transform: translateY(0px) rotate(6deg);
+    }
+    50% {
+      transform: translateY(-22px) rotate(6deg);
+    }
   }
   @keyframes marquee {
-    0%   { transform: translateX(0);    }
-    100% { transform: translateX(-50%); }
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
   }
   @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(28px); }
-    to   { opacity: 1; transform: translateY(0);    }
+    from {
+      opacity: 0;
+      transform: translateY(28px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
   @keyframes fadeIn {
-    from { opacity: 0; }
-    to   { opacity: 1; }
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
   }
   @keyframes scaleIn {
-    from { opacity: 0; transform: scale(0.93); }
-    to   { opacity: 1; transform: scale(1);    }
+    from {
+      opacity: 0;
+      transform: scale(0.93);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
   }
   @keyframes shimmer {
-    0%   { background-position: -200% 0; }
-    100% { background-position:  200% 0; }
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
   }
   @keyframes pulseRing {
-    0%, 100% { transform: scale(1);    opacity: 0.45; }
-    50%       { transform: scale(1.08); opacity: 0;    }
+    0%,
+    100% {
+      transform: scale(1);
+      opacity: 0.45;
+    }
+    50% {
+      transform: scale(1.08);
+      opacity: 0;
+    }
   }
   @keyframes countUp {
-    from { opacity: 0; transform: translateY(12px); }
-    to   { opacity: 1; transform: translateY(0);    }
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 }
 
 /* ============================================================
    Base Reset
    ============================================================ */
-*, *::before, *::after { box-sizing: border-box; }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
 
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+}
+
+/*
+ * Lenis (landing page only) drives the native scroll position itself and
+ * writes it with an explicit `behavior: "instant"`. The global smooth behavior
+ * above would otherwise fight it, so it is neutralised only while Lenis is
+ * active — every other page keeps native smooth anchor scrolling.
+ */
+html.lenis.lenis-smooth {
+  scroll-behavior: auto;
+}
 
 body {
-  font-family: var(--font-inter), sans-serif;
-  background-color: #F5F1EE;
-  color: #0F172A;
+  margin: 0;
+  font-family: var(--font-sans), "Open Sans", sans-serif;
+  background-color: #f5f5f0;
+  color: #17251c;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background: #b7e7c9;
+  color: #17251c;
+}
+
+:focus-visible {
+  outline: 2px solid #2e9e63;
+  outline-offset: 3px;
 }
 
 /* ============================================================
@@ -114,7 +193,7 @@ body {
    ============================================================ */
 .container-width {
   width: 100%;
-  max-width: 1900px;
+  max-width: 1400px;
   margin-left: auto;
   margin-right: auto;
   padding-left: 1.5rem;
@@ -130,49 +209,66 @@ body {
 /* ============================================================
    Shadow helpers (CSS classes so Tailwind JIT can't strip them)
    ============================================================ */
-.shadow-teal     { box-shadow: 0 8px 32px -8px rgba(13,148,136,0.35); }
-.shadow-teal-lg  { box-shadow: 0 20px 60px -12px rgba(13,148,136,0.45); }
-.shadow-glass    { box-shadow: 0 8px 32px rgba(15,23,42,0.07); }
-.shadow-card     { box-shadow: 0 4px 24px rgba(15,23,42,0.06); }
-.shadow-card-lg  { box-shadow: 0 20px 60px rgba(15,23,42,0.10); }
-.shadow-dark     { box-shadow: 0 24px 80px rgba(0,0,0,0.38); }
-.shadow-phone    { box-shadow: 0 40px 100px rgba(0,0,0,0.50),
-                               inset 0 0 0 1px rgba(255,255,255,0.07); }
-.shadow-cream    { box-shadow: 0 8px 40px rgba(15,23,42,0.05); }
+.shadow-teal {
+  box-shadow: 0 8px 32px -8px rgba(13, 148, 136, 0.35);
+}
+.shadow-teal-lg {
+  box-shadow: 0 20px 60px -12px rgba(13, 148, 136, 0.45);
+}
+.shadow-glass {
+  box-shadow: 0 8px 32px rgba(15, 23, 42, 0.07);
+}
+.shadow-card {
+  box-shadow: 0 4px 24px rgba(15, 23, 42, 0.06);
+}
+.shadow-card-lg {
+  box-shadow: 0 20px 60px rgba(15, 23, 42, 0.1);
+}
+.shadow-dark {
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.38);
+}
+.shadow-phone {
+  box-shadow:
+    0 40px 100px rgba(0, 0, 0, 0.5),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.07);
+}
+.shadow-cream {
+  box-shadow: 0 8px 40px rgba(15, 23, 42, 0.05);
+}
 
 /* ============================================================
    Glass helpers
    ============================================================ */
 .glass {
-  background: rgba(255,255,255,0.06);
+  background: rgba(255, 255, 255, 0.06);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
-  border: 1px solid rgba(255,255,255,0.10);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 .glass-cream {
-  background: rgba(245,241,238,0.80);
+  background: rgba(245, 241, 238, 0.8);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(13,148,136,0.10);
+  border: 1px solid rgba(13, 148, 136, 0.1);
 }
 .glass-white {
-  background: rgba(255,255,255,0.80);
+  background: rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(13,148,136,0.10);
+  border: 1px solid rgba(13, 148, 136, 0.1);
 }
 
 /* ============================================================
    Gradient Text
    ============================================================ */
 .gradient-text {
-  background: linear-gradient(135deg, #0D9488 0%, #2dd4bf 55%, #0f766e 100%);
+  background: linear-gradient(135deg, #0d9488 0%, #2dd4bf 55%, #0f766e 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 .gradient-text-dark {
-  background: linear-gradient(135deg, #0F172A 0%, #334155 100%);
+  background: linear-gradient(135deg, #0f172a 0%, #334155 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -183,18 +279,22 @@ body {
    ============================================================ */
 .grid-bg {
   background-image:
-    linear-gradient(rgba(13,148,136,0.045) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(13,148,136,0.045) 1px, transparent 1px);
+    linear-gradient(rgba(13, 148, 136, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(13, 148, 136, 0.045) 1px, transparent 1px);
   background-size: 52px 52px;
 }
 .grid-bg-dark {
   background-image:
-    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
   background-size: 52px 52px;
 }
 .dot-bg {
-  background-image: radial-gradient(circle, rgba(13,148,136,0.12) 1.5px, transparent 1.5px);
+  background-image: radial-gradient(
+    circle,
+    rgba(13, 148, 136, 0.12) 1.5px,
+    transparent 1.5px
+  );
   background-size: 28px 28px;
 }
 
@@ -204,10 +304,11 @@ body {
 .phone-frame {
   position: relative;
   border-radius: 2.75rem;
-  border: 7px solid #0F172A;
-  background: #0F172A;
-  box-shadow: 0 40px 100px rgba(0,0,0,0.50),
-              inset 0 0 0 1px rgba(255,255,255,0.06);
+  border: 7px solid #0f172a;
+  background: #0f172a;
+  box-shadow:
+    0 40px 100px rgba(0, 0, 0, 0.5),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.06);
   overflow: hidden;
 }
 .phone-notch {
@@ -217,7 +318,7 @@ body {
   transform: translateX(-50%);
   width: 35%;
   height: 20px;
-  background: #0F172A;
+  background: #0f172a;
   border-radius: 0 0 0.875rem 0.875rem;
   z-index: 20;
   pointer-events: none;
@@ -226,9 +327,15 @@ body {
 /* ============================================================
    Animations
    ============================================================ */
-.float-anim  { animation: float  4.5s ease-in-out infinite; }
-.float-anim2 { animation: floatB 5.2s ease-in-out infinite 0.6s; }
-.float-anim3 { animation: floatC 5.8s ease-in-out infinite 1.2s; }
+.float-anim {
+  animation: float 4.5s ease-in-out infinite;
+}
+.float-anim2 {
+  animation: floatB 5.2s ease-in-out infinite 0.6s;
+}
+.float-anim3 {
+  animation: floatC 5.8s ease-in-out infinite 1.2s;
+}
 
 /* ============================================================
    Marquee
@@ -239,7 +346,9 @@ body {
   animation: marquee 28s linear infinite;
   will-change: transform;
 }
-.marquee-track:hover { animation-play-state: paused; }
+.marquee-track:hover {
+  animation-play-state: paused;
+}
 
 /* ============================================================
    Step numbers (How it Works)
@@ -249,7 +358,7 @@ body {
   font-weight: 900;
   font-size: 4rem;
   line-height: 1;
-  color: rgba(13,148,136,0.12);
+  color: rgba(13, 148, 136, 0.12);
   user-select: none;
   letter-spacing: -0.05em;
 }
@@ -257,9 +366,16 @@ body {
 /* ============================================================
    Scrollbar
    ============================================================ */
-::-webkit-scrollbar        { width: 5px; }
-::-webkit-scrollbar-track  { background: #F5F1EE; }
-::-webkit-scrollbar-thumb  { background: #0D9488; border-radius: 99px; }
+::-webkit-scrollbar {
+  width: 5px;
+}
+::-webkit-scrollbar-track {
+  background: #f5f1ee;
+}
+::-webkit-scrollbar-thumb {
+  background: #0d9488;
+  border-radius: 99px;
+}
 
 /* ============================================================
    Typography helpers
@@ -276,6 +392,12 @@ body {
 /* ============================================================
    Utility radius (for rounded-5xl etc. used in JSX)
    ============================================================ */
-.rounded-4xl { border-radius: 2rem; }
-.rounded-5xl { border-radius: 2.5rem; }
-.rounded-6xl { border-radius: 3rem; }
+.rounded-4xl {
+  border-radius: 2rem;
+}
+.rounded-5xl {
+  border-radius: 2.5rem;
+}
+.rounded-6xl {
+  border-radius: 3rem;
+}

@@ -17,13 +17,13 @@ import AnimatedSection from "@/components/AnimatedSection";
 
 // ─── Sections Data ─────────────────────────────────────────────
 const SECTIONS = [
-  { id: "agreement",    label: "The Agreement",      icon: FileText      },
-  { id: "eligibility",  label: "Eligibility",         icon: Users         },
-  { id: "medical",      label: "Medical Disclaimer",  icon: AlertTriangle },
-  { id: "conduct",      label: "User Conduct",        icon: ShieldOff     },
-  { id: "liability",    label: "Liability",            icon: XCircle       },
-  { id: "termination",  label: "Termination",          icon: XCircle       },
-  { id: "contact",      label: "Contact Legal",        icon: Mail          },
+  { id: "agreement", label: "The Agreement", icon: FileText },
+  { id: "eligibility", label: "Eligibility", icon: Users },
+  { id: "medical", label: "Medical Disclaimer", icon: AlertTriangle },
+  { id: "conduct", label: "User Conduct", icon: ShieldOff },
+  { id: "liability", label: "Liability", icon: XCircle },
+  { id: "termination", label: "Termination", icon: XCircle },
+  { id: "contact", label: "Contact Legal", icon: Mail },
 ];
 
 const SECTION_CONTENT = [
@@ -43,8 +43,8 @@ const SECTION_CONTENT = [
         }}
       >
         By accessing or using the 4 Our Life App or website, you agree to be
-        bound by these Terms and Conditions. If you do not agree to all of
-        these terms, do not use the service. These terms form a legally binding
+        bound by these Terms and Conditions. If you do not agree to all of these
+        terms, do not use the service. These terms form a legally binding
         agreement between you and 4th Pay Ltd, operating as 4 Our Life.
       </p>
     ),
@@ -64,8 +64,8 @@ const SECTION_CONTENT = [
           fontSize: "0.95rem",
         }}
       >
-        You must be at least 13 years old to use this App. Users between 13
-        and 18 years of age require guardian consent to access specific health
+        You must be at least 13 years old to use this App. Users between 13 and
+        18 years of age require guardian consent to access specific health
         features. By using the App, you confirm that you meet these eligibility
         requirements.
       </p>
@@ -170,8 +170,8 @@ const SECTION_CONTENT = [
         }}
       >
         4 Our Life Limited (4th Pay Ltd) shall not be liable for any indirect,
-        incidental, special, or consequential damages resulting from your use
-        of the App, including but not limited to damages for loss of profits,
+        incidental, special, or consequential damages resulting from your use of
+        the App, including but not limited to damages for loss of profits,
         goodwill, use, data, or other intangible losses. Our total liability
         shall not exceed the amount paid by you (if any) for accessing the
         service in the twelve months preceding the claim.
@@ -242,8 +242,7 @@ export default function TermsOfServicePage() {
                 fontSize: "clamp(2rem, 4.5vw, 3.5rem)",
               }}
             >
-              Terms &amp;{" "}
-              <span className="gradient-text">Conditions</span>
+              Terms &amp; <span className="gradient-text">Conditions</span>
             </h1>
             <p
               className="text-lg max-w-2xl mx-auto leading-relaxed"
@@ -271,9 +270,8 @@ export default function TermsOfServicePage() {
 
       {/* ── Content ── */}
       <section className="py-20" style={{ background: "#F5F1EE" }}>
-        <div className="max-w-6xl mx-auto px-6 lg:px-8">
+        <div className="max-w-[1400px] mx-auto px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-[260px_1fr] gap-12">
-
             {/* ── Sticky TOC ── */}
             <aside className="hidden lg:block">
               <div
@@ -301,12 +299,16 @@ export default function TermsOfServicePage() {
                         className="group flex items-center gap-3 px-3 py-2 rounded-xl transition-all duration-150"
                         style={{ color: "#475569" }}
                         onMouseEnter={(e) => {
-                          (e.currentTarget as HTMLElement).style.background = "#F0FDFA";
-                          (e.currentTarget as HTMLElement).style.color = "#0D9488";
+                          (e.currentTarget as HTMLElement).style.background =
+                            "#F0FDFA";
+                          (e.currentTarget as HTMLElement).style.color =
+                            "#0D9488";
                         }}
                         onMouseLeave={(e) => {
-                          (e.currentTarget as HTMLElement).style.background = "transparent";
-                          (e.currentTarget as HTMLElement).style.color = "#475569";
+                          (e.currentTarget as HTMLElement).style.background =
+                            "transparent";
+                          (e.currentTarget as HTMLElement).style.color =
+                            "#475569";
                         }}
                       >
                         <Icon size={14} className="flex-shrink-0" />
@@ -324,7 +326,10 @@ export default function TermsOfServicePage() {
                   ))}
                 </ul>
 
-                <div className="mt-6 pt-6" style={{ borderTop: "1px solid #EDE8E3" }}>
+                <div
+                  className="mt-6 pt-6"
+                  style={{ borderTop: "1px solid #EDE8E3" }}
+                >
                   <Link
                     href="/privacy-policy"
                     className="flex items-center gap-2 transition-colors duration-150"
@@ -343,7 +348,7 @@ export default function TermsOfServicePage() {
             </aside>
 
             {/* ── Main Content ── */}
-            <div className="space-y-8">
+            <div className="space-y-8 max-w-[960px]">
               {SECTION_CONTENT.map((section, delay_i) => {
                 const Icon = section.icon;
                 return (
@@ -363,12 +368,16 @@ export default function TermsOfServicePage() {
                         <div
                           className="w-11 h-11 rounded-2xl flex items-center justify-center"
                           style={{
-                            background: section.accent ? "rgba(239,68,68,0.1)" : "#CCFBF1",
+                            background: section.accent
+                              ? "rgba(239,68,68,0.1)"
+                              : "#CCFBF1",
                           }}
                         >
                           <Icon
                             size={20}
-                            style={{ color: section.accent ? "#DC2626" : "#0D9488" }}
+                            style={{
+                              color: section.accent ? "#DC2626" : "#0D9488",
+                            }}
                           />
                         </div>
                         <h2
@@ -400,7 +409,10 @@ export default function TermsOfServicePage() {
                 >
                   <h2
                     className="font-black text-white mb-2"
-                    style={{ fontFamily: "var(--font-figtree)", fontSize: "1.5rem" }}
+                    style={{
+                      fontFamily: "var(--font-figtree)",
+                      fontSize: "1.5rem",
+                    }}
                   >
                     Contact Legal
                   </h2>

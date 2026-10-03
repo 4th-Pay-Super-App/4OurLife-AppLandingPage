@@ -1,0 +1,718 @@
+.page {
+  --paper: #f5f5f0;
+  --ink: #17251c;
+  --body: #48534b;
+  --forest: #1f7a4b;
+  --green: #47be7d;
+  --line: #d8e2d9;
+  min-height: 100vh;
+  overflow: clip;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans), "Open Sans", system-ui, sans-serif;
+}
+
+.page *,
+.page *::before,
+.page *::after {
+  box-sizing: border-box;
+}
+.page a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.navWrap {
+  position: absolute;
+  z-index: 20;
+  top: 18px;
+  left: 50%;
+  width: min(1400px, calc(100% - 32px));
+  transform: translateX(-50%);
+}
+
+.nav {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  min-height: 58px;
+  padding: 7px 8px 7px 20px;
+  border: 1px solid rgba(23, 37, 28, 0.1);
+  border-radius: 999px;
+  background: rgba(250, 250, 246, 0.82);
+  box-shadow: 0 14px 45px rgba(23, 37, 28, 0.1);
+  backdrop-filter: blur(18px) saturate(145%);
+}
+
+.brandMark {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  white-space: nowrap;
+}
+.brandMark img {
+  display: block;
+  width: 31px;
+  height: 28px;
+  object-fit: contain;
+}
+.brandMark > span {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.17em;
+}
+.brandMark strong {
+  font-weight: 800;
+}
+.navLinks {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  color: #526057;
+  font-size: 12px;
+  font-weight: 600;
+}
+.navLinks span {
+  color: var(--forest);
+  font-weight: 800;
+}
+.navLinks a:hover {
+  color: var(--forest);
+}
+.backLink {
+  justify-self: end;
+  display: inline-flex;
+  min-height: 42px;
+  align-items: center;
+  gap: 7px;
+  padding: 0 15px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: #fff !important;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.hero {
+  position: relative;
+  display: flex;
+  min-height: 720px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 145px 24px 100px;
+  text-align: center;
+}
+
+.hero::before,
+.hero::after {
+  position: absolute;
+  border: 1px solid rgba(46, 158, 99, 0.12);
+  border-radius: 50%;
+  content: "";
+}
+.hero::before {
+  top: 20%;
+  left: -18vw;
+  width: 48vw;
+  height: 48vw;
+}
+.hero::after {
+  right: -20vw;
+  bottom: -30vw;
+  width: 62vw;
+  height: 62vw;
+}
+.heroGlow {
+  position: absolute;
+  top: -24%;
+  left: 50%;
+  width: min(900px, 92vw);
+  height: 650px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(71, 190, 125, 0.22),
+    rgba(71, 190, 125, 0.05) 48%,
+    transparent 70%
+  );
+  transform: translateX(-50%);
+  filter: blur(6px);
+}
+.kicker {
+  position: relative;
+  margin: 0;
+  color: var(--forest);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+.hero h1 {
+  position: relative;
+  max-width: 1000px;
+  margin: 22px 0 24px;
+  font-family: var(--font-display), Georgia, serif;
+  font-size: clamp(62px, 7.6vw, 112px);
+  font-weight: 400;
+  letter-spacing: -0.065em;
+  line-height: 0.87;
+}
+.hero h1 em {
+  color: var(--green);
+  font-style: italic;
+}
+.heroCopy {
+  position: relative;
+  max-width: 660px;
+  margin: 0;
+  color: var(--body);
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+.audienceSwitch {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  margin-top: 39px;
+  padding: 5px;
+  border: 1px solid rgba(23, 37, 28, 0.1);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: 0 12px 35px rgba(23, 37, 28, 0.08);
+  backdrop-filter: blur(12px);
+}
+.audienceSwitch button {
+  min-width: 150px;
+  min-height: 45px;
+  padding: 0 22px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: #667168;
+  cursor: pointer;
+  font:
+    700 12px/1 var(--font-sans),
+    sans-serif;
+  transition:
+    background 180ms ease,
+    color 180ms ease,
+    transform 180ms ease;
+}
+.audienceSwitch button:hover {
+  color: var(--ink);
+}
+.audienceSwitch .switchActive {
+  background: var(--ink);
+  color: #fff;
+  box-shadow: 0 8px 18px rgba(23, 37, 28, 0.16);
+}
+.audienceSwitch .switchActive:hover {
+  color: #fff;
+}
+
+.planExperience {
+  background: var(--paper);
+}
+.cardsSection,
+.compareSection {
+  width: min(1400px, calc(100% - 64px));
+  margin: 0 auto;
+  padding: 100px 0 120px;
+}
+.cardsSection {
+  border-top: 1px solid var(--line);
+}
+.sectionHeading {
+  display: grid;
+  grid-template-columns: minmax(170px, 0.42fr) 1fr;
+  align-items: start;
+  gap: 50px;
+  margin-bottom: 65px;
+}
+.sectionHeading > p {
+  margin: 11px 0 0;
+  color: var(--forest);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.sectionHeading h2 {
+  max-width: 830px;
+  margin: 0;
+  font-family: var(--font-display), Georgia, serif;
+  font-size: clamp(47px, 5vw, 72px);
+  font-weight: 400;
+  letter-spacing: -0.055em;
+  line-height: 0.96;
+}
+
+.planGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  align-items: stretch;
+}
+.planGridBusiness {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.planCard {
+  position: relative;
+  display: flex;
+  min-height: 560px;
+  flex-direction: column;
+  padding: 30px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 30px;
+  background: rgba(255, 255, 255, 0.68);
+  box-shadow: 0 12px 40px rgba(23, 37, 28, 0.045);
+}
+.planCard::after {
+  position: absolute;
+  right: -75px;
+  bottom: -90px;
+  width: 190px;
+  height: 190px;
+  border: 1px solid rgba(31, 122, 75, 0.1);
+  border-radius: 50%;
+  content: "";
+}
+.planCardFeatured {
+  border-color: transparent;
+  background: var(--forest);
+  color: #f5faf6;
+  box-shadow: 0 25px 60px rgba(31, 122, 75, 0.18);
+  transform: translateY(-10px);
+}
+.planCardFeatured::after {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+.popularPill {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 22px;
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: #a8e8c1;
+  color: #143322;
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+.planEyebrow {
+  margin: 0 0 13px;
+  color: var(--forest);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.planCardFeatured .planEyebrow {
+  color: #a8e8c1;
+}
+.planCard h2 {
+  margin: 0;
+  font-family: var(--font-display), Georgia, serif;
+  font-size: clamp(31px, 2.7vw, 42px);
+  font-weight: 500;
+  letter-spacing: -0.045em;
+  line-height: 1;
+}
+.planDescription {
+  min-height: 72px;
+  margin: 18px 0 0;
+  color: #647068;
+  font-size: 12px;
+  line-height: 1.65;
+}
+.planCardFeatured .planDescription {
+  color: rgba(245, 250, 246, 0.65);
+}
+.priceLine {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+  margin: 36px 0 28px;
+}
+.priceLine strong {
+  font-family: var(--font-display), Georgia, serif;
+  font-size: clamp(39px, 3.2vw, 54px);
+  font-weight: 500;
+  letter-spacing: -0.05em;
+}
+.priceLine span {
+  color: #78827a;
+  font-size: 10px;
+  font-weight: 700;
+}
+.planCardFeatured .priceLine span {
+  color: rgba(255, 255, 255, 0.55);
+}
+.benefitList {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 32px;
+}
+.benefitList span {
+  display: grid;
+  grid-template-columns: 17px 1fr;
+  align-items: start;
+  gap: 9px;
+  color: #4f5b52;
+  font-size: 11px;
+  line-height: 1.45;
+}
+.benefitList svg {
+  margin-top: 1px;
+  color: var(--forest);
+}
+.planCardFeatured .benefitList span {
+  color: rgba(245, 250, 246, 0.76);
+}
+.planCardFeatured .benefitList svg {
+  color: #9ee2b8;
+}
+.planAction {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  min-height: 47px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: auto;
+  border-radius: 999px;
+  background: var(--ink);
+  color: #fff !important;
+  font-size: 11px;
+  font-weight: 800;
+  transition:
+    transform 180ms ease,
+    background 180ms ease;
+}
+a.planAction:hover {
+  background: var(--green);
+  color: var(--ink) !important;
+  transform: translateY(-1px);
+}
+.planCardFeatured .planAction {
+  background: #f5faf6;
+  color: var(--ink) !important;
+}
+.planActionDisabled {
+  border: 1px solid #dbe4dc;
+  background: transparent;
+  color: #879188 !important;
+}
+.planCardFeatured .planActionDisabled {
+  border-color: rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.62) !important;
+}
+.planNote {
+  display: block;
+  min-height: 25px;
+  margin-top: 12px;
+  color: #79847c;
+  font-size: 8px;
+  line-height: 1.5;
+  text-align: center;
+}
+.planCardFeatured .planNote {
+  color: rgba(255, 255, 255, 0.46);
+}
+
+.compareSection {
+  width: 100%;
+  max-width: none;
+  padding: 120px max(32px, calc((100vw - 1400px) / 2)) 150px;
+  background: #e8eee7;
+}
+.compareSection .sectionHeading {
+  width: min(1400px, 100%);
+  margin-right: auto;
+  margin-left: auto;
+}
+.tableShell {
+  width: min(1400px, 100%);
+  margin: 0 auto;
+  overflow-x: auto;
+  border: 1px solid rgba(23, 37, 28, 0.09);
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.7);
+  box-shadow: 0 18px 55px rgba(23, 37, 28, 0.06);
+}
+.comparisonTable {
+  width: 100%;
+  min-width: 800px;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+.comparisonTable th,
+.comparisonTable td {
+  padding: 18px 17px;
+  border-bottom: 1px solid rgba(23, 37, 28, 0.08);
+  text-align: center;
+}
+.comparisonTable thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  height: 92px;
+  background: rgba(249, 250, 247, 0.96);
+  color: var(--ink);
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 16px;
+  font-weight: 600;
+}
+.comparisonTable thead th:first-child {
+  width: 31%;
+  text-align: left;
+}
+.comparisonTable tbody th {
+  color: #4f5b52;
+  font-size: 11px;
+  font-weight: 600;
+  text-align: left;
+}
+.comparisonTable tbody td {
+  color: #465149;
+  font-size: 11px;
+}
+.comparisonTable tbody tr:last-child th,
+.comparisonTable tbody tr:last-child td {
+  border-bottom: 0;
+}
+.comparisonTable .groupRow th {
+  padding-top: 34px;
+  padding-bottom: 11px;
+  background: rgba(226, 236, 227, 0.68);
+  color: var(--forest);
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+.yes {
+  display: inline-grid;
+  width: 27px;
+  height: 27px;
+  place-items: center;
+  border-radius: 50%;
+  background: #daf1e2;
+  color: var(--forest);
+}
+.no {
+  color: #a6aea8;
+}
+.cellText {
+  font-size: 10px;
+  font-weight: 700;
+}
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.bottomCta {
+  display: flex;
+  min-height: 620px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 100px 24px;
+  background: #10291b;
+  color: #f5faf6;
+  text-align: center;
+}
+.bottomCta p {
+  margin: 0 0 22px;
+  color: #9ee2b8;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+.bottomCta h2 {
+  margin: 0;
+  font-family: var(--font-display), Georgia, serif;
+  font-size: clamp(58px, 7vw, 94px);
+  font-weight: 400;
+  letter-spacing: -0.06em;
+  line-height: 0.94;
+}
+.bottomCta a {
+  display: inline-flex;
+  min-height: 50px;
+  align-items: center;
+  gap: 9px;
+  margin-top: 38px;
+  padding: 0 20px;
+  border-radius: 999px;
+  background: #f5faf6;
+  color: var(--ink);
+  font-size: 11px;
+  font-weight: 800;
+}
+.footer {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-items: center;
+  min-height: 120px;
+  padding: 28px max(32px, calc((100vw - 1400px) / 2));
+  background: #09150e;
+  color: rgba(245, 250, 246, 0.58);
+  font-size: 9px;
+}
+.footer .brandMark {
+  color: #fff;
+}
+.footer > span {
+  justify-self: center;
+}
+.footer > a {
+  justify-self: end;
+}
+
+@media (max-width: 1020px) {
+  .planGridBusiness {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .planCardFeatured {
+    transform: none;
+  }
+}
+
+@media (max-width: 760px) {
+  .nav {
+    grid-template-columns: 1fr auto;
+    padding-left: 15px;
+  }
+  .navLinks {
+    display: none;
+  }
+  .backLink {
+    min-height: 40px;
+  }
+  .hero {
+    min-height: 680px;
+    padding-top: 126px;
+  }
+  .hero h1 {
+    font-size: clamp(54px, 15vw, 76px);
+  }
+  .heroCopy {
+    max-width: 540px;
+    font-size: 14px;
+  }
+  .audienceSwitch {
+    width: min(100%, 360px);
+  }
+  .audienceSwitch button {
+    min-width: 0;
+    padding: 0 14px;
+  }
+  .cardsSection,
+  .compareSection {
+    width: 100%;
+    padding: 85px 18px 105px;
+  }
+  .sectionHeading {
+    grid-template-columns: 1fr;
+    gap: 17px;
+    margin-bottom: 45px;
+    text-align: center;
+  }
+  .sectionHeading > p {
+    margin: 0;
+  }
+  .sectionHeading h2 {
+    margin: 0 auto;
+    font-size: clamp(43px, 12vw, 59px);
+  }
+  .planGrid,
+  .planGridBusiness {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .planCard {
+    min-height: 0;
+    padding: 25px;
+  }
+  .planDescription {
+    min-height: 0;
+  }
+  .planAction {
+    margin-top: 8px;
+  }
+  .compareSection {
+    padding-right: 0;
+    padding-left: 0;
+  }
+  .compareSection .sectionHeading {
+    padding: 0 18px;
+  }
+  .tableShell {
+    width: calc(100% - 18px);
+    margin-left: 18px;
+    border-radius: 22px 0 0 22px;
+  }
+  .comparisonTable {
+    min-width: 740px;
+  }
+  .bottomCta {
+    min-height: 520px;
+  }
+  .footer {
+    grid-template-columns: 1fr auto;
+    row-gap: 17px;
+  }
+  .footer > span {
+    justify-self: end;
+  }
+  .footer > a {
+    grid-column: 1 / 3;
+    justify-self: start;
+  }
+}
+
+@media (max-width: 420px) {
+  .brandMark > span {
+    font-size: 10px;
+  }
+  .brandMark img {
+    width: 28px;
+    height: 26px;
+  }
+  .backLink {
+    padding: 0 12px;
+    font-size: 10px;
+  }
+  .hero {
+    min-height: 650px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page *,
+  .page *::before,
+  .page *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
