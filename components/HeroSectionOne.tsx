@@ -4,6 +4,7 @@ import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion
 import { ShieldCheck, HeartPulse, MapPin } from "lucide-react";
 import Image from "next/image";
 import { AppStoreIcon, PlayStoreIcon } from "./Brand-icons";
+import { APP_STORE_URL, PLAY_STORE_URL } from "@/lib/store-links";
 
 /* ─── Floating badge cards ──────────────────────────────────── */
 const FLOAT_CARDS = [
@@ -117,7 +118,9 @@ export default function HeroSectionOne() {
               {/* CTA BUTTONS */}
               <motion.div className="flex flex-wrap gap-4 min-[2500px]:gap-10 mb-10 min-[2500px]:mb-24">
                 <motion.a
-                  href="#"
+                  href={APP_STORE_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   whileHover={{ scale: 1.04, y: -3 }}
                   whileTap={{ scale: 0.96 }}
                   className="bg-slate-900 hover:bg-teal-600 text-white px-6 py-3 md:px-8 md:py-4 min-[2500px]:px-16 min-[2500px]:py-8 rounded-full font-figtree font-extrabold text-xs md:text-[15px] min-[2500px]:text-3xl no-underline inline-flex items-center gap-3 min-[2500px]:gap-6 shadow-lg transition-colors duration-300"
@@ -130,7 +133,9 @@ export default function HeroSectionOne() {
                 </motion.a>
 
                 <motion.a
-                  href="#"
+                  href={PLAY_STORE_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   whileHover={{ scale: 1.04, y: -3 }}
                   whileTap={{ scale: 0.96 }}
                   className="bg-white text-slate-900 border-2 border-slate-200 hover:border-teal-600 hover:text-teal-600 px-6 py-3 md:px-8 md:py-4 min-[2500px]:px-16 min-[2500px]:py-8 rounded-full font-figtree font-extrabold text-xs md:text-[15px] min-[2500px]:text-3xl no-underline inline-flex items-center gap-3 min-[2500px]:gap-6 shadow-sm transition-all duration-300"

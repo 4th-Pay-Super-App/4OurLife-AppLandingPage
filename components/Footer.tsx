@@ -6,6 +6,7 @@ import { Heart, Mail, ArrowRight, Smartphone, Apple } from "lucide-react";
 import { FaTwitter, FaInstagram, FaLinkedinIn } from "react-icons/fa6";
 import { motion } from "framer-motion";
 import { AppStoreIcon, PlayStoreIcon } from "./Brand-icons";
+import { APP_STORE_URL, PLAY_STORE_URL } from "@/lib/store-links";
 
 const NAV = [
   { label: "Home",              href: "/"                  },
@@ -138,7 +139,9 @@ export default function Footer() {
             <p style={{ fontFamily: "var(--font-figtree)", fontWeight: 800, fontSize: "0.75rem", color: "rgba(255,255,255,0.55)", letterSpacing: "0.16em", textTransform: "uppercase", marginBottom: "1.125rem" }}>Get the App</p>
             <div className="flex flex-row md:flex-col gap-2.5">
               <motion.a
-                href="#"
+                href={APP_STORE_URL}
+                target="_blank"
+                rel="noopener noreferrer"
                 whileHover={{ scale: 1.03, y: -2 }}
                 whileTap={{ scale: 0.97 }}
                 className="flex items-center gap-3"
@@ -154,7 +157,9 @@ export default function Footer() {
               </motion.a>
 
               <motion.a
-                href="#"
+                href={PLAY_STORE_URL}
+                target="_blank"
+                rel="noopener noreferrer"
                 whileHover={{ scale: 1.03, y: -2 }}
                 whileTap={{ scale: 0.97 }}
                 className="flex items-center gap-3"
