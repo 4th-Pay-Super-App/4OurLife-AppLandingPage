@@ -62,6 +62,12 @@ import {
   useSmoothProgress,
 } from "./motion";
 import styles from "./LandingExperience.module.css";
+import {
+  APP_STORE_QR,
+  APP_STORE_URL,
+  PLAY_STORE_QR,
+  PLAY_STORE_URL,
+} from "@/lib/store-links";
 
 type Chapter = {
   eyebrow: string;
@@ -326,10 +332,11 @@ function LandingNav() {
   );
 }
 
+// lib/store-links.ts is the single source of truth for the store URLs and the
+// generated QR artwork (scripts/generate-store-qr.js) — never inline them here.
 const consumerStores = {
-  apple: "https://apps.apple.com/app/id6754759396",
-  google:
-    "https://play.google.com/store/apps/details?id=com.fourourlifeapppay.fourourlifeapppay",
+  apple: APP_STORE_URL,
+  google: PLAY_STORE_URL,
 };
 
 function StoreBadge({
@@ -405,7 +412,34 @@ function StoreBadges({ kind }: { kind: "consumer" | "business" }) {
         comingSoon={business}
         inverse={business}
       />
+      {business ? null : (
+        <div className={styles.storeQrs}>
+          <StoreQr src={PLAY_STORE_QR} href={PLAY_STORE_URL} label="Google Play" />
+          <StoreQr src={APP_STORE_QR} href={APP_STORE_URL} label="App Store" />
+        </div>
+      )}
     </div>
+  );
+}
+
+/**
+ * Scannable store QR (generated artwork in public/qr/). Desktop only — on a
+ * phone the badge above is the way in. A plain <img> because next.config does
+ * not enable dangerouslyAllowSVG for next/image.
+ */
+function StoreQr({ src, href, label }: { src: string; href: string; label: string }) {
+  return (
+    <a
+      className={styles.storeQr}
+      href={href}
+      target="_blank"
+      rel="noreferrer"
+      aria-label={`Scan to get 4 Our Life on ${label}`}
+    >
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={src} alt={`QR code for 4 Our Life on ${label}`} width={88} height={88} />
+      <small>{label}</small>
+    </a>
   );
 }
 
