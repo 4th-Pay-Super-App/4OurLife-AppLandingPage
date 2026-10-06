@@ -3,6 +3,7 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { Smartphone } from "lucide-react";
 import { AppStoreIcon, PlayStoreIcon } from "./Brand-icons";
+import { APP_STORE_URL, PLAY_STORE_URL } from "@/lib/store-links";
 
 
 
@@ -47,7 +48,9 @@ export default function FinalCTA() {
             {/* High-Contrast Action Buttons */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-5 min-[2500px]:gap-12">
               <motion.a
-                href="#"
+                href={APP_STORE_URL}
+                target="_blank"
+                rel="noopener noreferrer"
                 whileHover={{ scale: 1.05, y: -5 }}
                 whileTap={{ scale: 0.95 }}
                 className="group flex items-center gap-4 bg-slate-900 text-white min-w-[220px] min-[2500px]:min-w-[450px] px-8 py-4 min-[2500px]:px-16 min-[2500px]:py-10 rounded-full font-figtree font-extrabold shadow-xl hover:bg-black transition-colors"
@@ -60,7 +63,9 @@ export default function FinalCTA() {
               </motion.a>
 
               <motion.a
-                href="#"
+                href={PLAY_STORE_URL}
+                target="_blank"
+                rel="noopener noreferrer"
                 whileHover={{ scale: 1.05, y: -5 }}
                 whileTap={{ scale: 0.95 }}
                 className="group flex items-center gap-4 bg-white/15 hover:bg-white/25 text-white border-2 border-white/20 backdrop-blur-md min-w-[220px] min-[2500px]:min-w-[450px] px-8 py-4 min-[2500px]:px-16 min-[2500px]:py-10 rounded-full font-figtree font-extrabold transition-all"
