@@ -12,6 +12,11 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Node build scripts under scripts/ are CommonJS by necessity (they are run
+    // with `node scripts/x.js`, not bundled), so the app's TypeScript rules
+    // would only flag every require(). Generated QR artwork is not source.
+    "scripts/**",
+    "images/**",
   ]),
 ]);
 
