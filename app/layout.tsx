@@ -3,24 +3,37 @@ import localFont from "next/font/local";
 import { createPageMetadata, SITE_URL } from "@/lib/seo";
 import "./globals.css";
 
+/*
+ * OpenSans (text) and QuincyCF (display) are the same two faces the mobile
+ * apps bundle in `assets/fonts` — the sources here were byte-identical TTFs.
+ * They ship as subsetted WOFF2 because every face is `rel=preload as=font`,
+ * so their combined weight lands on the critical path ahead of first paint:
+ * as TTF that was 812KB, which on a slow connection cost seconds of blank
+ * hero. Subsetting to the Latin range the site renders and recompressing to
+ * WOFF2 brings the same six faces down to ~100KB.
+ *
+ * Regenerate with `scripts/build-fonts.sh` after replacing a source TTF.
+ */
 const openSans = localFont({
   src: [
-    { path: "./fonts/OpenSans-Regular.ttf", weight: "400", style: "normal" },
-    { path: "./fonts/OpenSans-Medium.ttf", weight: "500", style: "normal" },
-    { path: "./fonts/OpenSans-Bold.ttf", weight: "700", style: "normal" },
+    { path: "./fonts/OpenSans-Regular.woff2", weight: "400", style: "normal" },
+    { path: "./fonts/OpenSans-Medium.woff2", weight: "500", style: "normal" },
+    { path: "./fonts/OpenSans-Bold.woff2", weight: "700", style: "normal" },
   ],
   variable: "--font-sans",
   display: "swap",
+  fallback: ["Open Sans", "Helvetica Neue", "Arial", "sans-serif"],
 });
 
 const quincy = localFont({
   src: [
-    { path: "./fonts/QuincyCF-Regular.ttf", weight: "400", style: "normal" },
-    { path: "./fonts/QuincyCF-Medium.ttf", weight: "500", style: "normal" },
-    { path: "./fonts/QuincyCF-Bold.ttf", weight: "700", style: "normal" },
+    { path: "./fonts/QuincyCF-Regular.woff2", weight: "400", style: "normal" },
+    { path: "./fonts/QuincyCF-Medium.woff2", weight: "500", style: "normal" },
+    { path: "./fonts/QuincyCF-Bold.woff2", weight: "700", style: "normal" },
   ],
   variable: "--font-display",
   display: "swap",
+  fallback: ["Georgia", "Times New Roman", "serif"],
 });
 
 export const metadata: Metadata = {

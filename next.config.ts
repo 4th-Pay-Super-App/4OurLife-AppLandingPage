@@ -10,6 +10,14 @@ const nextConfig: NextConfig = {
    */
   allowedDevOrigins: ["127.0.0.1", "localhost"],
   images: {
+    /*
+     * Every image on the site is a phone screenshot or a flat brand asset, and
+     * the sources are large PNGs (the hero capture alone is 1MB at 944x2048).
+     * AVIF reaches roughly 20-30% below WebP on this kind of artwork, which
+     * comes straight off the LCP image. WebP stays listed as the fallback for
+     * browsers that do not send `image/avif` in Accept.
+     */
+    formats: ["image/avif", "image/webp"],
     remotePatterns: [
       {
         protocol: "https",
@@ -18,7 +26,12 @@ const nextConfig: NextConfig = {
     ],
   },
   experimental: {
-    optimizePackageImports: ["framer-motion", "lucide-react"],
+    /*
+     * `react-icons/si` is one barrel module covering every Simple Icons glyph,
+     * and the two store logos in DownloadSection are its only consumers.
+     * Listing it here keeps a stray deep import from pulling the barrel in.
+     */
+    optimizePackageImports: ["framer-motion", "lucide-react", "react-icons"],
   },
 };
 

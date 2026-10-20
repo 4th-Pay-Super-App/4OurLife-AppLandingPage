@@ -40,10 +40,29 @@
   --color-yellow-400: #facc15;
   --color-yellow-500: #eab308;
 
-  /* ── Fonts ── */
-  --font-inter: "Inter", sans-serif;
-  --font-figtree: "Figtree", sans-serif;
-  --font-noto: "Noto Sans", sans-serif;
+  /*
+   * ── Fonts ──
+   *
+   * Only two families are loaded, and they are the two the mobile apps bundle:
+   * OpenSans for text and UI (`--font-sans`) and QuincyCF for display headings
+   * (`--font-display`), both declared in `app/layout.tsx`.
+   *
+   * `--font-inter`, `--font-figtree` and `--font-noto` are kept as aliases
+   * because the older pages (/about, /privacy-policy, /terms-of-service,
+   * /register-facility) and their shared Navbar/Footer reference them in ~150
+   * places. Nothing ever loaded Inter, Figtree or Noto Sans, so each of those
+   * references silently fell through to the system sans — which is why those
+   * pages did not look like the apps. Aliasing them here points every one at a
+   * real face in a single edit.
+   *
+   * All three map to OpenSans, matching how the apps assign type: `typo.ts`
+   * uses OpenSans-Bold for screen titles, section labels, headings and buttons
+   * — exactly the roles `font-figtree` covers here — and reserves QuincyCF for
+   * brand/display headings, which already use `--font-display` directly.
+   */
+  --font-inter: var(--font-sans), "Open Sans", sans-serif;
+  --font-figtree: var(--font-sans), "Open Sans", sans-serif;
+  --font-noto: var(--font-sans), "Open Sans", sans-serif;
 
   /* ── Radius tokens ── */
   --radius-4xl: 2rem;
