@@ -1,13 +1,13 @@
 import { createPageMetadata } from "@/lib/seo";
-import LandingExperience from "@/components/landing/LandingExperience";
+import HomeExperience from "@/components/home/HomeExperience";
 
 export const metadata = createPageMetadata({
-  title: "Healthcare access, made clearer",
+  title: "Everyday health. Care closer to home.",
   description:
-    "Find hospitals, specialists and ambulance services in Ghana. Manage health reminders, explore trusted guidance and connect with care providers in one app.",
+    "Explore health guidance, build healthier routines and browse care services near you with 4 Our Life in Ghana.",
   path: "/",
 });
 
 export default function HomePage() {
-  return <LandingExperience />;
+  return <HomeExperience />;
 }

@@ -113,20 +113,31 @@ export function RevealLine({
 
   if (reduceMotion) return <span className={`${styles.revealLine} ${className}`}>{children}</span>;
 
-  const animateProps = immediate
-    ? { animate: { y: "0%" } }
-    : { whileInView: { y: "0%" }, viewport: { once: true, amount } };
+  /*
+   * The scroll trigger has to live on the mask, not on the span inside it.
+   * `whileInView` is backed by an IntersectionObserver, and the observer clips
+   * an element's rect by its ancestors' overflow. The inner span starts at
+   * `y: 112%`, which parks it completely outside the mask, so observing the
+   * inner span reports an intersection ratio of exactly 0 no matter where the
+   * page is scrolled and the line never reveals. Observing the mask (which is
+   * not clipped by its own overflow) and driving the inner span through
+   * variants keeps the same animation and actually fires.
+   */
+  const trigger = immediate
+    ? { animate: "show" as const }
+    : { whileInView: "show" as const, viewport: { once: true, amount } };
 
   return (
-    <span className={`${styles.revealLine} ${className}`}>
+    <motion.span className={`${styles.revealLine} ${className}`} initial="hidden" {...trigger}>
       <motion.span
         className={styles.revealInner}
-        initial={{ y: "112%" }}
-        {...animateProps}
-        transition={{ duration: DUR.reveal, ease: EASE.signature, delay }}
+        variants={{
+          hidden: { y: "112%" },
+          show: { y: "0%", transition: { duration: DUR.reveal, ease: EASE.signature, delay } },
+        }}
       >
         {children}
       </motion.span>
-    </span>
+    </motion.span>
   );
 }

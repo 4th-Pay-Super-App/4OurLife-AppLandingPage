@@ -23,6 +23,7 @@ const SECTIONS = [
   { id: "introduction", label: "Introduction", icon: ShieldCheck },
   { id: "collect", label: "Information We Collect", icon: Database },
   { id: "usage", label: "How We Use Information", icon: Eye },
+  { id: "health-connect", label: "Health Connect", icon: ShieldCheck },
   { id: "security", label: "Data Security", icon: Lock },
   { id: "retention", label: "Data Retention", icon: Clock },
   { id: "contact", label: "Contact Us", icon: Mail },
@@ -90,7 +91,7 @@ export default function PrivacyPolicyPage() {
                 color: "rgba(255,255,255,0.35)",
               }}
             >
-              Last Updated: January 2026 · Version 1.0
+              Last Updated: October 2026 · Version 1.1
             </p>
           </AnimatedSection>
         </div>
@@ -262,7 +263,7 @@ export default function PrivacyPolicyPage() {
                       },
                       {
                         title: "Health Information",
-                        desc: "Profile details, medication history, tracked symptoms, and facility interactions you choose to record.",
+                        desc: "Profile details, medication history, tracked symptoms, facility interactions you choose to record, and (on Android, only if you connect Health Connect and grant access) the health and fitness types you authorize: steps, heart rate, resting heart rate, sleep sessions, active calories, distance, oxygen saturation, and exercise sessions.",
                       },
                       {
                         title: "Device & Usage Data",
@@ -342,6 +343,7 @@ export default function PrivacyPolicyPage() {
                     {[
                       "Provide and improve the 4 Our Life app and its features.",
                       "Support health tools like ovulation tracking, medication reminders, and facility discovery.",
+                      "Display user-facing Health Metrics, activity summaries, trends, and insights based on Health Connect data you authorize.",
                       "Personalise your experience based on your health profile and usage patterns.",
                       "Conduct research, analytics, and — with your consent — targeted marketing.",
                       "Meet our legal and regulatory obligations under Ghanaian law.",
@@ -370,6 +372,35 @@ export default function PrivacyPolicyPage() {
                       </li>
                     ))}
                   </ul>
+                </div>
+              </AnimatedSection>
+
+              {/* Health Connect disclosure */}
+              <AnimatedSection delay={0.18}>
+                <div
+                  id="health-connect"
+                  className="rounded-3xl p-8"
+                  style={{
+                    background: "#FFFFFF",
+                    border: "1.5px solid #EDE8E3",
+                    boxShadow: "0 4px 24px rgba(15,23,42,0.05)",
+                  }}
+                >
+                  <div className="flex items-center gap-4 mb-5">
+                    <div className="w-11 h-11 rounded-2xl flex items-center justify-center" style={{ background: "#CCFBF1" }}>
+                      <ShieldCheck size={20} style={{ color: "#0D9488" }} />
+                    </div>
+                    <h2 className="font-black uppercase tracking-wider" style={{ fontFamily: "var(--font-figtree)", color: "#0F172A", fontSize: "1rem" }}>
+                      Health Connect (Android)
+                    </h2>
+                  </div>
+                  <div className="space-y-4" style={{ fontFamily: "var(--font-noto)", color: "#475569", lineHeight: 1.8, fontSize: "0.95rem" }}>
+                    <p>Connecting Health Connect is optional. If you connect it, 4 Our Life reads only data types for which you grant permission: steps, heart rate, resting heart rate, sleep sessions, active calories, distance, oxygen saturation, and exercise sessions. Exercise sessions are used to calculate active minutes. The app reads this data and does not write data to Health Connect.</p>
+                    <p>We reduce readings to daily aggregates on your device. The daily totals and contributing source-app identifiers are sent to and stored with your account in our Supabase database. Raw Health Connect samples are not sent to our servers.</p>
+                    <p>We use these metrics to show your Health Metrics, activity summaries, trends, and insights. Health Connect metrics are not sent to PostHog, Crashlytics, or advertising services, are not used for advertising or marketing, and are not provided to clinicians, facilities, researchers, or other users.</p>
+                    <p>Health Connect aggregates are retained with your account while it is active and removed through the account-deletion process, subject to legally required retention. We do not currently apply a separate fixed retention period to these aggregates.</p>
+                    <p>You can revoke 4 Our Life's permissions in Android Health Connect settings. Revoking permission stops future reads but does not delete summaries already stored with your account. To request deletion, follow the <Link href="https://office.4ourlife.com/delete-account" className="font-semibold underline" style={{ color: "#0D9488" }}>account deletion instructions</Link> or contact disrupt@4th-pay.com.</p>
+                  </div>
                 </div>
               </AnimatedSection>
 
@@ -515,8 +546,12 @@ export default function PrivacyPolicyPage() {
                         period: "Life of account + 2 years",
                       },
                       {
-                        type: "Health Data",
-                        period: "Life of account + 3 years",
+                        type: "Health information you enter in the App",
+                        period: "Life of account + 3 years (or as required by law)",
+                      },
+                      {
+                        type: "Health Connect daily aggregates",
+                        period: "While your account is active; removed through account deletion",
                       },
                       { type: "Marketing Data", period: "Until you opt-out" },
                       {

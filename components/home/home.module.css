@@ -1,0 +1,814 @@
+/*
+ * Homepage styles.
+ *
+ * Architecture, and the one thing to understand before editing:
+ *
+ *   CSS owns the layout. JavaScript owns the motion.
+ *
+ * The page has two layouts. "Flow" is ordinary document flow and is the base
+ * below, so it is what the server sends and what the browser paints first.
+ * "Scene" is the pinned, scroll-scrubbed composition, and it lives in the one
+ * media query at the bottom of this file.
+ *
+ * That split matters. An earlier version decided the layout in JavaScript from
+ * `useStageMode`, which cannot run until hydration: on a cold 4G load a desktop
+ * visitor sat looking at the centred phone layout for three and a half seconds
+ * before it snapped into the desktop composition. Expressing the layout as a
+ * media query means it is correct in the first frame, with no JavaScript.
+ * `useStageMode` tests the identical conditions and decides only whether to
+ * attach motion values, so the two can never disagree.
+ *
+ * Two consequences the scene block has to honour:
+ *   1. It is gated on `html.js` (set by the inline script in `app/layout.tsx`),
+ *      so a reader without JavaScript keeps the flow layout, where nothing is
+ *      hidden behind an animation that will never run.
+ *   2. Until hydration the markup is still the flow markup, so the scene block
+ *      hides the flow-only elements and declares the resting state of the
+ *      first act. Framer Motion's inline styles take over from there.
+ */
+
+.page {
+  --paper: #f6f8f6;
+  --ink: #10261b;
+  --muted: #4b5a52;
+  --forest: #0b2a1d;
+  --forest-soft: #174b32;
+  --brand: #1f7a4b;
+  --mint: #c8f0d9;
+  --on-forest: #f2f7f4;
+  --line: rgba(16, 38, 27, 0.14);
+  /* Capped against the viewport height as well as its width, so a short laptop
+     screen never clips the phone. A clipped device reads as a broken page. */
+  --device-w: clamp(188px, min(20cqw, 36svh), 470px);
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  min-height: 100vh;
+  /* `clip`, never `hidden`: `hidden` would create a scroll container and break
+     every `position: sticky` stage on the page. */
+  overflow: clip;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans), "Open Sans", sans-serif;
+}
+
+.page *,
+.page *::before,
+.page *::after { box-sizing: border-box; }
+.page a { color: inherit; text-decoration: none; }
+.page button { font: inherit; }
+.page :focus-visible { outline: 3px solid #77d6a0; outline-offset: 4px; }
+
+.skipLink {
+  position: fixed; z-index: 500; top: 12px; left: 12px; padding: 12px 16px;
+  border-radius: 12px; background: white; color: var(--ink); font-size: 13px; font-weight: 700;
+  transform: translateY(-160%);
+}
+.skipLink:focus { transform: translateY(0); }
+
+/* ── Navigation ─────────────────────────────────────────────────────────── */
+
+.navShell { position: fixed; z-index: 100; top: 18px; left: 50%; width: min(1560px, calc(100% - 48px)); transform: translateX(-50%); }
+.nav {
+  position: relative;
+  display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 20px;
+  min-height: 68px; padding: 9px 11px 9px 20px; border: 1px solid rgba(15, 42, 28, .1);
+  border-radius: 999px; background: rgba(250, 252, 250, .72); color: #13251a;
+  box-shadow: 0 16px 48px rgba(14, 39, 25, .07);
+  backdrop-filter: blur(22px) saturate(165%); -webkit-backdrop-filter: blur(22px) saturate(165%);
+  transition: min-height .4s var(--ease), background .5s ease, border-color .5s ease, box-shadow .5s ease, color .5s ease;
+}
+/* Condenses once the page has moved, so the hero gets the full viewport. */
+.navShell[data-lifted="true"] .nav { min-height: 58px; background: rgba(250, 252, 250, .86); box-shadow: 0 14px 40px rgba(14, 39, 25, .11); }
+
+.brand { display: inline-flex; align-items: center; gap: 10px; width: fit-content; }
+.brandLogo { display: block; width: 34px; height: 30px; object-fit: contain; }
+.brandName, .footerBrand > span:last-child { font-size: clamp(11px, .62vw, 14px); font-weight: 700; letter-spacing: .17em; white-space: nowrap; }
+.navLinks { display: flex; align-items: center; gap: clamp(18px, 2.4vw, 36px); }
+.navLinks a { position: relative; color: #34493c; font-size: clamp(13px, .8vw, 16px); font-weight: 600; transition: color .25s ease; }
+.navLinks a::after { position: absolute; bottom: -8px; left: 0; width: 100%; height: 1px; background: currentColor; content: ""; transform: scaleX(0); transform-origin: right; transition: transform .35s var(--ease); }
+.navLinks a:hover { color: var(--brand); }
+.navLinks a:hover::after, .navLinks a:focus-visible::after { transform: scaleX(1); transform-origin: left; }
+
+.navCta, .primaryButton, .darkButton, .outlineButton, .lightButton {
+  display: inline-flex; align-items: center; justify-content: center; gap: clamp(12px, .8vw, 16px);
+  min-height: clamp(48px, 3.1vw, 64px); padding: 0 clamp(21px, 1.5vw, 34px);
+  border-radius: 999px; font-size: clamp(13px, .82vw, 17px); font-weight: 700; white-space: nowrap;
+  transition: transform .3s var(--ease), background .3s ease, box-shadow .3s ease, color .3s ease;
+}
+.navCta { justify-self: end; min-height: clamp(44px, 2.6vw, 54px); background: var(--ink); }
+.navCta:hover, .darkButton:hover { transform: translateY(-2px); background: #176540; box-shadow: 0 12px 28px rgba(15, 63, 38, .2); }
+.primaryButton { background: var(--brand); }
+.primaryButton:hover { background: #176540; box-shadow: 0 14px 32px rgba(15, 63, 38, .24); }
+.menuButton, .mobileMenu { display: none; }
+
+/*
+ * Button text colour, kept together and qualified with `.page` so it outranks
+ * the `.page a { color: inherit }` reset above. Without the extra specificity
+ * every one of these inherits the surrounding ink and the dark pills go
+ * unreadable. Ratios against their own background: white on --ink 15.8:1,
+ * white on --brand 4.8:1, #143f28 on #e7f6ec 9.7:1.
+ */
+.page a.navCta, .page a.primaryButton, .page a.darkButton { color: #fff; }
+.page a.outlineButton { color: var(--ink); }
+.page a.lightButton { color: #143f28; }
+.page a.secondaryButton { color: #3c5545; }
+.page a.secondaryButton:hover { color: var(--brand); }
+
+.navProgress {
+  position: absolute; right: 30px; bottom: 7px; left: 30px; height: 1.5px;
+  border-radius: 2px; background: var(--brand); opacity: .5;
+  /* `transform`, not the `scale` property: Framer Motion writes `transform`,
+     and `scale: 0 1` here would multiply with it and pin the bar at 0 width. */
+  transform-origin: left center; transform: scaleX(0);
+}
+
+/*
+ * The glass pill vanishes against the forest act of the consumer chapter, so it
+ * inverts while that act is on screen. The attribute is written to <html> by
+ * `ConsumerChapter` without a React render.
+ */
+:global(html[data-chapter-tone="dark"]) .navShell[data-lifted="true"] .nav,
+:global(html[data-chapter-tone="dark"]) .nav {
+  border-color: rgba(214, 243, 225, .2); background: #050705; color: #fff;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, .26);
+}
+:global(html[data-chapter-tone="dark"]) .navLinks a { color: rgba(255, 255, 255, .88); }
+:global(html[data-chapter-tone="dark"]) .navLinks a:hover { color: #fff; }
+:global(html[data-chapter-tone="dark"]) .page a.navCta { background: var(--mint); color: #0b2a1d; }
+:global(html[data-chapter-tone="dark"]) .page a.navCta:hover { background: #fff; }
+:global(html[data-chapter-tone="dark"]) .navProgress { background: var(--mint); }
+
+/* ── Shared type ────────────────────────────────────────────────────────── */
+
+.heroCopy h1,
+.pillarHeading,
+.plasenceCopy h2,
+.toolsHeading h2,
+.businessIntro h2,
+.downloadCopy h2 {
+  margin: 0; font-family: var(--font-display), Georgia, serif; font-weight: 500; letter-spacing: -.02em;
+}
+/* QuincyCF is a serif with deep descenders. Below about 1.04 the masked reveal
+   starts slicing the "y" in "Everyday" and the "g" in "Ghana". */
+.heroCopy h1 { font-size: clamp(46px, 4.9vw, 108px); line-height: 1.04; }
+/*
+ * The hero's masked line reveal, in CSS so it needs no JavaScript. The mask
+ * clips rather than fades, which is what reads as considered rather than
+ * generic; the padding keeps QuincyCF's descenders off the clip edge.
+ */
+.heroLine { display: block; overflow: hidden; padding-bottom: .12em; margin-bottom: -.12em; }
+.heroLine > span { display: block; animation: heroRise .85s var(--ease) both; }
+.heroLine:nth-of-type(2) > span { animation-delay: .09s; }
+@keyframes heroRise { from { transform: translateY(112%); } to { transform: translateY(0); } }
+.heroCopy h1 em,
+.plasenceCopy h2 em,
+.toolsHeading h2 em,
+.downloadCopy h2 em { color: var(--brand); font-style: normal; }
+
+.eyebrow { display: inline-flex; color: var(--brand); font-size: 11px; font-weight: 800; letter-spacing: .17em; line-height: 1.2; text-transform: uppercase; }
+
+/* ── Consumer chapter (flow is the base) ────────────────────────────────── */
+
+.chapter { position: relative; }
+.stage { position: relative; padding-top: 150px; background: var(--paper); }
+.sceneContent { position: relative; width: min(100%, 1800px); margin: 0 auto; }
+
+.heroGlow, .forestGlow {
+  position: absolute; z-index: 0; top: 42%; left: 50%; width: min(74vw, 900px); aspect-ratio: 1;
+  border-radius: 50%; pointer-events: none; transform: translate(-50%, -50%);
+}
+.heroGlow { background: radial-gradient(circle, rgba(107, 211, 146, .22), rgba(142, 213, 164, .09) 36%, transparent 70%); }
+.forestGlow { background: radial-gradient(circle, rgba(63, 166, 105, .3), rgba(37, 120, 73, .12) 40%, transparent 72%); opacity: 0; }
+
+.heroCopy {
+  position: relative; z-index: 5;
+  width: min(760px, calc(100% - 48px)); margin: 0 auto; text-align: center;
+}
+.heroCopy > p { max-width: min(46ch, 100%); margin: 22px auto 0; color: var(--muted); font-size: clamp(15px, 1.3vw, 22px); line-height: 1.7; }
+.heroActions { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 12px; margin-top: 26px; }
+.secondaryButton { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: clamp(46px, 3vw, 62px); padding: 0 clamp(14px, 1vw, 22px); font-size: clamp(13px, .82vw, 17px); font-weight: 700; transition: color .25s ease; }
+.storeLinks { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 18px; }
+.storeLinks a { display: flex; align-items: center; gap: clamp(9px, .7vw, 13px); min-width: clamp(139px, 10vw, 196px); min-height: clamp(48px, 3.1vw, 64px); padding: clamp(8px, .6vw, 12px) clamp(13px, 1vw, 20px); border: 1px solid rgba(13, 44, 28, .13); border-radius: 14px; background: rgba(255, 255, 255, .6); text-align: left; transition: background .3s ease, transform .3s var(--ease); }
+.storeLinks a:hover { transform: translateY(-2px); background: #fff; }
+.storeLinks small, .storeLinks strong { display: block; }
+.storeLinks small { color: #66776c; font-size: clamp(8px, .55vw, 11px); letter-spacing: .04em; line-height: 1.25; text-transform: uppercase; }
+.storeLinks strong { color: #15291d; font-size: clamp(12px, .8vw, 16px); line-height: 1.3; }
+.storeLogo { flex: 0 0 auto; width: clamp(22px, 1.5vw, 30px); height: clamp(22px, 1.5vw, 30px); color: #14251a; }
+
+.deviceStage { position: relative; z-index: 3; padding-bottom: 72px; }
+.device { width: var(--device-w); }
+.deviceCentre { width: min(260px, 62vw); margin: 34px auto 0; filter: drop-shadow(0 26px 40px rgba(5, 25, 13, .2)); }
+/* The pillar cards below carry these two screens, so a second copy would be
+   the same screenshot twice. */
+.deviceLeft, .deviceRight { display: none; }
+.careCallout, .categoryVisuals, .plasenceVisual, .plasenceVisualFlow { display: none; }
+.visualSurface { transform-style: preserve-3d; transition: transform .55s var(--ease), box-shadow .55s ease; }
+.brandCategoryIcon {
+  display: block; width: 38px; height: 38px; background: #de3163; mask-position: center; mask-repeat: no-repeat; mask-size: contain;
+  -webkit-mask-position: center; -webkit-mask-repeat: no-repeat; -webkit-mask-size: contain;
+}
+.brandDisease { mask-image: url("/home/consumer/category-disease.png"); -webkit-mask-image: url("/home/consumer/category-disease.png"); }
+.brandPlasence { mask-image: url("/home/consumer/category-plasence.png"); -webkit-mask-image: url("/home/consumer/category-plasence.png"); }
+.pillar { position: relative; }
+.pillarImage { z-index: 2; }
+.pillarVisual {
+  position: absolute; z-index: 1; top: 40%; left: calc(50% + 73px); display: grid; width: 58px; height: 58px;
+  place-items: center; border: 1px solid rgba(238, 70, 128, .16); border-radius: 18px; background: #fff8fa;
+  box-shadow: 0 14px 30px rgba(108, 43, 66, .18); color: #ed427b; transform: rotate(-8deg);
+  transition: transform .55s var(--ease), box-shadow .55s ease; animation: callout-float 5.5s ease-in-out infinite;
+}
+.plasenceVisualFlow { position: absolute; z-index: 3; top: 40%; right: max(16px, calc(50% - 166px)); display: block; width: clamp(92px, 26vw, 128px); }
+.plasenceDeviceFlow .deviceFrame { position: relative; z-index: 2; }
+.plasenceVisualFlow > .visualSurface { display: grid; min-height: 92px; place-items: center; animation: callout-float 5.7s ease-in-out infinite; }
+.plasenceOrb {
+  display: grid; width: 78px; height: 78px; place-items: center; border: 1px solid rgba(244, 47, 123, .18);
+  border-radius: 28px; background: radial-gradient(circle at 30% 24%, #fff 0 10%, #ffe7f0 40%, #f9bbd2 100%);
+  box-shadow: inset -8px -10px 16px rgba(210, 73, 122, .14), inset 5px 5px 13px #fff, 0 12px 24px rgba(141, 45, 81, .2);
+  color: #ee3c7c; transform: rotate(-9deg);
+}
+.plasenceCalendar, .plasenceChart {
+  display: grid; width: 106px; min-height: 84px; justify-items: center; gap: 8px; padding: 12px;
+  border: 1px solid rgba(244, 47, 123, .14); border-radius: 19px; background: linear-gradient(145deg, #fff, #fff3f7);
+  box-shadow: inset 0 1px 0 #fff, 0 12px 24px rgba(141, 45, 81, .14); color: #e83e78; transform: rotate(6deg);
+}
+.plasenceCalendarDots { display: grid; width: 68px; grid-template-columns: repeat(3, 1fr); gap: 5px; }
+.plasenceCalendarDots i { width: 9px; height: 9px; border-radius: 50%; background: #f3a7c1; }
+.plasenceCalendarDots i:nth-child(4n) { background: #ffdfeb; }
+.plasenceChart > span { display: flex; height: 23px; align-items: end; gap: 5px; }
+.plasenceChart > span i { width: 8px; border-radius: 5px 5px 2px 2px; background: #ee7da3; }
+.plasenceChart > span i:nth-child(1) { height: 11px; }
+.plasenceChart > span i:nth-child(2) { height: 17px; }
+.plasenceChart > span i:nth-child(3) { height: 13px; }
+.plasenceChart > span i:nth-child(4) { height: 22px; }
+.plasenceChart > span i:nth-child(5) { height: 16px; }
+
+/* ── Device chrome ──────────────────────────────────────────────────────── */
+
+.deviceFrame {
+  position: relative; width: 100%; padding: 8px;
+  border: 1px solid rgba(255, 255, 255, .46); border-radius: clamp(31px, 3.2vw, 43px);
+  background: linear-gradient(145deg, #29302b, #030605 35%, #202722 78%, #060807);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .18), 0 30px 70px rgba(3, 25, 12, .22);
+}
+.deviceScreen { position: relative; overflow: hidden; aspect-ratio: 944 / 2048; border-radius: clamp(24px, 2.5vw, 34px); background: #fff; }
+.deviceLayer { position: absolute; inset: 0; transition: opacity .5s var(--ease); }
+.deviceLayer[data-active="false"] { opacity: 0; }
+/* Layers whose opacity is driven by scroll progress animate every frame
+   already; letting them also inherit the tab transition makes the Home to
+   Plasence dissolve lag behind the scrollbar. */
+.deviceLayer[data-scrub="true"] { transition: none; }
+.deviceImage { object-fit: cover; }
+.deviceIsland { position: absolute; z-index: 2; top: 2.05%; left: 50%; width: 21%; height: auto; aspect-ratio: 62 / 17; border-radius: 999px; background: #050706; transform: translateX(-50%); }
+
+/* ── Act 2: the three pillars ───────────────────────────────────────────── */
+
+.pillarBand { position: relative; z-index: 4; padding: 62px 0 70px; background: var(--forest); color: var(--on-forest); scroll-margin-top: 96px; }
+.pillarHeading { padding: 0 max(7vw, 24px) 28px; font-size: clamp(34px, 7.5vw, 46px); line-height: 1.06; }
+.pillarHeading em { color: var(--mint); font-style: normal; }
+.pillarGrid {
+  display: grid; grid-auto-flow: column; grid-auto-columns: minmax(236px, 78vw); gap: 13px;
+  overflow-x: auto; padding: 0 24px 14px;
+  scroll-snap-type: x mandatory; scrollbar-width: thin; scrollbar-color: rgba(209, 240, 220, .35) transparent;
+}
+.pillar { min-width: 0; padding: 12px 12px 20px; border: 1px solid rgba(233, 248, 238, .17); border-radius: 24px; background: rgba(255, 255, 255, .055); scroll-snap-align: start; }
+.pillarImage { position: relative; height: 278px; overflow: hidden; border-radius: 16px; background: #edf4ee; }
+.pillarImage img { object-fit: cover; object-position: top center; }
+.pillar h3 { margin: 17px 4px 0; font-family: var(--font-display), Georgia, serif; font-size: 23px; font-weight: 500; letter-spacing: -.02em; line-height: 1.14; }
+.pillar p { margin: 7px 4px 0; color: rgba(239, 249, 242, .72); font-size: 12.5px; line-height: 1.6; }
+
+/*
+ * Scroll-depth markers for the in-page nav, rendered only in scene mode. The
+ * acts are pinned there, so an id on the act itself would resolve to wherever
+ * the sticky stage currently sits. These sit in the section's own coordinate
+ * space: the chapter is 430svh with 330svh of travel, and Lenis offsets anchors
+ * by 96px to clear the fixed pill, so 44% settles near p 0.54 (three phones
+ * spread, captions in) and 70% near p 0.88 (Plasence arrived and readable).
+ */
+.actAnchor { position: absolute; left: 0; width: 1px; height: 1px; pointer-events: none; }
+.anchorPillars { top: 44%; }
+.anchorPlasence { top: 70%; }
+
+/* ── Act 3: Plasence ────────────────────────────────────────────────────── */
+
+.plasenceCopy {
+  position: relative; z-index: 5;
+  width: min(760px, calc(100% - 48px)); margin: 0 auto; padding: 96px 0 0;
+  text-align: center; scroll-margin-top: 96px;
+}
+.plasenceCopy h2 { margin-top: 18px; font-size: clamp(44px, 5vw, 98px); line-height: 1.04; }
+.plasenceCopy > p { max-width: min(46ch, 100%); margin: 20px auto 0; color: var(--muted); font-size: clamp(15.5px, 1.1vw, 21px); line-height: 1.75; }
+.plasenceTabs { display: inline-flex; gap: 4px; margin-top: 26px; padding: 5px; border: 1px solid #dce8df; border-radius: 999px; background: #edf3ef; }
+.plasenceTabs button { min-width: clamp(92px, 6.6vw, 132px); min-height: clamp(44px, 3vw, 60px); padding: 0 clamp(17px, 1.2vw, 26px); border: 0; border-radius: 999px; background: transparent; color: #5b6a60; cursor: pointer; font-size: clamp(12px, .8vw, 16px); font-weight: 700; transition: background .3s ease, color .3s ease, box-shadow .3s ease; }
+.plasenceTabs button:hover { color: var(--brand); }
+.plasenceTabs button.plasenceTabActive { background: #fff; color: #155a35; box-shadow: 0 4px 12px rgba(21, 74, 42, .1); }
+.plasenceSummary { min-height: 42px; margin: 16px 0 0; color: #2f4a39; font-size: clamp(14px, 1vw, 19px); font-weight: 600; line-height: 1.5; }
+.healthNote { max-width: min(54ch, 100%); margin: 14px auto 0; color: #74857a; font-size: clamp(11.5px, .8vw, 15px); line-height: 1.6; }
+
+.plasenceDeviceFlow { position: relative; display: flex; justify-content: center; padding: 34px 24px 80px; }
+.plasenceVisualFlow { position: absolute; z-index: 3; top: 40%; right: max(16px, calc(50% - 166px)); display: block; width: clamp(92px, 26vw, 128px); }
+.plasenceDeviceFlow .deviceFrame { position: relative; z-index: 2; }
+.plasenceDeviceFlow .deviceFrame { width: min(292px, 70vw); filter: drop-shadow(0 30px 44px rgba(50, 39, 44, .16)); }
+.plasenceAura {
+  position: absolute; top: 44%; left: 50%; width: min(90vw, 420px); aspect-ratio: 1; border-radius: 50%;
+  background: radial-gradient(circle, rgba(236, 70, 133, .1), rgba(246, 214, 226, .28) 45%, transparent 72%);
+  transform: translate(-50%, -50%);
+}
+/* The scene-only aura sits behind the travelling phone in act 3. */
+.plasenceAuraScene { display: none; }
+
+/* ── Everyday tools ─────────────────────────────────────────────────────── */
+
+.tools {
+  width: 100%; margin: 0 auto; padding: 104px 0 112px; overflow: hidden;
+  background: var(--paper);
+}
+.toolsHeading { width: min(1100px, calc(100% - 48px)); margin: 0 auto 34px; text-align: center; }
+.toolsEyebrow { display: inline-block; margin-bottom: 15px; color: var(--brand); font-size: 10px; font-weight: 800; letter-spacing: .17em; text-transform: uppercase; }
+.toolsHeading h2 { font-size: clamp(42px, 5.6vw, 110px); line-height: 1.02; }
+.toolsHeading h2 em { color: #4d735c; }
+.toolsHeading > p { max-width: min(52ch, 100%); margin: 18px auto 0; color: var(--muted); font-size: clamp(15px, 1.15vw, 21px); line-height: 1.65; }
+.toolsList {
+  display: flex; width: min(100%, 2100px); align-items: stretch; justify-content: center;
+  margin: 0 auto; padding: clamp(38px, 3vw, 64px) clamp(44px, 3.4vw, 80px) clamp(58px, 4vw, 90px);
+  perspective: 1400px;
+}
+.tool {
+  --fan-angle: 0deg;
+  --fan-y: 0px;
+  position: relative; display: flex; flex: 1 1 0; min-width: 0; flex-direction: column;
+  min-height: clamp(300px, 21vw, 430px);
+  justify-content: space-between; margin-left: clamp(-20px, -1vw, -14px);
+  padding: clamp(22px, 1.5vw, 34px) clamp(23px, 1.6vw, 36px) clamp(24px, 1.7vw, 38px);
+  border: 1px solid rgba(16, 38, 27, .08);
+  border-radius: 24px; box-shadow: 0 22px 54px rgba(24, 39, 29, .12); rotate: var(--fan-angle);
+  translate: 0 var(--fan-y); transform-origin: 50% 75%; z-index: 1;
+  transition: translate .55s var(--ease), rotate .55s var(--ease), scale .55s var(--ease), box-shadow .55s ease;
+}
+.tool:first-child { margin-left: 0; }
+.tool:nth-child(1) { --fan-angle: -4deg; --fan-y: 18px; z-index: 1; }
+.tool:nth-child(2) { --fan-angle: -2deg; --fan-y: 2px; z-index: 2; }
+.tool:nth-child(3) { --fan-angle: 0deg; --fan-y: -12px; z-index: 3; }
+.tool:nth-child(4) { --fan-angle: 2deg; --fan-y: 2px; z-index: 2; }
+.tool:nth-child(5) { --fan-angle: 4deg; --fan-y: 18px; z-index: 1; }
+/*
+ * One green ramp, palest to deepest. The previous lavender and lime sat outside
+ * the brand entirely. Text pairs: #14251a on the three light tones, #f2faf5 on
+ * the two dark ones (4.9:1 on --tone-4, far higher on --tone-5).
+ */
+.tool[data-tone="pale"] { background: #eef4ef; color: #14251a; }
+.tool[data-tone="light"] { background: #d9e9de; color: #14251a; }
+.tool[data-tone="sage"] { background: #b3d3c0; color: #11301f; }
+.tool[data-tone="forest"] { background: #3c7a55; color: #f2faf5; }
+.tool[data-tone="deep"] { background: #11301f; color: #eaf5ee; }
+.toolTop { display: flex; align-items: center; justify-content: space-between; color: currentColor; font-size: clamp(10px, .72vw, 13px); font-weight: 800; letter-spacing: .13em; }
+.toolTop > span > span { opacity: .58; }
+.toolTop > svg { width: clamp(48px, 3.4vw, 68px); height: clamp(48px, 3.4vw, 68px); padding: clamp(11px, .8vw, 17px); border: 1px solid currentColor; border-radius: 50%; opacity: .86; }
+.toolCopy h3 { margin: 0; font-family: var(--font-display), Georgia, serif; font-size: clamp(22px, 1.75vw, 40px); font-weight: 500; letter-spacing: -.03em; line-height: 1.05; text-wrap: balance; }
+.toolCopy p { max-width: min(34ch, 100%); margin: 12px 0 0; color: currentColor; font-size: clamp(13px, .95vw, 18px); line-height: 1.6; opacity: .78; }
+
+@media (hover: hover) and (pointer: fine) {
+  .toolsList:hover .tool:not(:hover) { translate: 0 calc(var(--fan-y) + 6px); }
+  .tool:hover { z-index: 10; translate: 0 -22px; rotate: 0deg; scale: 1.06; box-shadow: 0 34px 70px rgba(24, 39, 29, .22); }
+}
+
+/* ── Business story (flow is the base) ──────────────────────────────────── */
+
+.business { position: relative; background: var(--forest); color: var(--on-forest); }
+.businessStage { position: relative; padding: 104px 24px 78px; }
+.businessSceneContent { position: relative; width: min(100%, 1800px); margin: 0 auto; }
+.businessIntro { position: relative; z-index: 2; }
+.businessIntro h2 { max-width: min(1180px, 100%); margin-top: 18px; color: #f6faf7; font-size: clamp(44px, 5.6vw, 116px); line-height: 1.04; }
+.businessIntro h2 em { color: var(--mint); font-style: normal; }
+.businessIntro .eyebrow { color: #a8e6bf; }
+.businessIntro > p { max-width: min(54ch, 100%); margin: 17px 0 0; color: rgba(242, 248, 244, .7); font-size: clamp(14px, 1vw, 19px); line-height: 1.65; }
+
+.businessTrack { display: grid; margin-top: 52px; }
+.businessPanel { padding: 26px 0 44px; border-top: 1px solid rgba(231, 248, 236, .2); }
+.roleCount { display: flex; align-items: center; gap: 9px; color: rgba(221, 245, 229, .54); font-size: 10px; letter-spacing: .12em; }
+.roleCount i { width: 30px; height: 1px; background: rgba(221, 245, 229, .38); }
+.roleLabel { margin: 10px 0 0; color: #a8e6bf; font-size: 11px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; }
+.businessPanel h3 { max-width: min(960px, 100%); margin: 8px 0 0; color: #f7fbf8; font-family: var(--font-display), Georgia, serif; font-size: clamp(32px, 7.2vw, 78px); font-weight: 500; letter-spacing: -.03em; line-height: 1.04; }
+.roleBody { max-width: min(48ch, 100%); margin: 12px 0 0; color: rgba(242, 248, 244, .72); font-size: clamp(14px, 1vw, 19px); line-height: 1.6; }
+.roleDetails { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 16px; }
+.roleDetails span { padding: clamp(8px, .6vw, 12px) clamp(12px, .9vw, 18px); border: 1px solid rgba(231, 248, 236, .22); border-radius: 999px; color: rgba(243, 249, 245, .86); font-size: clamp(10px, .72vw, 13px); }
+.roleFlowVisual { display: flex; width: fit-content; margin: 18px auto 0; }
+.roleFlowVisual > .visualSurface, .businessCallout > .visualSurface {
+  display: flex; align-items: center; gap: clamp(11px, .9cqw, 17px);
+  padding: clamp(12px, 1cqw, 19px) clamp(15px, 1.25cqw, 24px);
+  border: 1px solid rgba(208, 240, 218, .16); border-radius: clamp(19px, 1.5cqw, 28px); background: linear-gradient(145deg, rgba(255, 255, 255, .98), rgba(237, 249, 240, .95));
+  box-shadow: inset 0 1px 0 #fff, 0 16px 35px rgba(0, 0, 0, .19); color: #12311e;
+  animation: callout-float 6s ease-in-out infinite;
+}
+.businessCallout { display: none; }
+.businessCalloutIcon { display: grid; width: clamp(42px, 3.4cqw, 62px); height: clamp(42px, 3.4cqw, 62px); flex: 0 0 clamp(42px, 3.4cqw, 62px); place-items: center; border-radius: clamp(14px, 1.1cqw, 20px); background: var(--mint); color: #18391f; }
+.businessCalloutCopy { display: grid; gap: clamp(3px, .25cqw, 6px); }
+.businessCalloutCopy strong { font-size: clamp(13px, 1.05cqw, 22px); line-height: 1.2; }
+.businessCalloutCopy small { color: #65776b; font-size: clamp(10px, .8cqw, 16px); line-height: 1.3; }
+.panelImage { position: relative; width: min(290px, 72vw); margin: 28px auto 0; overflow: hidden; aspect-ratio: 828 / 1792; padding: 6px; border: 1px solid rgba(239, 255, 244, .35); border-radius: 31px; background: #06130b; box-shadow: 0 25px 42px rgba(0, 0, 0, .24); }
+.panelImage img { object-fit: cover; border-radius: 25px; }
+
+/* The single travelling phone and the step rail belong to the pinned scene. */
+.businessDeviceStage, .roleRail { display: none; }
+.businessDeviceGlow { position: absolute; top: 46%; left: 50%; width: 152%; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle, rgba(140, 226, 170, .2), transparent 68%); transform: translate(-50%, -50%); }
+.businessDevice { position: relative; width: 100%; overflow: hidden; aspect-ratio: 828 / 1792; padding: 7px; border: 1px solid rgba(239, 255, 244, .4); border-radius: 35px; background: #08130c; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .13), 0 34px 50px rgba(0, 0, 0, .34); }
+.businessDeviceLayer { position: absolute; inset: 7px; overflow: hidden; border-radius: 28px; transition: opacity .45s var(--ease); }
+.businessDeviceLayer[data-active="false"] { opacity: 0; }
+.businessDeviceLayer img { object-fit: cover; }
+.roleRail button { position: relative; display: flex; align-items: center; gap: 9px; min-height: 52px; padding: 4px 0 0; border: 0; background: transparent; color: rgba(230, 245, 234, .55); cursor: pointer; font-size: 10px; transition: color .3s ease; }
+.roleRail button::before { position: absolute; top: -1px; right: 0; left: 0; height: 2px; background: transparent; content: ""; transition: background .3s ease; }
+.roleRail button:hover { color: rgba(240, 250, 243, .88); }
+.roleRail button span { color: rgba(230, 245, 234, .42); font-size: 9px; }
+.roleRail button.roleRailActive { color: #f4faf5; }
+.roleRail button.roleRailActive::before { background: #9ae0b3; }
+.roleRail button.roleRailActive span { color: #a8e6bf; }
+
+.businessBand { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 24px; padding: 30px max(24px, calc((100vw - 1800px) / 2 + 24px)); background: var(--forest-soft); color: #f6faf7; }
+.businessBand p { margin: 0; color: rgba(245, 250, 247, .74); font-size: 13px; }
+.lightButton { background: #e7f6ec; }
+.lightButton:hover { transform: translateY(-2px); background: #fff; }
+.comingSoon { color: rgba(233, 248, 237, .54); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; }
+
+/* ── Download ───────────────────────────────────────────────────────────── */
+
+.download { position: relative; display: grid; width: 100%; grid-template-columns: 1fr; align-items: center; gap: 38px; margin: 0 auto; padding: 84px max(24px, calc((100vw - 1600px) / 2 + 24px)) 80px; overflow: hidden; background: #f2f6f2; }
+.downloadOrb { position: absolute; top: 50%; right: 8%; width: min(48vw, 600px); aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle, rgba(97, 197, 131, .17), rgba(156, 219, 175, .08) 48%, transparent 70%); transform: translateY(-50%); }
+.downloadCopy { position: relative; z-index: 2; max-width: 760px; }
+.downloadCopy h2 { font-size: clamp(48px, 10vw, 74px); line-height: 1.04; }
+.downloadCopy > p { margin: 24px 0 0; max-width: 46ch; color: #5b6c60; font-size: clamp(15px, 1.1vw, 20px); line-height: 1.7; }
+.downloadButtons { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 30px; }
+.darkButton { background: var(--ink); }
+.storeButtonLogo { flex: 0 0 auto; width: 18px; height: 18px; }
+.outlineButton { border: 1px solid rgba(16, 38, 27, .18); background: rgba(255, 255, 255, .55); }
+.outlineButton:hover { transform: translateY(-2px); background: #fff; }
+.businessInvite { margin-top: 28px; color: #5b6c60; font-size: 12.5px; }
+.businessInvite a { color: var(--brand); font-weight: 800; }
+.qrGroup { position: relative; z-index: 2; display: flex; justify-self: start; gap: 14px; }
+.qrGroup a { display: grid; justify-items: center; gap: 9px; padding: 12px; border: 1px solid rgba(16, 38, 27, .11); border-radius: 18px; background: rgba(255, 255, 255, .62); box-shadow: 0 14px 40px rgba(20, 53, 32, .07); transition: transform .3s var(--ease), background .3s ease; }
+.qrGroup a:hover { transform: translateY(-3px); background: #fff; }
+.qrGroup img { display: block; border-radius: 7px; background: #fff; }
+.qrGroup span { color: #506456; font-size: 10px; font-weight: 700; }
+
+/* ── Footer ─────────────────────────────────────────────────────────────── */
+
+.footer { position: relative; display: grid; width: 100%; grid-template-columns: 1fr auto; align-items: center; gap: 15px; margin: 0 auto; padding: 25px max(24px, calc((100vw - 1800px) / 2 + 24px)); background: #f2f6f2; }
+.footerBrand { display: inline-flex; align-items: center; gap: 9px; }
+.footer > p { grid-column: 1 / -1; grid-row: 2; margin: 0; color: #617166; font-size: 11px; }
+.footer nav { grid-column: 1 / -1; grid-row: 3; display: flex; flex-wrap: wrap; gap: 14px; }
+.footer nav a { color: #516357; font-size: 10px; transition: color .25s ease; }
+.footer nav a:hover { color: var(--brand); }
+.copyright { grid-column: 1 / -1; grid-row: 4; padding-top: 20px; border-top: 1px solid rgba(16, 38, 27, .12); color: #839187; font-size: 10px; }
+
+/* ── Flow refinements: phones ───────────────────────────────────────────── */
+
+@media (max-width: 900px) {
+  .navShell { top: 12px; width: calc(100% - 24px); }
+  .nav { min-height: 58px; grid-template-columns: 1fr auto; padding: 7px 8px 7px 15px; }
+  .navShell[data-lifted="true"] .nav { min-height: 54px; }
+  .navLinks, .navCta { display: none; }
+  .navProgress { right: 22px; bottom: 5px; left: 22px; }
+  .menuButton { display: grid; justify-self: end; place-items: center; width: 42px; height: 42px; border: 0; border-radius: 50%; background: var(--ink); color: #fff; cursor: pointer; }
+  .mobileMenu { position: absolute; top: calc(100% + 8px); right: 0; left: 0; display: grid; gap: 2px; padding: 10px; border: 1px solid rgba(15, 42, 28, .1); border-radius: 22px; background: rgba(250, 252, 250, .97); box-shadow: 0 18px 48px rgba(14, 39, 25, .14); backdrop-filter: blur(22px); }
+  .mobileMenu a { display: flex; justify-content: space-between; align-items: center; min-height: 48px; padding: 0 12px; border-radius: 13px; color: #23422f; font-size: 14px; font-weight: 650; }
+  .mobileMenu a:hover { background: #edf5ef; }
+
+  .stage { padding-top: 132px; }
+  .heroCopy { width: min(620px, calc(100% - 40px)); }
+  .heroCopy h1 { font-size: clamp(44px, 9.4vw, 70px); }
+  .heroCopy > p { max-width: 470px; font-size: 15px; }
+  .heroGlow { top: 480px; width: min(96vw, 600px); }
+  .forestGlow { display: none; }
+  .deviceStage { padding-bottom: 66px; }
+
+  .pillarHeading { padding: 0 24px 26px; }
+  .tools { padding: 82px 0 88px; }
+  .toolsHeading { width: calc(100% - 48px); margin-bottom: 24px; text-align: left; }
+  .toolsHeading h2 { font-size: clamp(38px, 8vw, 56px); }
+  .toolsHeading > p { margin: 14px 0 0; }
+  .toolsList {
+    display: grid; width: 100%; height: auto; grid-auto-flow: column; grid-auto-columns: minmax(260px, 82vw);
+    justify-content: start; gap: 14px; overflow-x: auto; overscroll-behavior-x: contain;
+    padding: 14px 24px 30px; perspective: none; scroll-snap-type: x mandatory; scrollbar-width: thin;
+    scrollbar-color: rgba(31, 122, 75, .3) transparent;
+  }
+  .tool {
+    display: flex; min-height: 292px; min-width: 0; margin: 0; padding: 21px; border-radius: 22px;
+    rotate: 0deg; translate: 0 0; scroll-snap-align: center;
+  }
+  .toolTop > svg { width: 44px; height: 44px; }
+  .toolCopy h3 { font-size: 27px; }
+  .toolCopy p { font-size: 14px; }
+  /* On touch widths, this chapter turns one viewport of vertical travel into
+     the exact horizontal distance between the first and last cards. */
+  :global(html.js) .pillarBand {
+    height: calc(100svh + max(156vw, 472px) + 26px); padding: 0; overflow: clip;
+  }
+  :global(html.js) .pillarSticky {
+    position: sticky; top: 0; display: flex; height: 100svh; flex-direction: column;
+    justify-content: center; gap: 14px; overflow: hidden; padding: 76px 0 20px; box-sizing: border-box;
+  }
+  :global(html.js) .pillarHeading { padding: 0 24px; font-size: clamp(34px, 8.4vw, 42px); }
+  :global(html.js) .pillarViewport { width: 100%; overflow: hidden; padding: 0 24px; box-sizing: border-box; }
+  :global(html.js) .pillarGrid {
+    display: flex; width: max-content; grid-auto-columns: unset; gap: 13px; overflow: visible;
+    margin: 0; padding: 0; will-change: transform;
+  }
+  :global(html.js) .pillar { flex: 0 0 max(236px, 78vw); padding: 12px 12px 16px; }
+  :global(html.js) .pillarImage {
+    width: min(100%, 220px); height: auto; aspect-ratio: 944 / 2048; margin: 0 auto;
+    background: #edf4ee;
+  }
+  :global(html.js) .pillarImage img { object-fit: contain; }
+  :global(html.js) .pillar h3 { margin-top: 13px; font-size: 20px; }
+  .plasenceCopy { padding-top: 76px; }
+  .plasenceCopy h2 { font-size: clamp(42px, 8.6vw, 62px); }
+  .plasenceCopy > p { max-width: 520px; font-size: 15px; }
+  .businessIntro h2 { font-size: clamp(42px, 8.6vw, 62px); }
+  .businessBand p { flex: 1 1 100%; }
+  .comingSoon { margin-left: auto; }
+}
+
+@media (max-width: 900px) and (prefers-reduced-motion: reduce) {
+  :global(html.js) .pillarBand { height: auto; overflow: visible; padding: 62px 0 70px; }
+  :global(html.js) .pillarSticky { position: static; height: auto; gap: 0; overflow: visible; padding: 0; }
+  :global(html.js) .pillarViewport { width: auto; overflow: visible; padding: 0; }
+  :global(html.js) .pillarGrid {
+    display: grid; width: auto; grid-auto-flow: row; grid-auto-columns: auto; grid-template-columns: 1fr;
+    gap: 13px; overflow: visible; margin: 0; padding: 0 24px;
+  }
+  :global(html.js) .pillar { flex: initial; }
+}
+
+@media (max-width: 900px) and (max-height: 740px) and (prefers-reduced-motion: no-preference) {
+  :global(html.js) .pillarSticky { gap: 10px; padding: 66px 0 12px; }
+  :global(html.js) .pillarHeading { font-size: clamp(30px, 7.8vw, 36px); }
+  :global(html.js) .pillarImage { width: min(100%, 180px); }
+  :global(html.js) .pillar h3 { margin-top: 10px; font-size: 18px; }
+  :global(html.js) .pillar p { font-size: 11.5px; line-height: 1.45; }
+}
+
+@media (max-width: 900px) and (max-height: 680px) and (prefers-reduced-motion: no-preference) {
+  :global(html.js) .pillarSticky { padding-top: 62px; }
+  :global(html.js) .pillarImage { width: min(100%, 150px); }
+  :global(html.js) .pillarHeading { font-size: clamp(28px, 7.2vw, 33px); }
+}
+
+@media (max-width: 520px) {
+  .heroCopy h1 { font-size: clamp(40px, 11vw, 54px); }
+  .heroActions { flex-direction: column; align-items: stretch; gap: 6px; }
+  .storeLinks a { flex: 1 1 140px; min-width: 0; }
+  .plasenceTabs { display: grid; width: 100%; grid-template-columns: repeat(3, 1fr); }
+  .plasenceTabs button { min-width: 0; padding: 0 10px; }
+  .toolsList { grid-auto-columns: minmax(260px, 86vw); gap: 12px; padding-right: 20px; padding-left: 20px; }
+  .tool { min-height: 280px; padding: 19px; }
+  .businessBand .lightButton { width: 100%; }
+  .comingSoon { width: 100%; margin: 0; }
+  .downloadButtons { display: grid; grid-template-columns: 1fr; }
+  .qrGroup { width: 100%; justify-content: space-between; gap: 8px; }
+  .qrGroup a { flex: 1; padding: 9px 6px; }
+  .qrGroup img { width: min(100px, 24vw); height: auto; }
+  .footer nav { gap: 10px 14px; }
+}
+
+/* ── Flow refinements: wide screens that still do not get the scene ─────── */
+
+@media (min-width: 901px) {
+  .tools { width: min(100%, 2400px); margin: 0 auto; padding: clamp(90px, 9vw, 145px) 32px clamp(90px, 9vw, 140px); }
+  .toolsHeading { margin-bottom: 38px; }
+  .toolsList { width: 100%; }
+  .toolsHeading h2 { font-size: clamp(36px, 4.2vw, 104px); }
+  .download { grid-template-columns: 1fr auto; gap: 60px; padding: clamp(90px, 11vw, 130px) max(48px, calc((100vw - 2100px) / 2 + 48px)); }
+  .downloadCopy h2 { font-size: clamp(54px, 7vw, 136px); }
+  .footer { grid-template-columns: auto 1fr auto; gap: 24px; padding: 28px max(32px, calc((100vw - 2400px) / 2 + 32px)); }
+  .footer > p { grid-column: auto; grid-row: auto; }
+  .footer nav { grid-column: auto; grid-row: auto; gap: 18px; }
+  .copyright { grid-row: auto; }
+}
+
+@media (min-width: 901px) and (max-width: 1199px) {
+  .toolsList { display: grid; height: auto; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; padding: 14px 8px 30px; }
+  .tool { height: 280px; margin: 0; padding: 19px; rotate: 0deg; translate: 0 0; }
+}
+
+/* These two only apply when the scene is NOT taken: a short viewport, or a
+   reader who asked for reduced motion. The scene block below owns the rest. */
+@media (min-width: 901px) and ((max-height: 639px) or (prefers-reduced-motion: reduce)) {
+  .stage { padding-top: 150px; }
+  .businessStage { padding: 112px max(24px, calc((100vw - 1800px) / 2 + 24px)) 76px; }
+  .businessTrack { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+  .businessPanel { padding: 26px; border: 1px solid rgba(231, 248, 236, .18); border-radius: 24px; }
+  .pillarHeading { width: min(1520px, 100%); margin: 0 auto; padding: 0 32px 26px; }
+  .pillarGrid { display: grid; width: min(1520px, 100%); grid-auto-flow: row; grid-auto-columns: auto; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; overflow: visible; margin: 0 auto; padding: 0 32px; }
+}
+
+/* ────────────────────────────────────────────────────────────────────────
+   THE SCENE
+   The pinned, scroll-scrubbed composition. Gated on `html.js` so a reader
+   without JavaScript keeps the flow layout, where no content depends on an
+   animation that will never run. Everything here is also the resting state of
+   act 1, because until hydration Framer Motion has not written a single inline
+   style yet and this is what the first frame paints.
+   ──────────────────────────────────────────────────────────────────────── */
+
+@media (min-width: 901px) and (min-height: 640px) and (prefers-reduced-motion: no-preference) {
+  :global(html.js) .chapter { height: 430svh; }
+  :global(html.js) .stage {
+    position: sticky; top: 0; height: 100svh; padding-top: 0; overflow: hidden; isolation: isolate;
+  }
+  :global(html.js) .sceneContent {
+    position: relative; width: min(100%, 2400px); height: 100%; margin: 0 auto; container-type: inline-size;
+  }
+
+  :global(html.js) .heroCopy {
+    position: absolute; top: 50%; left: clamp(44px, 6cqw, 110px); width: min(1040px, 48cqw); margin: 0;
+    translate: 0 -50%; text-align: left;
+  }
+  :global(html.js) .heroCopy > p { margin-left: 0; }
+  :global(html.js) .heroActions, :global(html.js) .storeLinks { justify-content: flex-start; }
+
+  :global(html.js) .deviceStage { position: absolute; inset: 0; width: 100%; padding: 0; pointer-events: none; }
+  :global(html.js) .device {
+    position: absolute; top: 50%; left: 50%; width: var(--device-w); margin: 0;
+    translate: -50% -50%; transform-origin: center center;
+    /* A tinted shadow rather than a black one, so the phone sits in the green
+       page instead of floating above it. */
+    filter: drop-shadow(0 30px 44px rgba(5, 25, 13, .24));
+  }
+  /* Act 1 resting state: the hero phone sits right of the headline. */
+  :global(html.js) .deviceCentre { z-index: 3; transform: translateX(21cqw); }
+  :global(html.js) .deviceLeft, :global(html.js) .deviceRight { display: block; z-index: 2; opacity: 0; }
+
+  :global(html.js) .categoryVisuals { display: block; position: absolute; z-index: 4; inset: 0; pointer-events: none; }
+  :global(html.js) .categoryVisual {
+    display: block; position: absolute; width: clamp(66px, 7cqw, 136px); aspect-ratio: 1; pointer-events: auto;
+    filter: drop-shadow(0 12px 20px rgba(2, 24, 11, .18)); animation: callout-float 5s ease-in-out infinite;
+  }
+  :global(html.js) .categoryVisual .visualSurface {
+    display: grid; width: 100%; height: 100%; place-items: center; border: 1px solid rgba(238, 70, 128, .2);
+    border-radius: 24px; background: linear-gradient(145deg, rgba(255, 255, 255, .98), rgba(255, 239, 245, .92));
+    color: #e83e78; box-shadow: inset 0 1px 0 #fff, 0 16px 32px rgba(6, 24, 14, .14);
+  }
+  :global(html.js) .categoryVisualDisease { top: 35%; left: 15cqw; rotate: -11deg; }
+  :global(html.js) .categoryVisualFitness { top: 48%; left: 32cqw; rotate: 8deg; animation-delay: -.7s; }
+  :global(html.js) .categoryVisualWellness { top: 30%; right: 31cqw; rotate: 9deg; animation-delay: -1.4s; }
+  :global(html.js) .categoryVisualPlasence { top: 48%; right: 14cqw; rotate: -7deg; animation-delay: -2s; }
+
+  :global(html.js) .careCallout {
+    display: flex; position: absolute; z-index: 6; top: 42%; right: clamp(20px, 2cqw, 42px);
+    width: clamp(240px, 21cqw, 430px); pointer-events: auto;
+  }
+  :global(html.js) .careCallout > .visualSurface {
+    display: flex; width: 100%; align-items: center; gap: clamp(13px, 1.1cqw, 20px);
+    padding: clamp(14px, 1.15cqw, 22px) clamp(16px, 1.3cqw, 25px);
+    border: 1px solid rgba(19, 55, 32, .08); border-radius: clamp(21px, 1.7cqw, 30px); background: rgba(255, 255, 255, .96);
+    box-shadow: 0 22px 55px rgba(1, 24, 10, .25); color: #102a1b; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  }
+  :global(html.js) .careCalloutIcon {
+    display: grid; width: clamp(44px, 3.6cqw, 64px); height: clamp(44px, 3.6cqw, 64px);
+    flex: 0 0 clamp(44px, 3.6cqw, 64px); place-items: center;
+    /* Was lime (#d9eb83), the one colour family the brand does not use. */
+    border-radius: 50%; background: var(--mint); color: #14321e;
+  }
+  :global(html.js) .careCalloutCopy { display: grid; min-width: 0; gap: 4px; }
+  :global(html.js) .careCalloutCopy strong { font-size: clamp(13px, 1.05cqw, 21px); line-height: 1.2; }
+  :global(html.js) .careCalloutCopy > span { color: #4d6455; font-size: clamp(10px, .76cqw, 15px); line-height: 1.3; }
+  :global(html.js) .careCalloutCopy small { color: #6f8275; font-size: clamp(9px, .68cqw, 14px); line-height: 1.3; }
+  :global(html.js) .careCalloutSpark { display: grid; width: clamp(27px, 2.2cqw, 40px); height: clamp(27px, 2.2cqw, 40px); flex: 0 0 clamp(27px, 2.2cqw, 40px); place-items: center; border: 1px solid #e4ebe5; border-radius: 50%; color: #4c7358; font-size: clamp(14px, 1.1cqw, 20px); }
+  :global(html.js) .plasenceVisual {
+    display: block; position: absolute; z-index: 6; top: 56%; left: 11cqw;
+    width: clamp(158px, 13cqw, 232px); pointer-events: auto;
+    filter: drop-shadow(0 15px 26px rgba(43, 28, 41, .19));
+  }
+  :global(html.js) .plasenceVisual > .visualSurface { display: grid; min-height: clamp(98px, 8cqw, 142px); place-items: center; }
+  :global(html.js) .plasenceVisual > .visualSurface { animation: callout-float 5.7s ease-in-out infinite; }
+  :global(html.js) .plasenceOrb {
+    display: grid; width: clamp(88px, 7.2cqw, 128px); height: clamp(88px, 7.2cqw, 128px); place-items: center;
+    border: 1px solid rgba(244, 47, 123, .18); border-radius: clamp(30px, 2.4cqw, 42px); background: radial-gradient(circle at 30% 24%, #fff 0 10%, #ffe7f0 40%, #f9bbd2 100%);
+    box-shadow: inset -8px -10px 16px rgba(210, 73, 122, .14), inset 5px 5px 13px #fff, 0 12px 24px rgba(141, 45, 81, .2);
+    color: #ee3c7c; transform: rotate(-9deg);
+  }
+  :global(html.js) .plasenceCalendar, :global(html.js) .plasenceChart {
+    display: grid; width: clamp(118px, 9.7cqw, 172px); min-height: clamp(92px, 7.6cqw, 134px); justify-items: center;
+    gap: clamp(10px, .8cqw, 15px); padding: clamp(14px, 1.15cqw, 21px);
+    border: 1px solid rgba(244, 47, 123, .14); border-radius: clamp(21px, 1.7cqw, 30px); background: linear-gradient(145deg, #fff, #fff3f7);
+    box-shadow: inset 0 1px 0 #fff, 0 12px 24px rgba(141, 45, 81, .14); color: #e83e78; transform: rotate(6deg);
+  }
+  :global(html.js) .plasenceCalendarDots { display: grid; width: clamp(74px, 6.1cqw, 108px); grid-template-columns: repeat(3, 1fr); gap: clamp(6px, .5cqw, 9px); }
+  :global(html.js) .plasenceCalendarDots i { width: clamp(10px, .82cqw, 15px); height: clamp(10px, .82cqw, 15px); border-radius: 50%; background: #f3a7c1; }
+  :global(html.js) .plasenceCalendarDots i:nth-child(4n) { background: #ffdfeb; }
+  :global(html.js) .plasenceChart > span { display: flex; height: 26px; align-items: end; gap: 6px; }
+  :global(html.js) .plasenceChart > span i { width: 9px; border-radius: 5px 5px 2px 2px; background: #ee7da3; }
+  :global(html.js) .plasenceChart > span i:nth-child(1) { height: 12px; }
+  :global(html.js) .plasenceChart > span i:nth-child(2) { height: 19px; }
+  :global(html.js) .plasenceChart > span i:nth-child(3) { height: 14px; }
+  :global(html.js) .plasenceChart > span i:nth-child(4) { height: 24px; }
+  :global(html.js) .plasenceChart > span i:nth-child(5) { height: 17px; }
+
+  :global(html.js) .pillarBand {
+    position: absolute; top: calc(50% - 4svh + var(--device-w) - 16px); right: 0; bottom: auto; left: 0;
+    padding: 0; background: none; opacity: 0; pointer-events: none;
+  }
+  /* The three captions carry the act on their own here, but the heading stays
+     in the document so the outline is the same at every breakpoint. */
+  :global(html.js) .pillarHeading {
+    position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden;
+    clip-path: inset(50%); white-space: nowrap;
+  }
+  :global(html.js) .pillarGrid {
+    display: grid; width: min(72cqw, 1860px); grid-auto-flow: row; grid-auto-columns: auto;
+    grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; overflow: visible;
+    margin: 0 auto; padding: 0; color: #f4faf5; text-align: center;
+  }
+  :global(html.js) .pillar { padding: 0; border: 0; background: none; }
+  :global(html.js) .pillarVisual { display: none; }
+  :global(html.js) .pillar h3 { margin: 0; font-size: clamp(22px, 2.1cqw, 46px); line-height: 1.12; }
+  :global(html.js) .pillar p { max-width: min(40ch, 100%); margin: 12px auto 0; color: rgba(239, 249, 242, .76); font-size: clamp(14px, 1cqw, 21px); line-height: 1.55; }
+  /* Flow-only markup, still in the DOM until hydration swaps it out. */
+  :global(html.js) .pillarImage { display: none; }
+  :global(html.js) .plasenceDeviceFlow { display: none; }
+
+  :global(html.js) .plasenceCopy {
+    position: absolute; top: 50%; right: clamp(40px, 6cqw, 110px); width: min(780px, 39cqw); margin: 0; padding: 0;
+    translate: 0 -50%; text-align: left; opacity: 0; visibility: hidden;
+  }
+  :global(html.js) .plasenceCopy > p, :global(html.js) .healthNote { margin-left: 0; }
+  :global(html.js) .plasenceAuraScene {
+    display: block; position: absolute; z-index: 1; top: 50%; left: 31cqw;
+    width: min(42cqw, 760px); aspect-ratio: 1; border-radius: 50%; pointer-events: none; opacity: 0;
+    background: radial-gradient(circle, rgba(236, 70, 133, .11), rgba(246, 214, 226, .26) 44%, transparent 72%);
+    transform: translate(-50%, -50%);
+  }
+
+  :global(html.js) .business { height: 520svh; }
+  :global(html.js) .businessStage {
+    position: sticky; top: 0; height: 100svh; padding: 0; overflow: hidden; isolation: isolate;
+    background: radial-gradient(ellipse at 82% 52%, rgba(53, 143, 88, .26), transparent 46%), var(--forest);
+  }
+  :global(html.js) .businessSceneContent { position: relative; width: min(100%, 2400px); height: 100%; margin: 0 auto; container-type: inline-size; }
+  :global(html.js) .businessIntro { position: absolute; top: clamp(96px, 13svh, 148px); left: clamp(30px, 6cqw, 108px); width: min(1180px, 63cqw); }
+  :global(html.js) .businessViewport { position: absolute; top: 48%; right: 0; bottom: 13%; left: 0; z-index: 3; overflow: hidden; }
+  :global(html.js) .businessTrack { display: flex; width: 500%; height: 100%; margin: 0; gap: 0; }
+  :global(html.js) .businessPanel { flex: 0 0 20%; padding: 24px 42cqw 0 7cqw; border: 0; border-radius: 0; }
+  :global(html.js) .businessPanel h3 { font-size: clamp(34px, 3.9cqw, 80px); }
+  :global(html.js) .panelImage { display: none; }
+  :global(html.js) .businessDeviceStage { display: block; position: absolute; z-index: 5; top: 18%; right: clamp(36px, 7cqw, 126px); width: clamp(200px, min(23cqw, 31svh), 460px); }
+  :global(html.js) .businessCallout {
+    display: block; position: absolute; z-index: 3; top: 39%; left: -43%; width: min(400px, 78%); pointer-events: auto;
+    filter: drop-shadow(0 14px 24px rgba(0, 0, 0, .18));
+  }
+  :global(html.js) .businessDevice { z-index: 2; }
+  :global(html.js) .roleFlowVisual { display: none; }
+  :global(html.js) .roleRail {
+    display: flex; position: absolute; z-index: 10; right: clamp(36px, 6cqw, 108px); bottom: 4.2%; left: clamp(36px, 6cqw, 108px);
+    justify-content: space-between; gap: 9px; border-top: 1px solid rgba(226, 247, 232, .22);
+  }
+}
+
+@media (min-width: 901px) and (max-width: 1100px) and (min-height: 640px) and (prefers-reduced-motion: no-preference) {
+  :global(html.js) .businessPanel { padding-right: 38vw; }
+  :global(html.js) .businessDeviceStage { right: 5vw; width: min(27vw, 282px); }
+  :global(html.js) .roleRail { right: 5vw; left: 5vw; }
+  :global(html.js) .roleRail button { font-size: 9px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .heroLine > span { animation: none; }
+  .toolsList:hover .tool:not(:hover) { translate: 0 var(--fan-y); }
+  .tool:hover { translate: 0 var(--fan-y); rotate: var(--fan-angle); scale: 1; }
+  .page *, .page *::before, .page *::after {
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .categoryVisual:hover .visualSurface,
+  .careCallout:hover .visualSurface,
+  .plasenceVisual:hover > .visualSurface,
+  .plasenceVisualFlow:hover > .visualSurface,
+  .pillar:hover .pillarVisual,
+  .roleFlowVisual:hover .visualSurface,
+  .businessCallout:hover > .visualSurface {
+    transform: perspective(900px) translateZ(18px) rotateX(7deg) rotateY(-10deg) rotateZ(4.5deg) scale(1.2);
+    box-shadow: 0 22px 42px rgba(8, 31, 16, .26);
+  }
+}
+
+@keyframes callout-float {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 0 -10px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .categoryVisual { animation: none !important; }
+  .pillarVisual, .plasenceVisualFlow > .visualSurface, .plasenceVisual > .visualSurface,
+  .roleFlowVisual > .visualSurface, .businessCallout > .visualSurface { animation: none !important; }
+  .categoryVisual:hover .visualSurface,
+  .careCallout:hover .visualSurface,
+  .plasenceVisual:hover > .visualSurface,
+  .plasenceVisualFlow:hover > .visualSurface,
+  .pillar:hover .pillarVisual,
+  .roleFlowVisual:hover .visualSurface,
+  .businessCallout:hover > .visualSurface { transform: none; }
+}
