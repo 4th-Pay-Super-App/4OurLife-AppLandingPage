@@ -173,6 +173,14 @@
 .stage { position: relative; padding-top: 150px; background: var(--paper); }
 .sceneContent { position: relative; width: min(100%, 1800px); margin: 0 auto; }
 
+.heroGrainient {
+  position: absolute; z-index: 0; inset: 0; overflow: hidden; pointer-events: none;
+}
+.heroGrainientCanvas {
+  position: absolute; inset: 0; width: 100%; height: 100%; opacity: .24;
+  background: linear-gradient(135deg, #f6f8f6, #e3f0e6 44%, #bdddc7 76%, #1f7a4b);
+  mix-blend-mode: multiply;
+}
 .heroGlow, .forestGlow {
   position: absolute; z-index: 0; top: 42%; left: 50%; width: min(74vw, 900px); aspect-ratio: 1;
   border-radius: 50%; pointer-events: none; transform: translate(-50%, -50%);
@@ -188,6 +196,11 @@
 .heroActions { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 12px; margin-top: 26px; }
 .secondaryButton { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: clamp(46px, 3vw, 62px); padding: 0 clamp(14px, 1vw, 22px); font-size: clamp(13px, .82vw, 17px); font-weight: 700; transition: color .25s ease; }
 .storeLinks { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 18px; }
+.heroQrGroup { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 18px; }
+.heroQrGroup a { display: grid; justify-items: center; gap: 5px; min-width: 104px; padding: 8px; border: 1px solid rgba(13, 44, 28, .13); border-radius: 15px; background: rgba(255, 255, 255, .72); color: #15291d; transition: transform .25s var(--ease), background .25s ease; }
+.heroQrGroup a:hover { transform: translateY(-2px); background: #fff; }
+.heroQrGroup img { display: block; width: 80px; height: 80px; border-radius: 6px; background: #fff; }
+.heroQrGroup span { font-size: 11px; font-weight: 700; }
 .storeLinks a { display: flex; align-items: center; gap: clamp(9px, .7vw, 13px); min-width: clamp(139px, 10vw, 196px); min-height: clamp(48px, 3.1vw, 64px); padding: clamp(8px, .6vw, 12px) clamp(13px, 1vw, 20px); border: 1px solid rgba(13, 44, 28, .13); border-radius: 14px; background: rgba(255, 255, 255, .6); text-align: left; transition: background .3s ease, transform .3s var(--ease); }
 .storeLinks a:hover { transform: translateY(-2px); background: #fff; }
 .storeLinks small, .storeLinks strong { display: block; }
@@ -391,9 +404,9 @@
 .roleBody { max-width: min(48ch, 100%); margin: 12px 0 0; color: rgba(242, 248, 244, .72); font-size: clamp(14px, 1vw, 19px); line-height: 1.6; }
 .roleDetails { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 16px; }
 .roleDetails span { padding: clamp(8px, .6vw, 12px) clamp(12px, .9vw, 18px); border: 1px solid rgba(231, 248, 236, .22); border-radius: 999px; color: rgba(243, 249, 245, .86); font-size: clamp(10px, .72vw, 13px); }
-.roleFlowVisual { display: flex; width: fit-content; margin: 18px auto 0; }
+.roleFlowVisual { display: flex; width: min(100%, 360px); margin: 18px auto 0; }
 .roleFlowVisual > .visualSurface, .businessCallout > .visualSurface {
-  display: flex; align-items: center; gap: clamp(11px, .9cqw, 17px);
+  display: flex; width: 100%; min-width: 0; align-items: center; gap: clamp(11px, .9cqw, 17px);
   padding: clamp(12px, 1cqw, 19px) clamp(15px, 1.25cqw, 24px);
   border: 1px solid rgba(208, 240, 218, .16); border-radius: clamp(19px, 1.5cqw, 28px); background: linear-gradient(145deg, rgba(255, 255, 255, .98), rgba(237, 249, 240, .95));
   box-shadow: inset 0 1px 0 #fff, 0 16px 35px rgba(0, 0, 0, .19); color: #12311e;
@@ -401,8 +414,8 @@
 }
 .businessCallout { display: none; }
 .businessCalloutIcon { display: grid; width: clamp(42px, 3.4cqw, 62px); height: clamp(42px, 3.4cqw, 62px); flex: 0 0 clamp(42px, 3.4cqw, 62px); place-items: center; border-radius: clamp(14px, 1.1cqw, 20px); background: var(--mint); color: #18391f; }
-.businessCalloutCopy { display: grid; gap: clamp(3px, .25cqw, 6px); }
-.businessCalloutCopy strong { font-size: clamp(13px, 1.05cqw, 22px); line-height: 1.2; }
+.businessCalloutCopy { display: grid; min-width: 0; flex: 1 1 auto; gap: clamp(3px, .25cqw, 6px); }
+.businessCalloutCopy strong { font-size: clamp(13px, 1.05cqw, 22px); line-height: 1.2; overflow-wrap: anywhere; }
 .businessCalloutCopy small { color: #65776b; font-size: clamp(10px, .8cqw, 16px); line-height: 1.3; }
 .panelImage { position: relative; width: min(290px, 72vw); margin: 28px auto 0; overflow: hidden; aspect-ratio: 828 / 1792; padding: 6px; border: 1px solid rgba(239, 255, 244, .35); border-radius: 31px; background: #06130b; box-shadow: 0 25px 42px rgba(0, 0, 0, .24); }
 .panelImage img { object-fit: cover; border-radius: 25px; }
@@ -442,11 +455,6 @@
 .outlineButton:hover { transform: translateY(-2px); background: #fff; }
 .businessInvite { margin-top: 28px; color: #5b6c60; font-size: 12.5px; }
 .businessInvite a { color: var(--brand); font-weight: 800; }
-.qrGroup { position: relative; z-index: 2; display: flex; justify-self: start; gap: 14px; }
-.qrGroup a { display: grid; justify-items: center; gap: 9px; padding: 12px; border: 1px solid rgba(16, 38, 27, .11); border-radius: 18px; background: rgba(255, 255, 255, .62); box-shadow: 0 14px 40px rgba(20, 53, 32, .07); transition: transform .3s var(--ease), background .3s ease; }
-.qrGroup a:hover { transform: translateY(-3px); background: #fff; }
-.qrGroup img { display: block; border-radius: 7px; background: #fff; }
-.qrGroup span { color: #506456; font-size: 10px; font-weight: 700; }
 
 /* ── Footer ─────────────────────────────────────────────────────────────── */
 
@@ -514,15 +522,17 @@
   }
   :global(html.js) .pillar { flex: 0 0 max(236px, 78vw); padding: 12px 12px 16px; }
   :global(html.js) .pillarImage {
-    width: min(100%, 220px); height: auto; aspect-ratio: 944 / 2048; margin: 0 auto;
+    width: min(100%, clamp(150px, calc(46svh - 161px), 220px)); height: auto; aspect-ratio: 944 / 2048; margin: 0 auto;
     background: #edf4ee;
   }
+  :global(html.js) .pillarVisual { z-index: 3; }
   :global(html.js) .pillarImage img { object-fit: contain; }
   :global(html.js) .pillar h3 { margin-top: 13px; font-size: 20px; }
   .plasenceCopy { padding-top: 76px; }
   .plasenceCopy h2 { font-size: clamp(42px, 8.6vw, 62px); }
   .plasenceCopy > p { max-width: 520px; font-size: 15px; }
   .businessIntro h2 { font-size: clamp(42px, 8.6vw, 62px); }
+  .roleFlowVisual { width: min(100%, 360px); }
   .businessBand p { flex: 1 1 100%; }
   .comingSoon { margin-left: auto; }
 }
@@ -556,6 +566,10 @@
   .heroCopy h1 { font-size: clamp(40px, 11vw, 54px); }
   .heroActions { flex-direction: column; align-items: stretch; gap: 6px; }
   .storeLinks a { flex: 1 1 140px; min-width: 0; }
+  .heroQrGroup { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: 14px; }
+  .heroQrGroup a { min-width: 0; padding: 7px; border-radius: 12px; }
+  .heroQrGroup img { width: 64px; height: 64px; }
+  .heroQrGroup span { font-size: 10px; }
   .plasenceTabs { display: grid; width: 100%; grid-template-columns: repeat(3, 1fr); }
   .plasenceTabs button { min-width: 0; padding: 0 10px; }
   .toolsList { grid-auto-columns: minmax(260px, 86vw); gap: 12px; padding-right: 20px; padding-left: 20px; }
@@ -563,9 +577,6 @@
   .businessBand .lightButton { width: 100%; }
   .comingSoon { width: 100%; margin: 0; }
   .downloadButtons { display: grid; grid-template-columns: 1fr; }
-  .qrGroup { width: 100%; justify-content: space-between; gap: 8px; }
-  .qrGroup a { flex: 1; padding: 9px 6px; }
-  .qrGroup img { width: min(100px, 24vw); height: auto; }
   .footer nav { gap: 10px 14px; }
 }
 
@@ -576,7 +587,7 @@
   .toolsHeading { margin-bottom: 38px; }
   .toolsList { width: 100%; }
   .toolsHeading h2 { font-size: clamp(36px, 4.2vw, 104px); }
-  .download { grid-template-columns: 1fr auto; gap: 60px; padding: clamp(90px, 11vw, 130px) max(48px, calc((100vw - 2100px) / 2 + 48px)); }
+  .download { grid-template-columns: minmax(0, 1fr); gap: 38px; padding: clamp(90px, 11vw, 130px) max(48px, calc((100vw - 1600px) / 2 + 48px)); }
   .downloadCopy h2 { font-size: clamp(54px, 7vw, 136px); }
   .footer { grid-template-columns: auto 1fr auto; gap: 24px; padding: 28px max(32px, calc((100vw - 2400px) / 2 + 32px)); }
   .footer > p { grid-column: auto; grid-row: auto; }
@@ -623,7 +634,7 @@
     translate: 0 -50%; text-align: left;
   }
   :global(html.js) .heroCopy > p { margin-left: 0; }
-  :global(html.js) .heroActions, :global(html.js) .storeLinks { justify-content: flex-start; }
+  :global(html.js) .heroActions, :global(html.js) .storeLinks, :global(html.js) .heroQrGroup { justify-content: flex-start; }
 
   :global(html.js) .deviceStage { position: absolute; inset: 0; width: 100%; padding: 0; pointer-events: none; }
   :global(html.js) .device {
@@ -745,14 +756,15 @@
   }
   :global(html.js) .businessSceneContent { position: relative; width: min(100%, 2400px); height: 100%; margin: 0 auto; container-type: inline-size; }
   :global(html.js) .businessIntro { position: absolute; top: clamp(96px, 13svh, 148px); left: clamp(30px, 6cqw, 108px); width: min(1180px, 63cqw); }
-  :global(html.js) .businessViewport { position: absolute; top: 48%; right: 0; bottom: 13%; left: 0; z-index: 3; overflow: hidden; }
+  :global(html.js) .businessViewport { position: absolute; top: clamp(370px, 54svh, 650px); right: 0; bottom: clamp(64px, 9svh, 120px); left: 0; z-index: 3; overflow: hidden; }
   :global(html.js) .businessTrack { display: flex; width: 500%; height: 100%; margin: 0; gap: 0; }
   :global(html.js) .businessPanel { flex: 0 0 20%; padding: 24px 42cqw 0 7cqw; border: 0; border-radius: 0; }
   :global(html.js) .businessPanel h3 { font-size: clamp(34px, 3.9cqw, 80px); }
   :global(html.js) .panelImage { display: none; }
   :global(html.js) .businessDeviceStage { display: block; position: absolute; z-index: 5; top: 18%; right: clamp(36px, 7cqw, 126px); width: clamp(200px, min(23cqw, 31svh), 460px); }
   :global(html.js) .businessCallout {
-    display: block; position: absolute; z-index: 3; top: 39%; left: -43%; width: min(400px, 78%); pointer-events: auto;
+    display: block; position: absolute; z-index: 3; top: 39%; left: clamp(-150px, -36%, -72px);
+    width: min(360px, calc(100vw - 40px)); pointer-events: auto;
     filter: drop-shadow(0 14px 24px rgba(0, 0, 0, .18));
   }
   :global(html.js) .businessDevice { z-index: 2; }

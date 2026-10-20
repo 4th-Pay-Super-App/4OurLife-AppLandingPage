@@ -3,11 +3,11 @@
 import Image from "next/image";
 import { motion, useMotionValueEvent, useScroll, useTransform, type MotionValue } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
-import { SiApple, SiGoogleplay } from "react-icons/si";
 import { Activity, Biohazard, CalendarDays, Droplet, Dumbbell, HeartPulse, MapPin } from "lucide-react";
-import { APP_STORE_URL, PLAY_STORE_URL } from "@/lib/store-links";
+import { APP_STORE_QR, APP_STORE_URL, PLAY_STORE_QR, PLAY_STORE_URL } from "@/lib/store-links";
 import { Magnetic } from "@/components/landing/motion";
 import { DeviceFrame, DeviceLayerGroup, DeviceScreen, type Screen } from "./DeviceFrame";
+import Grainient from "./Grainient";
 import { useScrub } from "./useScrub";
 import { useStageMode } from "./useStageMode";
 import styles from "./home.module.css";
@@ -257,6 +257,29 @@ export function ConsumerChapter() {
         style={scene ? { backgroundColor: stageColor } : undefined}
       >
         <motion.div
+          className={styles.heroGrainient}
+          aria-hidden="true"
+          style={scene ? { opacity: heroGlow } : undefined}
+        >
+          <Grainient
+            className={styles.heroGrainientCanvas}
+            style={{}}
+            colors={["#f6f8f6", "#e3f0e6", "#bdddc7", "#78b88c", "#1f7a4b"]}
+            angle={48}
+            flow={0.22}
+            silk={0.12}
+            grainAmount={0.025}
+            grainSize={1}
+            grainAnimated={false}
+            speed={0}
+            contrast={0.82}
+            saturation={0.82}
+            interactive={false}
+            clickSwirl={false}
+            dpr={1}
+          />
+        </motion.div>
+        <motion.div
           className={styles.heroGlow}
           aria-hidden="true"
           style={scene ? { opacity: heroGlow } : undefined}
@@ -296,20 +319,14 @@ export function ConsumerChapter() {
               For health businesses <span aria-hidden="true">↓</span>
             </a>
           </div>
-          <div className={styles.storeLinks} aria-label="Available on the App Store and Google Play">
-            <a href={APP_STORE_URL} target="_blank" rel="noreferrer">
-              <SiApple className={styles.storeLogo} aria-hidden="true" />
-              <span>
-                <small>Download on the</small>
-                <strong>App Store</strong>
-              </span>
+          <div className={styles.heroQrGroup} aria-label="Scan to download 4 Our Life">
+            <a href={APP_STORE_URL} target="_blank" rel="noreferrer" aria-label="Scan to download 4 Our Life from the App Store">
+              <Image src={APP_STORE_QR} width={88} height={88} alt="App Store download QR code" />
+              <span>App Store</span>
             </a>
-            <a href={PLAY_STORE_URL} target="_blank" rel="noreferrer">
-              <SiGoogleplay className={styles.storeLogo} aria-hidden="true" />
-              <span>
-                <small>Get it on</small>
-                <strong>Google Play</strong>
-              </span>
+            <a href={PLAY_STORE_URL} target="_blank" rel="noreferrer" aria-label="Scan to download 4 Our Life from Google Play">
+              <Image src={PLAY_STORE_QR} width={88} height={88} alt="Google Play download QR code" />
+              <span>Google Play</span>
             </a>
           </div>
         </motion.div>
