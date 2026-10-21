@@ -1,8 +1,6 @@
 "use client";
 
-import type { Metadata } from "next";
 import Link from "next/link";
-import { motion } from "framer-motion";
 import {
   ShieldCheck,
   Database,
@@ -217,7 +215,7 @@ export default function PrivacyPolicyPage() {
                     4 Our Life is committed to protecting your privacy and
                     ensuring the security of your personal information,
                     particularly your health data. This Privacy Policy explains
-                    how 4th Pay Ltd ("we," "us," or "our") collects, uses, and
+                    how 4th Pay Ltd (&ldquo;we,&rdquo; &ldquo;us,&rdquo; or &ldquo;our&rdquo;) collects, uses, and
                     safeguards your information when you use the 4 Our Life
                     mobile application and website. This policy complies with
                     the Data Protection Act, 2012 (Act 843) of Ghana.

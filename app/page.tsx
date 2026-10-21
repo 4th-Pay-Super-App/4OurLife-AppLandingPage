@@ -1,13 +1,18 @@
 import { createPageMetadata } from "@/lib/seo";
-import LandingExperience from "@/components/landing/LandingExperience";
+import Landing from "@/components/landing/Landing";
+import SiteShell from "@/components/landing/SiteShell";
 
 export const metadata = createPageMetadata({
-  title: "Healthcare access, made clearer",
+  title: "Your All-in-One Health App for Ghana",
   description:
-    "Find hospitals, specialists and ambulance services in Ghana. Manage health reminders, explore trusted guidance and connect with care providers in one app.",
+    "Download 4 Our Life for fitness plans, symptom checking, medication reminders, and verified wellness centers across Ghana.",
   path: "/",
 });
 
 export default function HomePage() {
-  return <LandingExperience />;
+  return (
+    <SiteShell>
+      <Landing />
+    </SiteShell>
+  );
 }

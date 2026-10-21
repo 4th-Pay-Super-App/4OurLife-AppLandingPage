@@ -1,0 +1,1610 @@
+/* ============================================================
+   4 Our Life — landing design system
+   ============================================================
+
+   A port of `static-landing/styles.css` (the reference page signed off by
+   the team) into the Next.js app.
+
+   Two deliberate differences from the reference:
+
+   1. Element selectors (`section`, `h1`, `h2`…) are scoped under `.fol`.
+      The rest of the site renders with Tailwind, whose preflight and
+      utilities would fight unscoped element rules. `.fol` is applied by
+      `SiteShell`, so every page built from this design system opts in and
+      no other page is touched.
+
+   2. `--light-border` is defined. The reference stylesheet referenced it in
+      a dozen places but never declared it, so every border that used it
+      resolved to nothing and those cards rendered edgeless.
+   ============================================================ */
+
+.fol {
+  --primary: #2d6a4f;
+  --primary-light: #40916c;
+  --primary-pale: #d8f3dc;
+  --bg-cream: #fefcf5;
+  --bg-light-green: #f1f8e9;
+  --dark-green: #1b4332;
+  --text: #1a1a1a;
+  --text-secondary: #5a5a5a;
+  --accent-yellow: #fbbf24;
+  --white: #ffffff;
+  --muted-green: #a3b18a;
+  --light-border: #e4e9e4;
+  --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+
+  font-family: var(--font-landing), "Inter", system-ui, sans-serif;
+  color: var(--text);
+  background: var(--bg-cream);
+  line-height: 1.6;
+  overflow-x: clip;
+}
+
+.fol *,
+.fol *::before,
+.fol *::after {
+  box-sizing: border-box;
+}
+
+/*
+ * Both selectors are wrapped in `:where()` so the whole rule weighs nothing.
+ * Written as `.fol h1, .fol p …` it would score one class plus one element and
+ * silently outrank every single-class rule below it — which is exactly what
+ * happened to `.partners-label`'s margin-bottom, dropping the marquee on top
+ * of its own heading.
+ */
+:where(.fol) :where(h1, h2, h3, h4, h5, p, ul, ol, figure, figcaption, blockquote) {
+  margin: 0;
+  padding: 0;
+}
+
+:where(.fol) :where(ul) {
+  list-style: none;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ── Icons ── */
+.fol .icon {
+  width: 24px;
+  height: 24px;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+  flex-shrink: 0;
+}
+.fol .icon-sm {
+  width: 20px;
+  height: 20px;
+}
+
+/* ============================================================
+   Navigation
+   ============================================================ */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  transition:
+    background 0.3s ease,
+    box-shadow 0.3s ease;
+  padding: 16px 0;
+}
+.navbar.scrolled {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.06);
+}
+.navbar-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  font-size: 20px;
+  color: var(--primary);
+  text-decoration: none;
+}
+.logo-mark {
+  width: 32px;
+  height: 32px;
+  background: var(--primary);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+.logo-mark img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 3px;
+}
+.nav-links {
+  display: flex;
+  gap: 32px;
+}
+.nav-links a {
+  text-decoration: none;
+  color: var(--text);
+  font-weight: 500;
+  font-size: 15px;
+  transition: color 0.2s;
+}
+.nav-links a:hover,
+.nav-links a[aria-current="page"] {
+  color: var(--primary);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 28px;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 15px;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+  font-family: inherit;
+}
+.btn:hover {
+  transform: scale(1.03);
+}
+.btn-primary {
+  background: var(--primary);
+  color: var(--white);
+  box-shadow: 0 4px 14px rgba(45, 106, 79, 0.3);
+}
+.btn-primary:hover {
+  box-shadow: 0 6px 20px rgba(45, 106, 79, 0.4);
+}
+.btn-secondary {
+  background: transparent;
+  color: var(--primary);
+  border: 2px solid var(--primary);
+}
+
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 10px 4px;
+}
+.hamburger span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--text);
+  transition: 0.3s;
+  border-radius: 2px;
+}
+.mobile-menu {
+  position: fixed;
+  inset: 0;
+  background: var(--bg-cream);
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  transform: translateY(-100%);
+  opacity: 0;
+  transition:
+    transform 0.3s ease,
+    opacity 0.3s ease;
+  pointer-events: none;
+}
+.mobile-menu.open {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+.mobile-menu a {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--text);
+  text-decoration: none;
+}
+.mobile-menu .btn-primary {
+  font-size: 18px;
+  padding: 16px 40px;
+}
+.menu-close {
+  position: absolute;
+  top: 20px;
+  right: 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text);
+  padding: 8px;
+}
+
+/* ============================================================
+   Shared section furniture
+   ============================================================ */
+/* Zero-specificity, so each section's own class can set its own padding. */
+:where(.fol) :where(section) {
+  padding: 96px 0;
+}
+.section-header {
+  text-align: center;
+  max-width: 640px;
+  margin: 0 auto 64px;
+}
+.eyebrow {
+  display: inline-block;
+  padding: 6px 16px;
+  border-radius: 50px;
+  background: var(--primary-pale);
+  color: var(--primary);
+  font-weight: 600;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 16px;
+}
+:where(.fol) :where(h1) {
+  font-size: 56px;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -1px;
+}
+:where(.fol) :where(h2) {
+  font-size: 40px;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.5px;
+  margin-bottom: 16px;
+}
+:where(.fol) :where(h3) {
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+.subtitle {
+  font-size: 18px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/*
+ * Scroll reveal. The `no-js` → `js` swap happens in <head> before first
+ * paint, so a visitor without JavaScript sees the finished state instead of
+ * a permanently invisible page.
+ */
+.js .reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition:
+    opacity 0.6s ease,
+    transform 0.6s ease;
+}
+.js .reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.skip-link {
+  position: absolute;
+  top: -48px;
+  left: 16px;
+  z-index: 2000;
+  background: var(--primary);
+  color: var(--white);
+  padding: 10px 18px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: top 0.2s ease;
+}
+.skip-link:focus {
+  top: 12px;
+}
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ============================================================
+   Hero
+   ============================================================ */
+.hero {
+  padding-top: 140px;
+  padding-bottom: 96px;
+  background: var(--bg-cream);
+  position: relative;
+  overflow: hidden;
+}
+/*
+ * Grainient sits behind everything in the hero as an atmospheric wash. It is a
+ * WebGL canvas, so it carries a CSS gradient of the same palette as its own
+ * background: if WebGL is unavailable or the context is lost, what remains is
+ * that gradient rather than a blank rectangle.
+ *
+ * `mix-blend-mode: multiply` over the cream page is what keeps it a tint
+ * rather than a panel, and the low opacity keeps the hero copy at full
+ * contrast over it.
+ */
+.hero-grainient {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.hero-grainient-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.24;
+  background: linear-gradient(135deg, #f6f8f6, #e3f0e6 44%, #bdddc7 76%, #1f7a4b);
+  mix-blend-mode: multiply;
+}
+
+.blob {
+  position: absolute;
+  border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+  background: var(--primary-pale);
+  opacity: 0.35;
+  pointer-events: none;
+}
+.blob-1 {
+  width: 500px;
+  height: 500px;
+  top: -100px;
+  right: -80px;
+}
+.blob-2 {
+  width: 350px;
+  height: 350px;
+  bottom: -60px;
+  left: -60px;
+  opacity: 0.25;
+}
+.blob-3 {
+  width: 280px;
+  height: 280px;
+  top: 40%;
+  left: 35%;
+  opacity: 0.2;
+}
+
+.hero-inner {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 60px;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+.hero-ctas {
+  display: flex;
+  gap: 16px;
+  margin: 32px 0 24px;
+  flex-wrap: wrap;
+}
+.trust-line {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+.trust-stars {
+  display: flex;
+  gap: 2px;
+  color: var(--accent-yellow);
+  flex-shrink: 0;
+}
+
+.hero-visual {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ============================================================
+   Device frame
+
+   The reference page drew a flat green rectangle per slide. Real captures of
+   the shipped app go here instead, and the phone body around them is CSS —
+   the chrome and the island are drawn, never part of the artwork. That keeps
+   every screen on the page inside an identical device at any size, and lets
+   the optimizer serve the capture at exactly the pixels it will occupy rather
+   than scaling a frame baked into the PNG.
+
+   Ported from `components/home/DeviceFrame.tsx` on feature/premium-landing-page.
+   ============================================================ */
+.device-frame {
+  position: relative;
+  width: 100%;
+  padding: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.46);
+  border-radius: clamp(31px, 3.2vw, 43px);
+  background: linear-gradient(145deg, #29302b, #030605 35%, #202722 78%, #060807);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.18),
+    0 30px 70px rgba(3, 25, 12, 0.22);
+}
+.device-screen {
+  position: relative;
+  overflow: hidden;
+  /* Matches the captures' intrinsic size, so the frame reserves its height
+     before the image arrives and nothing shifts on load. */
+  aspect-ratio: 944 / 2048;
+  border-radius: clamp(24px, 2.5vw, 34px);
+  background: #fff;
+}
+/* Every screen a device can show is mounted and stacked, so changing screens
+   is an opacity crossfade between already-decoded images. */
+.device-layer {
+  position: absolute;
+  inset: 0;
+  transition: opacity 0.5s ease;
+}
+.device-layer[data-active="false"] {
+  opacity: 0;
+}
+.device-screen img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+.device-island {
+  position: absolute;
+  z-index: 2;
+  top: 2.05%;
+  left: 50%;
+  width: 21%;
+  aspect-ratio: 62 / 17;
+  border-radius: 999px;
+  background: #050706;
+  transform: translateX(-50%);
+}
+
+.phone-carousel {
+  width: 280px;
+  max-width: 100%;
+  position: relative;
+  z-index: 2;
+}
+.phone-carousel .device-frame {
+  animation: fol-float 4s ease-in-out infinite;
+}
+.phone-carousel-caption {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--primary);
+}
+.phone-carousel-dots {
+  display: flex;
+  justify-content: center;
+  gap: 0;
+  margin-top: 10px;
+}
+/*
+ * The button is a 24px square — WCAG 2.5.8's minimum target size — and the dot
+ * the visitor actually sees is drawn as an 8px pseudo-element inside it. An 8px
+ * button with padding around it would not satisfy the rule, because the
+ * criterion measures the target itself.
+ */
+.phone-carousel-dots .dot {
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: none;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+.phone-carousel-dots .dot::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(45, 106, 79, 0.3);
+  transition:
+    background 0.3s,
+    transform 0.3s;
+}
+.phone-carousel-dots .dot.active::before {
+  background: var(--primary);
+  transform: scale(1.3);
+}
+
+.float-card {
+  position: absolute;
+  background: var(--white);
+  border-radius: 14px;
+  padding: 14px 18px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+  z-index: 3;
+  max-width: 230px;
+}
+.float-card.behind {
+  top: 48px;
+  right: -28px;
+  transform: rotate(-6deg);
+  animation: fol-float 4s ease-in-out infinite 0.5s;
+}
+.bell-ring {
+  width: 28px;
+  height: 28px;
+  background: var(--primary-pale);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.bell-ring svg {
+  width: 16px;
+  height: 16px;
+  stroke: var(--primary);
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+@keyframes fol-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+@keyframes fol-float-tilt {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-6deg);
+  }
+  50% {
+    transform: translateY(-12px) rotate(-6deg);
+  }
+}
+.float-card.behind {
+  animation-name: fol-float-tilt;
+}
+
+/* ============================================================
+   Stats bar
+   ============================================================ */
+.stats-bar {
+  background: var(--primary);
+  padding: 48px 0;
+}
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  text-align: center;
+}
+.stat-item {
+  color: var(--white);
+}
+.stat-icon {
+  width: 32px;
+  height: 32px;
+  stroke: var(--primary-pale);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  margin: 0 auto 12px;
+  fill: none;
+}
+.stat-number {
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: 8px;
+  font-variant-numeric: tabular-nums;
+}
+.stat-label {
+  font-size: 15px;
+  opacity: 0.85;
+}
+
+/* ============================================================
+   Partner strip
+   ============================================================ */
+.partners {
+  padding: 40px 0 48px;
+  background: var(--white);
+  border-top: 1px solid rgba(45, 106, 79, 0.08);
+  border-bottom: 1px solid rgba(45, 106, 79, 0.08);
+}
+.partners-label {
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: 24px;
+}
+.partners-marquee {
+  overflow: hidden;
+  position: relative;
+}
+.partners-marquee::before,
+.partners-marquee::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 80px;
+  z-index: 1;
+  pointer-events: none;
+}
+.partners-marquee::before {
+  left: 0;
+  background: linear-gradient(90deg, var(--white), transparent);
+}
+.partners-marquee::after {
+  right: 0;
+  background: linear-gradient(-90deg, var(--white), transparent);
+}
+.partners-track {
+  display: flex;
+  gap: 56px;
+  width: max-content;
+  animation: fol-partner-scroll 32s linear infinite;
+}
+.partners-track:hover {
+  animation-play-state: paused;
+}
+.partner-mark {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  font-size: 17px;
+  color: var(--text-secondary);
+  opacity: 0.75;
+  white-space: nowrap;
+}
+.partner-mark .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--muted-green);
+}
+@keyframes fol-partner-scroll {
+  from {
+    transform: translateX(0);
+  }
+  /* The track holds the list twice, so -50% lands exactly on the repeat. */
+  to {
+    transform: translateX(calc(-50% - 28px));
+  }
+}
+
+/* ============================================================
+   Features grid
+   ============================================================ */
+.features {
+  background: var(--bg-light-green);
+}
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+.feature-card {
+  background: var(--white);
+  border-radius: 16px;
+  padding: 32px 24px;
+  box-shadow: var(--card-shadow);
+  transition:
+    transform 0.25s,
+    box-shadow 0.25s;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+}
+.feature-icon-wrap {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--primary-pale);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  flex-shrink: 0;
+}
+.feature-icon-wrap svg {
+  width: 32px;
+  height: 32px;
+  stroke: var(--primary);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+}
+.feature-card h3 {
+  font-size: 20px;
+  margin-bottom: 10px;
+  color: var(--dark-green);
+}
+.feature-card p {
+  font-size: 15px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+.feature-card a {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--primary);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: auto;
+}
+.feature-card a:hover {
+  text-decoration: underline;
+}
+
+/* ============================================================
+   Showcases
+   ============================================================ */
+.showcase-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+.showcase-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.showcase-image .device-frame {
+  max-width: 320px;
+}
+.showcase.reverse .showcase-image {
+  order: 2;
+}
+.showcase.reverse .showcase-text {
+  order: 1;
+}
+.showcase-text h2 {
+  margin-bottom: 20px;
+}
+.showcase-text > p {
+  color: var(--text-secondary);
+  margin-bottom: 24px;
+}
+.check-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 28px;
+}
+.check-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 16px;
+  color: var(--text);
+}
+.check-list .check {
+  width: 22px;
+  height: 22px;
+  background: var(--primary-pale);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.check-list .check svg {
+  width: 14px;
+  height: 14px;
+  stroke: var(--primary);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+}
+
+.showcase-centered {
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto 48px;
+}
+.showcase-centered p {
+  color: var(--text-secondary);
+}
+.showcase-split {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 32px;
+  align-items: center;
+  max-width: 1040px;
+  margin: 0 auto;
+}
+.showcase-split .device-frame {
+  width: 240px;
+}
+.info-card {
+  background: var(--white);
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: var(--card-shadow);
+  text-align: left;
+}
+.info-card .feature-icon-wrap {
+  margin-bottom: 16px;
+}
+.info-card h3 {
+  margin-bottom: 10px;
+  font-size: 20px;
+}
+.info-card p {
+  font-size: 15px;
+  color: var(--text-secondary);
+}
+
+/* ============================================================
+   How it works
+   ============================================================ */
+.how-it-works {
+  background: var(--bg-light-green);
+}
+.steps {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+}
+.steps::before {
+  content: "";
+  position: absolute;
+  top: 28px;
+  left: 60px;
+  right: 60px;
+  border-top: 2px dashed var(--primary);
+  opacity: 0.3;
+}
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  flex: 1;
+  position: relative;
+  z-index: 1;
+}
+.step-icon-wrap {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--primary-pale);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+.step-icon-wrap svg {
+  width: 28px;
+  height: 28px;
+  stroke: var(--primary);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+}
+.fol .step-num {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 20px;
+  font-family: inherit;
+  letter-spacing: normal;
+  line-height: 1;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 14px rgba(45, 106, 79, 0.3);
+}
+.step h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.step p {
+  font-size: 14px;
+  color: var(--text-secondary);
+  max-width: 220px;
+}
+
+/* ============================================================
+   Testimonials
+   ============================================================ */
+.testimonials {
+  background: var(--white);
+}
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.testimonial-card {
+  background: var(--white);
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: var(--card-shadow);
+  position: relative;
+}
+.quote-mark {
+  font-size: 48px;
+  line-height: 1;
+  color: var(--primary-pale);
+  font-family: Georgia, serif;
+  margin-bottom: 8px;
+}
+.stars {
+  display: flex;
+  gap: 4px;
+  color: var(--accent-yellow);
+  margin-bottom: 16px;
+}
+.testimonial-text {
+  font-size: 16px;
+  color: var(--text);
+  line-height: 1.7;
+  margin-bottom: 24px;
+}
+.testimonial-author {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.author-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--white);
+  font-weight: 600;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+.author-name {
+  font-weight: 600;
+  font-size: 15px;
+}
+.author-loc {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+/* ============================================================
+   Coming soon band
+   ============================================================ */
+.coming-soon-band {
+  background: var(--dark-green);
+  text-align: center;
+}
+.coming-soon-band .eyebrow {
+  background: rgba(216, 243, 220, 0.15);
+  color: var(--primary-pale);
+}
+.coming-soon-band h2 {
+  color: var(--white);
+}
+.coming-soon-band .subtitle {
+  color: rgba(255, 255, 255, 0.75);
+  max-width: 560px;
+  margin: 0 auto 32px;
+}
+/* The usual green primary button would sit at roughly 1.6:1 against this
+   band; white carries the contrast the band needs. */
+.btn-white {
+  background: var(--white);
+  color: var(--dark-green);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+}
+.btn-white:hover {
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.26);
+}
+
+/* ============================================================
+   Download CTA
+   ============================================================ */
+.download-cta {
+  background: var(--primary);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.download-cta h2 {
+  color: var(--white);
+}
+.download-cta > .container > p {
+  color: rgba(255, 255, 255, 0.85);
+  max-width: 560px;
+  margin: 0 auto 32px;
+}
+.badges {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+.store-badge {
+  width: 200px;
+  min-height: 56px;
+  padding: 8px 16px;
+  background: var(--white);
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--dark-green);
+  text-decoration: none;
+  text-align: left;
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease;
+}
+.store-badge:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.22);
+}
+.store-badge:focus-visible {
+  outline: 3px solid var(--accent-yellow);
+  outline-offset: 2px;
+}
+.store-badge svg {
+  width: 22px;
+  height: 22px;
+  flex: none;
+}
+.store-badge-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+}
+.store-badge-text small {
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+.store-badge-text strong {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.qr-row {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+.qr-card {
+  margin: 0;
+  background: var(--white);
+  border-radius: 14px;
+  padding: 14px;
+  width: 168px;
+}
+/*
+ * Solid white behind the code. The 4-module quiet zone is baked into the
+ * SVG, but a tinted surround still measurably reduces camera scan success.
+ */
+.qr-code {
+  background: var(--white);
+  line-height: 0;
+}
+.qr-code img,
+.qr-code svg {
+  width: 140px;
+  height: 140px;
+  display: block;
+}
+.qr-card figcaption {
+  margin-top: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.cta-phones {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 40px;
+  margin-top: 48px;
+}
+.cta-phones .device-frame {
+  width: 220px;
+  animation: fol-float 4s ease-in-out infinite;
+}
+.cta-phones .device-frame:nth-child(2) {
+  animation-delay: 0.5s;
+}
+
+/* ============================================================
+   Footer
+   ============================================================ */
+.footer {
+  background: var(--dark-green);
+  padding: 64px 0 24px;
+  color: var(--white);
+}
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr;
+  gap: 40px;
+  margin-bottom: 48px;
+}
+.footer-brand .logo {
+  color: var(--white);
+  margin-bottom: 12px;
+}
+.footer-brand .logo-mark {
+  background: var(--primary-light);
+}
+.footer-brand p {
+  color: var(--muted-green);
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+.footer-brand .socials {
+  margin-top: 20px;
+}
+.footer-contact a {
+  color: var(--primary-pale);
+  font-size: 14px;
+  text-decoration: none;
+}
+.footer-contact a:hover {
+  color: var(--white);
+  text-decoration: underline;
+}
+.socials {
+  display: flex;
+  gap: 12px;
+}
+.social {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--white);
+  transition: background 0.2s;
+  text-decoration: none;
+}
+.social:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+.social svg {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+}
+.footer-col h3 {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: var(--white);
+}
+.footer-col ul {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.footer-col a {
+  color: var(--muted-green);
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.2s;
+}
+.footer-col a:hover {
+  color: var(--white);
+}
+.footer-bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 24px;
+  text-align: center;
+  color: var(--muted-green);
+  font-size: 13px;
+}
+
+/* ============================================================
+   Sticky mobile download bar
+   ============================================================ */
+.sticky-download {
+  display: none;
+}
+
+/* ============================================================
+   Content pages (Careers, Blog, Press, Contact, Cookie Policy)
+
+   These carry the bodies that the reference page kept inside modal
+   overlays. Rendering them as routes means they are linkable, indexable
+   and printable, which modal markup is not.
+   ============================================================ */
+.page-hero {
+  background: var(--bg-light-green);
+  padding: 148px 0 64px;
+  text-align: center;
+}
+.page-hero p {
+  color: var(--text-secondary);
+  max-width: 640px;
+  margin: 0 auto;
+}
+.page-body {
+  padding: 64px 0 96px;
+}
+.page-body .container {
+  max-width: 860px;
+}
+/*
+ * Section headings are `h2` and sub-headings `h3`, one level below the page
+ * `h1`. The reference page used h3/h4 here because this content sat inside a
+ * modal whose own title was the h2; as routes, skipping a level would make the
+ * outline unnavigable by screen reader.
+ */
+.page-body h2 {
+  font-size: 20px;
+  margin: 36px 0 12px;
+  color: var(--dark-green);
+  letter-spacing: normal;
+}
+.page-body h3 {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 24px 0 8px;
+  color: var(--primary);
+}
+.page-body > .container > h2:first-child {
+  margin-top: 0;
+}
+.page-body p {
+  margin: 0 0 14px;
+  color: var(--text-secondary);
+  line-height: 1.75;
+}
+.page-body ul {
+  margin: 0 0 16px;
+  padding-left: 22px;
+  list-style: disc;
+  color: var(--text-secondary);
+  line-height: 1.85;
+}
+.page-body strong {
+  color: var(--text);
+}
+.page-body a {
+  color: var(--primary);
+  text-decoration: underline;
+}
+.legal-date {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: 24px;
+}
+.cookie-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 10px 0 24px;
+  font-size: 14px;
+}
+.cookie-table th,
+.cookie-table td {
+  padding: 10px 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--light-border);
+}
+.cookie-table th {
+  background: var(--bg-light-green);
+  font-weight: 600;
+  color: var(--dark-green);
+}
+.cookie-table td {
+  color: var(--text-secondary);
+}
+.table-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ============================================================
+   Responsive
+   ============================================================ */
+@media (max-width: 1024px) {
+  .fol h1 {
+    font-size: 44px;
+  }
+  .fol h2 {
+    font-size: 32px;
+  }
+  .hero-inner {
+    gap: 40px;
+  }
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .showcase-inner {
+    gap: 40px;
+  }
+  /* The phone between the two cards goes at tablet width: three columns in
+     the space of two would squeeze the cards past readable. */
+  .showcase-split {
+    grid-template-columns: 1fr 1fr;
+  }
+  .showcase-split .device-frame {
+    display: none;
+  }
+  .footer-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .cta-phones {
+    gap: 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  :where(.fol) :where(section) {
+    padding: 64px 0;
+  }
+  .fol h1 {
+    font-size: 36px;
+  }
+  .fol h2 {
+    font-size: 28px;
+  }
+  .nav-links,
+  .nav-cta-desktop {
+    display: none;
+  }
+  .hamburger {
+    display: flex;
+  }
+  .hero {
+    padding-top: 112px;
+  }
+  .hero-inner {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+  .hero-ctas {
+    justify-content: center;
+  }
+  .trust-line {
+    justify-content: center;
+    text-align: left;
+  }
+  .hero-visual {
+    order: -1;
+  }
+  .phone-carousel {
+    width: 230px;
+  }
+  /* The tilted reminder card overflows the viewport at phone widths. */
+  .float-card.behind {
+    display: none;
+  }
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 32px 24px;
+  }
+  .stat-number {
+    font-size: 32px;
+  }
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+  .showcase-inner {
+    grid-template-columns: 1fr;
+  }
+  .showcase.reverse .showcase-image,
+  .showcase-image {
+    order: -1;
+  }
+  .showcase.reverse .showcase-text,
+  .showcase-text {
+    order: 0;
+  }
+  .showcase-split {
+    grid-template-columns: 1fr;
+  }
+  .steps {
+    flex-direction: column;
+    gap: 40px;
+  }
+  .steps::before {
+    display: none;
+  }
+  /*
+   * A horizontal snap rail beats a 3-up grid on a phone, but it needs the
+   * gutter back so the first and last card are not glued to the edge.
+   */
+  .testimonials-grid {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 16px;
+    padding-bottom: 8px;
+    margin: 0 -24px;
+    padding-inline: 24px;
+    scroll-padding-left: 24px;
+  }
+  .testimonial-card {
+    min-width: min(300px, 80vw);
+    scroll-snap-align: start;
+  }
+  .cta-phones {
+    gap: 16px;
+  }
+  .cta-phones .device-frame {
+    width: 150px;
+  }
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  .page-hero {
+    padding: 120px 0 48px;
+  }
+  .store-badge {
+    width: 100%;
+    max-width: 260px;
+  }
+  .qr-card {
+    width: 152px;
+  }
+  .qr-code img,
+  .qr-code svg {
+    width: 124px;
+    height: 124px;
+  }
+
+  /* Sticky download bar — phones only. */
+  .fol {
+    padding-bottom: 68px;
+  }
+  .sticky-download {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 900;
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-top: 1px solid rgba(45, 106, 79, 0.12);
+    padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease;
+  }
+  .sticky-download.hidden {
+    transform: translateY(110%);
+  }
+  .sticky-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    margin: 0;
+    line-height: 1.3;
+  }
+  .sticky-label small {
+    display: block;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-secondary);
+  }
+  .sticky-btn {
+    padding: 10px 22px;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+}
+
+/* Very narrow phones: the 4-up stat grid and 2-up cards need one more step. */
+@media (max-width: 380px) {
+  .fol h1 {
+    font-size: 31px;
+  }
+  .hero-ctas .btn {
+    width: 100%;
+  }
+  .qr-row {
+    gap: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fol *,
+  .fol *::before,
+  .fol *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .js .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}

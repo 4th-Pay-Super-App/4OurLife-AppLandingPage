@@ -10,7 +10,6 @@ import { motion, AnimatePresence } from "framer-motion";
 const NAV_LINKS = [
   { href: "/",          label: "Home",         id: "home" },
   { href: "/#features", label: "Features",     id: "features" },
-  { href: "/about",     label: "About",        id: "about" },
   { href: "/#how",      label: "How It Works", id: "how" },
 ];
 
@@ -19,6 +18,19 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
   const pathname = usePathname();
+  const [renderedPath, setRenderedPath] = useState(pathname);
+
+  /*
+   * Adjusting state during render, rather than in an effect, is React's
+   * documented pattern for "reset when a value changes" — it re-renders
+   * before the browser paints, so neither the stale active link nor an open
+   * menu is ever shown on the new route.
+   */
+  if (pathname !== renderedPath) {
+    setRenderedPath(pathname);
+    setMenuOpen(false);
+    if (pathname !== "/") setActiveSection("about");
+  }
 
   useEffect(() => {
     const handle = () => setScrolled(window.scrollY > 50);
@@ -27,10 +39,7 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => {
-    if (pathname !== "/") {
-      setActiveSection("about");
-      return;
-    }
+    if (pathname !== "/") return;
     const observerOptions = { root: null, rootMargin: "-40% 0px -40% 0px", threshold: 0 };
     const handleIntersect = (entries: IntersectionObserverEntry[]) => {
       entries.forEach((entry) => {
@@ -44,8 +53,6 @@ export default function Navbar() {
     });
     return () => observer.disconnect();
   }, [pathname]);
-
-  useEffect(() => setMenuOpen(false), [pathname]);
 
 
   return (

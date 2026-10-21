@@ -3,6 +3,18 @@ import localFont from "next/font/local";
 import { createPageMetadata, SITE_URL } from "@/lib/seo";
 import "./globals.css";
 
+/*
+ * Open Sans backs `body` in globals.css, so the pages still built with
+ * Tailwind use it. `preload: false` because the landing and the pages built
+ * from the landing design system set Inter on their own wrapper, and nothing
+ * on them ever renders in Open Sans — preloading it there cost ~390 KB of
+ * unrendered TTF on the most-visited page on the site. Pages that do use it
+ * fetch it on demand, covered by `display: swap`.
+ *
+ * (These are unsubsetted TTFs at ~130 KB per weight. Converting them to woff2
+ * would cut roughly 60% off; worth doing when the Tailwind pages are next
+ * touched.)
+ */
 const openSans = localFont({
   src: [
     { path: "./fonts/OpenSans-Regular.ttf", weight: "400", style: "normal" },
@@ -11,15 +23,32 @@ const openSans = localFont({
   ],
   variable: "--font-sans",
   display: "swap",
+  preload: false,
 });
 
-const quincy = localFont({
-  src: [
-    { path: "./fonts/QuincyCF-Regular.ttf", weight: "400", style: "normal" },
-    { path: "./fonts/QuincyCF-Medium.ttf", weight: "500", style: "normal" },
-    { path: "./fonts/QuincyCF-Bold.ttf", weight: "700", style: "normal" },
-  ],
-  variable: "--font-display",
+/*
+ * The landing design calls for Inter. The reference page pulled it from
+ * fonts.googleapis.com, which costs a render-blocking stylesheet plus a second
+ * connection to fonts.gstatic.com before any text can paint. These are the
+ * same Google-published woff2 subset, served from our own origin: one 48 KB
+ * file covers 400–700 because Inter is a variable font.
+ *
+ * Latin only. `next/font/local` emits no `unicode-range`, so listing the
+ * latin-ext subset as a second src made every visitor download both (another
+ * 84 KB) regardless of the glyphs on the page. Every character the site
+ * renders — including the typographic quotes, en dashes and the middot in the
+ * trust line — is inside this subset. Text in a language that needs Latin
+ * Extended (Twi's ɛ/ɔ, say) would fall back to the system UI font; add that
+ * subset back, with an explicit unicode-range, if such copy is ever added.
+ *
+ * The variable is `--font-landing`, not `--font-inter`: globals.css already
+ * declares `--font-inter: "Inter", sans-serif` in its Tailwind theme, and two
+ * declarations of the same name on the same element resolve by source order,
+ * which the font loader does not control.
+ */
+const inter = localFont({
+  src: [{ path: "./fonts/Inter-Variable-latin.woff2", weight: "400 700", style: "normal" }],
+  variable: "--font-landing",
   display: "swap",
 });
 
@@ -54,7 +83,7 @@ export default function RootLayout({
     // before React hydrates.
     <html
       lang="en"
-      className={`no-js ${openSans.variable} ${quincy.variable}`}
+      className={`no-js ${openSans.variable} ${inter.variable}`}
       suppressHydrationWarning
     >
       <head>

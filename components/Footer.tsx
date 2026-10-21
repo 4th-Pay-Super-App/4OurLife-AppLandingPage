@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { Heart, Mail, ArrowRight, Smartphone, Apple } from "lucide-react";
+import { Mail, ArrowRight } from "lucide-react";
 import { FaTwitter, FaInstagram, FaLinkedinIn } from "react-icons/fa6";
 import { motion } from "framer-motion";
 import { AppStoreIcon, PlayStoreIcon } from "./Brand-icons";
@@ -12,13 +12,12 @@ const NAV = [
   { label: "Home",              href: "/"                  },
   { label: "Features",          href: "/#features"         },
   { label: "How It Works",      href: "/#how"              },
-  { label: "About Us",          href: "/about"             },
-  { label: "Register Facility", href: "/register-facility" },
 ];
 
 const LEGAL = [
-  { label: "Privacy Policy",  href: "/privacy-policy"   },
-  { label: "Terms of Service",href: "/terms-of-service" },
+  { label: "Privacy Policy",   href: "/privacy-policy"   },
+  { label: "Terms of Service", href: "/terms-of-service" },
+  { label: "Cookie Policy",    href: "/cookie-policy"    },
 ];
 
 const SOCIALS = [
