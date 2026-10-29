@@ -6,6 +6,7 @@ import {
   FOOTER_COMPANY_LINKS,
   FOOTER_FEATURE_LINKS,
   FOOTER_LEGAL_LINKS,
+  PHONES,
   SOCIAL_LINKS,
 } from "./content";
 import { FacebookIcon, InstagramIcon, LinkedInIcon, TwitterIcon } from "./icons";
@@ -53,11 +54,20 @@ export default function SiteFooter() {
             </Link>
             <p>Your health, simplified.</p>
             {/*
-              With the Contact page gone, the one address worth publishing
-              sits here rather than alone in a column of its own.
+              The single published mailbox and the two phone lines, from
+              CONTACT and PHONES in ./content.ts. They sit under the brand
+              rather than in a column of their own: there are three values,
+              which is too few to justify a fourth column but too useful to
+              leave only on /contact.
             */}
             <p className="footer-contact">
               <a href={`mailto:${CONTACT.general}`}>{CONTACT.general}</a>
+              {PHONES.map(({ display, href }) => (
+                <span key={href}>
+                  <br />
+                  <a href={href}>{display}</a>
+                </span>
+              ))}
             </p>
             {/*
               Renders nothing until SOCIAL_LINKS has real profile URLs. The

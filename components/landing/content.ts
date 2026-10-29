@@ -18,7 +18,8 @@
  *                      itself said "replace with real partner facilities".
  *   • `TESTIMONIALS` — three quotes written as examples, attributed to
  *                      people who do not exist, one of them to a doctor.
- *   • `CONTACT.phone`— +233 24 000 0000, not a dialable number.
+ *   • `CONTACT.phone`— +233 24 000 0000, not a dialable number. Two real
+ *                      lines now ship in `PHONES` below.
  *
  * Put any of them back only with a source. Real figures belong in a
  * dated note next to the number so the next person can re-verify it.
@@ -246,14 +247,46 @@ export const COMPANY = {
   address: "4th Pay Ltd, Kwashieman Ofankor Road, Accra, Ghana",
 } as const;
 
+/**
+ * One mailbox, two phone lines, for the whole site.
+ *
+ * `general`, `privacy` and `legal` are deliberately the same address rather
+ * than three aliases: we were asked to publish a single point of contact, and
+ * three names for one inbox is how the five-addresses-across-four-domains mess
+ * started. They remain separate keys so a page can still say *why* it is
+ * pointing somewhere — and so splitting them later is an edit here, not a
+ * hunt through the pages.
+ *
+ * ── On the domain ───────────────────────────────────────────────────────
+ * It is `4th-pay.com`, hyphenated. `4thpay.com` is not a registered domain
+ * (no nameservers, no A record), so mail to it bounces with NXDOMAIN rather
+ * than arriving anywhere. The hyphenated spelling is also what the iOS and
+ * Android builds and the admin panel already publish. Do not drop the hyphen.
+ *
+ * Note that 4th-pay.com currently has no MX record either; delivery depends
+ * on the SMTP fallback to its A record. Worth confirming the mailbox actually
+ * receives before this is the only way to reach us.
+ */
 export const CONTACT = {
   /** General enquiries and support. */
-  general: "support@4ourlife.com",
+  general: "disrupt@4th-pay.com",
   /** Privacy, data-protection and legal correspondence. */
   privacy: "disrupt@4th-pay.com",
   legal: "disrupt@4th-pay.com",
   address: COMPANY.address,
 } as const;
+
+/**
+ * Published phone lines.
+ *
+ * `href` is the E.164 form `tel:` needs; `display` is how it is read aloud.
+ * These replace the reference page's "+233 24 000 0000", which was a
+ * placeholder and not a dialable number.
+ */
+export const PHONES: readonly { display: string; href: string }[] = [
+  { display: "+233 554 506 861", href: "tel:+233554506861" },
+  { display: "+233 204 648 483", href: "tel:+233204648483" },
+] as const;
 
 export const NAV_LINKS: readonly { href: string; label: string }[] = [
   { href: "/#features", label: "Features" },

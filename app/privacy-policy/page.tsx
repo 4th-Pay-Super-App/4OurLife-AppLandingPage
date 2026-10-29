@@ -1,6 +1,7 @@
 import { createPageMetadata } from "@/lib/seo";
 import SiteShell from "@/components/landing/SiteShell";
 import { COMPANY, CONTACT } from "@/components/landing/content";
+import ContactDetails from "@/components/landing/ContactDetails";
 
 export const metadata = createPageMetadata({
   title: "Privacy Policy",
@@ -26,9 +27,10 @@ const LAST_UPDATED = "October 29, 2026";
  *     Tech" at Accra Digital Center with privacy@4ourlife.health; the
  *     registered operator the app stores and the admin panel both name is
  *     4th Pay Ltd.
- *   • The reference's "+233 24 000 0000" is dropped rather than published.
- *     It is not a dialable number, and a privacy policy that invites people
- *     to call a disconnected line is worse than one that lists only email.
+ *   • The reference's "+233 24 000 0000" is not published — it is not a
+ *     dialable number, and a privacy policy that invites people to call a
+ *     disconnected line is worse than one that lists only email. The two
+ *     real lines in PHONES are published in its place.
  *   • §4 no longer lists "analytics providers" among the parties we share
  *     data with, and the marketing site is described as cookie-free,
  *     because it is — see app/cookie-policy/page.tsx for the detail.
@@ -245,11 +247,7 @@ export default function PrivacyPolicyPage() {
             If you have questions or concerns about this Privacy Policy or our data practices,
             please contact us:
           </p>
-          <p>
-            <strong>Email:</strong> <a href={`mailto:${CONTACT.privacy}`}>{CONTACT.privacy}</a>
-            <br />
-            <strong>Address:</strong> {CONTACT.address}
-          </p>
+          <ContactDetails purpose="privacy" />
           <p>
             You also have the right to lodge a complaint with the{" "}
             <strong>Data Protection Commission of Ghana</strong> if you believe we have violated

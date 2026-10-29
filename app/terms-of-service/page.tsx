@@ -1,6 +1,7 @@
 import { createPageMetadata } from "@/lib/seo";
 import SiteShell from "@/components/landing/SiteShell";
-import { COMPANY, CONTACT } from "@/components/landing/content";
+import { COMPANY } from "@/components/landing/content";
+import ContactDetails from "@/components/landing/ContactDetails";
 
 export const metadata = createPageMetadata({
   title: "Terms of Service",
@@ -247,11 +248,7 @@ export default function TermsOfServicePage() {
 
           <h2>13. Contact Information</h2>
           <p>For questions about these Terms, contact us at:</p>
-          <p>
-            <strong>Email:</strong> <a href={`mailto:${CONTACT.legal}`}>{CONTACT.legal}</a>
-            <br />
-            <strong>Address:</strong> {CONTACT.address}
-          </p>
+          <ContactDetails purpose="legal" />
         </div>
       </section>
     </SiteShell>

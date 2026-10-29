@@ -1,6 +1,6 @@
 import { createPageMetadata } from "@/lib/seo";
 import SiteShell from "@/components/landing/SiteShell";
-import { COMPANY, CONTACT } from "@/components/landing/content";
+import { COMPANY, CONTACT, PHONES } from "@/components/landing/content";
 
 export const metadata = createPageMetadata({
   title: "Contact 4 Our Life",
@@ -17,26 +17,28 @@ export const metadata = createPageMetadata({
  * that eats enquiries is worse than no form, and worse again on a health
  * product where someone may be writing about their own data.
  *
- * Addresses come from CONTACT in components/landing/content.ts, which is the
- * single source of truth for the whole site. Build a real form here when
- * there is somewhere for it to post.
+ * Addresses and phone lines come from CONTACT and PHONES in
+ * components/landing/content.ts, which is the single source of truth for the
+ * whole site. Build a real form here when there is somewhere for it to post.
+ *
+ * Every topic below routes to the one published mailbox, so they are listed
+ * as guidance on what to put in the subject line rather than as three
+ * separate addresses — printing the same address three times under three
+ * headings reads like a mistake.
  */
 
-const ENQUIRIES: readonly { heading: string; body: string; email: string }[] = [
+const TOPICS: readonly { heading: string; body: string }[] = [
   {
     heading: "Support and general enquiries",
     body: "Trouble with the app, a question about a feature, or anything else.",
-    email: CONTACT.general,
   },
   {
     heading: "Privacy and data protection",
     body: "Requests to access, correct, export or delete your data under the Ghana Data Protection Act. We respond within 30 days.",
-    email: CONTACT.privacy,
   },
   {
     heading: "Legal and press",
     body: "Terms, compliance, partnership and media enquiries.",
-    email: CONTACT.legal,
   },
 ];
 
@@ -53,16 +55,29 @@ export default function ContactPage() {
 
       <section className="page-body">
         <div className="container">
-          {ENQUIRIES.map(({ heading, body, email }) => (
-            <div key={heading}>
-              <h2>{heading}</h2>
-              <p>{body}</p>
-              <p>
-                <a href={`mailto:${email}`}>
-                  <strong>{email}</strong>
-                </a>
-              </p>
-            </div>
+          <h2>Email</h2>
+          <p>
+            <a href={`mailto:${CONTACT.general}`}>
+              <strong>{CONTACT.general}</strong>
+            </a>
+          </p>
+
+          <h2>Phone</h2>
+          <p>
+            {PHONES.map(({ display, href }, index) => (
+              <span key={href}>
+                {index > 0 && <br />}
+                <a href={href}>{display}</a>
+              </span>
+            ))}
+          </p>
+
+          <h2>What to write about</h2>
+          <p>All of the below reach the same inbox. Naming the topic in your subject line gets it to the right person faster.</p>
+          {TOPICS.map(({ heading, body }) => (
+            <p key={heading}>
+              <strong>{heading}.</strong> {body}
+            </p>
           ))}
 
           <h2>Deleting your account</h2>

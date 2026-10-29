@@ -1,6 +1,7 @@
 import { createPageMetadata } from "@/lib/seo";
 import SiteShell from "@/components/landing/SiteShell";
-import { COMPANY, CONTACT } from "@/components/landing/content";
+import { COMPANY } from "@/components/landing/content";
+import ContactDetails from "@/components/landing/ContactDetails";
 
 export const metadata = createPageMetadata({
   title: "Cookie Policy",
@@ -187,11 +188,7 @@ export default function CookiePolicyPage() {
 
           <h2>8. Contact us</h2>
           <p>If you have questions about this Policy, please contact us:</p>
-          <p>
-            <strong>Email:</strong> <a href={`mailto:${CONTACT.privacy}`}>{CONTACT.privacy}</a>
-            <br />
-            <strong>Address:</strong> {CONTACT.address}
-          </p>
+          <ContactDetails purpose="privacy" />
           <p>
             You also have the right to lodge a complaint with the{" "}
             <strong>Data Protection Commission of Ghana</strong> if you believe we have mishandled
