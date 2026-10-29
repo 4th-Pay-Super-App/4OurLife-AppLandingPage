@@ -1,24 +1,33 @@
 /**
  * Landing page copy and the device artwork each section shows.
  *
- * Everything here is lifted verbatim from the signed-off reference page in
+ * Structure and copy come from the signed-off reference page in
  * `static-landing/index.html`.
  *
- * ⚠ PLACEHOLDER CONTENT — carried over from the reference, needs real data
- * before this goes to production:
- *   • `PARTNERS`      — invented facility names (the reference marked them
- *                       "replace with real partner facilities")
- *   • `TESTIMONIALS`  — written as examples, not collected from real users
- *   • `STATS`         — unverified figures (2,500 users, 4.9 rating, 150
- *                       facilities, 16 regions)
- *   • `CONTACT.phone` — +233 24 000 0000 is not a dialable number
+ * ── Prototype content, removed Oct 2026 ──────────────────────────────────
+ * The reference carried four blocks of invented data that had been shipping
+ * as fact. All four are gone, not commented out — a fabricated number that
+ * is one uncomment away from production is still a liability:
+ *
+ *   • `STATS`        — "2,500+ Active Users", "150+ Verified Facilities",
+ *                      "16 Regions Covered", "4.9 App Store Rating". None
+ *                      was measured; the 4.9 in particular claimed a store
+ *                      rating the listings do not have.
+ *   • `PARTNERS`     — eight invented facility names ("Premier Family
+ *                      Hospital", "Korle Hills Clinic", …). The reference
+ *                      itself said "replace with real partner facilities".
+ *   • `TESTIMONIALS` — three quotes written as examples, attributed to
+ *                      people who do not exist, one of them to a doctor.
+ *   • `CONTACT.phone`— +233 24 000 0000, not a dialable number.
+ *
+ * Put any of them back only with a source. Real figures belong in a
+ * dated note next to the number so the next person can re-verify it.
  */
 
 import type { ComponentType } from "react";
 import {
   ActivityIcon,
   BookIcon,
-  BuildingIcon,
   CalendarIcon,
   CheckIcon,
   DownloadIcon,
@@ -27,10 +36,8 @@ import {
   HeartIcon,
   MapPinIcon,
   MessageCircleIcon,
-  StarIcon,
   SunIcon,
   UserIcon,
-  UsersIcon,
 } from "./icons";
 
 type IconComponent = ComponentType<{ className?: string }>;
@@ -94,40 +101,6 @@ export const CAROUSEL_SLIDES: readonly CarouselSlide[] = [
   { label: "Symptom Checker", ...SCREENS.diseaseLibrary },
   { label: "Medication Tracker", ...SCREENS.reminders },
   { label: "Nearby Clinics", ...SCREENS.map },
-] as const;
-
-/* ============================================================
-   Stats bar
-   ============================================================ */
-
-export type Stat = {
-  icon: IconComponent;
-  target: number;
-  suffix?: string;
-  decimal?: boolean;
-  label: string;
-};
-
-export const STATS: readonly Stat[] = [
-  { icon: UsersIcon, target: 2500, suffix: "+", label: "Active Users" },
-  { icon: BuildingIcon, target: 150, suffix: "+", label: "Verified Facilities" },
-  { icon: MapPinIcon, target: 16, label: "Regions Covered" },
-  { icon: StarIcon, target: 4.9, decimal: true, label: "App Store Rating" },
-] as const;
-
-/* ============================================================
-   Partner strip
-   ============================================================ */
-
-export const PARTNERS: readonly string[] = [
-  "Premier Family Hospital",
-  "Korle Hills Clinic",
-  "Ashanti Diagnostic Lab",
-  "GreenLeaf Pharmacy",
-  "Cape Wellness Center",
-  "Northern Eye Clinic",
-  "Harmony Physiotherapy",
-  "AccraCentral Fitness",
 ] as const;
 
 /* ============================================================
@@ -244,49 +217,42 @@ export const STEPS: readonly Step[] = [
 ] as const;
 
 /* ============================================================
-   Testimonials
-   ============================================================ */
-
-export type Testimonial = {
-  quote: string;
-  name: string;
-  location: string;
-};
-
-export const TESTIMONIALS: readonly Testimonial[] = [
-  {
-    quote:
-      "The fitness workouts are perfect for my small apartment. I've lost 5kg in 2 months just following the AI plans.",
-    name: "Ama, 28",
-    location: "Accra",
-  },
-  {
-    quote:
-      "I use the medication tracker for my mother's blood pressure pills. The reminders have been a lifesaver.",
-    name: "Kofi, 45",
-    location: "Kumasi",
-  },
-  {
-    quote:
-      "I recommend 4 Our Life to my patients. The symptom checker helps them understand when to seek care.",
-    name: "Dr. Mensah",
-    location: "Cape Coast",
-  },
-] as const;
-
-/* ============================================================
-   Navigation + contact details
+   Company identity + contact details
    ============================================================ */
 
 /**
- * Only the addresses the site still shows. The support, legal, press and
- * phone entries went with the Contact, Careers and Press Kit pages — a
- * published address nothing links to is an inbox nobody watches.
+ * The one place this site states who operates it.
+ *
+ * These values match the shipped iOS/Android app and the admin panel, which
+ * both identify the operator as 4th Pay Ltd and route mail to
+ * disrupt@4th-pay.com. The landing page had been the odd one out, publishing
+ * a different company name ("4 Our Life Health Tech"), a different registered
+ * address (Accra Digital Center) and two mailboxes on a domain the site does
+ * not use — hello@ and privacy@4ourlife.health — while the legacy
+ * `components/Footer.tsx` published a third, hello@4ourlife.app. Five
+ * addresses across four domains, for one company.
+ *
+ * The reference page in `static-landing/` still carries the old identity.
+ * Where it conflicts with this, this wins: a mockup is a layout, not a
+ * company registration.
+ *
+ * If any of this changes, change it here. Nothing else should hardcode it.
  */
+export const COMPANY = {
+  /** Registered operator, as stated in the app stores and the admin panel. */
+  legalName: "4th Pay Ltd",
+  /** Consumer-facing product name. */
+  tradingName: "4 Our Life",
+  address: "4th Pay Ltd, Kwashieman Ofankor Road, Accra, Ghana",
+} as const;
+
 export const CONTACT = {
-  general: "hello@4ourlife.health",
-  privacy: "privacy@4ourlife.health",
-  address: "4 Our Life Health Tech, Accra Digital Center, Accra, Ghana",
+  /** General enquiries and support. */
+  general: "support@4ourlife.com",
+  /** Privacy, data-protection and legal correspondence. */
+  privacy: "disrupt@4th-pay.com",
+  legal: "disrupt@4th-pay.com",
+  address: COMPANY.address,
 } as const;
 
 export const NAV_LINKS: readonly { href: string; label: string }[] = [
@@ -303,15 +269,30 @@ export const FOOTER_FEATURE_LINKS: readonly { href: string; label: string }[] = 
   { href: "/#features", label: "Health Tips" },
 ] as const;
 
+export const FOOTER_COMPANY_LINKS: readonly { href: string; label: string }[] = [
+  { href: "/about", label: "About" },
+  { href: "/contact", label: "Contact" },
+] as const;
+
 export const FOOTER_LEGAL_LINKS: readonly { href: string; label: string }[] = [
   { href: "/privacy-policy", label: "Privacy Policy" },
   { href: "/terms-of-service", label: "Terms of Service" },
   { href: "/cookie-policy", label: "Cookie Policy" },
 ] as const;
 
-export const SOCIAL_LINKS: readonly { href: string; label: string }[] = [
-  { href: "https://www.facebook.com/", label: "Facebook" },
-  { href: "https://www.instagram.com/", label: "Instagram" },
-  { href: "https://twitter.com/", label: "Twitter" },
-  { href: "https://www.linkedin.com/", label: "LinkedIn" },
-] as const;
+/**
+ * Social profiles.
+ *
+ * Empty on purpose. The four icons used to link to facebook.com,
+ * instagram.com, twitter.com and linkedin.com — the platforms' own front
+ * pages, not our profiles — so every click left the site and landed nowhere
+ * useful. The footer renders nothing while this list is empty.
+ *
+ * Add the real profile URLs here and the icon row comes back on its own:
+ *
+ *   { href: "https://www.facebook.com/<handle>", label: "Facebook" },
+ *
+ * `label` must be one of the keys in SiteFooter's SOCIAL_ICONS map
+ * (Facebook, Instagram, Twitter, LinkedIn).
+ */
+export const SOCIAL_LINKS: readonly { href: string; label: string }[] = [];

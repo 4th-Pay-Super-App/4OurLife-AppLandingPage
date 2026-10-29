@@ -60,6 +60,21 @@ export const metadata: Metadata = {
     path: "/",
   }),
   metadataBase: SITE_URL,
+  /*
+   * Google Search Console verification.
+   *
+   * A *Domain* property (the kind that covers 4ourlife.com and every
+   * subdomain, http and https alike) is verified by a DNS TXT record on the
+   * apex, not by anything in this codebase — see docs below. This tag is the
+   * fallback for a *URL-prefix* property, and it is here so that verifying
+   * one never needs a code change: set GOOGLE_SITE_VERIFICATION in the
+   * hosting environment and redeploy.
+   *
+   * Left undefined when the variable is unset, so no empty meta tag ships.
+   */
+  verification: process.env.GOOGLE_SITE_VERIFICATION
+    ? { google: process.env.GOOGLE_SITE_VERIFICATION }
+    : undefined,
   keywords: [
     "Ghana health app",
     "healthcare Ghana",

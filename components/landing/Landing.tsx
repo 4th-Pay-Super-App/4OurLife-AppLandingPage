@@ -1,19 +1,10 @@
 import Link from "next/link";
-import {
-  FEATURES,
-  FITNESS_POINTS,
-  PARTNERS,
-  SCREENS,
-  STEPS,
-  SYMPTOM_POINTS,
-  TESTIMONIALS,
-} from "./content";
-import { BellIcon, CheckIcon, MessageCircleIcon, StarRow } from "./icons";
+import { FEATURES, FITNESS_POINTS, SCREENS, STEPS, SYMPTOM_POINTS } from "./content";
+import { BellIcon, CheckIcon, MessageCircleIcon } from "./icons";
 import DeviceFrame from "./DeviceFrame";
 import HeroBackdrop from "./HeroBackdrop";
 import HeroCarousel from "./HeroCarousel";
 import Reveal from "./Reveal";
-import StatsBar from "./StatsBar";
 import { StoreBadgeRow, StoreQrRow } from "./StoreBadges";
 
 /** A bulleted benefit list — identical markup in both showcase sections. */
@@ -43,26 +34,27 @@ export default function Landing() {
         <div className="blob blob-3" />
         <Reveal className="container hero-inner">
           <div className="hero-text">
-            <span className="eyebrow">Ghana&rsquo;s All-in-One Health Platform</span>
+            <span className="eyebrow">Health, Fitness &amp; Nearby Care in Ghana</span>
             <h1>Healthcare Simplified, Longevity Amplified.</h1>
             <p className="subtitle">
               From fitness plans and symptom checks to medication reminders and nearby wellness
               centers — 4 Our Life puts your complete health journey in one place.
             </p>
+            {/*
+              The store badges, not a jump link. "Download the App" used to
+              scroll to #download further down the page, so the primary call
+              to action on the site took two clicks to reach a store and
+              looked broken to anyone expecting a download.
+
+              "Explore Features" keeps the in-page jump, which is what it is
+              for.
+            */}
             <div className="hero-ctas">
-              <Link href="#download" className="btn btn-primary">
-                Download the App
-              </Link>
+              <StoreBadgeRow />
               <Link href="#features" className="btn btn-secondary">
                 Explore Features
               </Link>
             </div>
-            <p className="trust-line">
-              <span className="trust-stars">
-                <StarRow className="icon-sm" />
-              </span>
-              Trusted by 2,500+ Ghanaians · 4.9 App Rating · HEFRA-aligned facilities
-            </p>
           </div>
 
           <div className="hero-visual">
@@ -77,28 +69,13 @@ export default function Landing() {
         </Reveal>
       </header>
 
-      <StatsBar />
-
-      {/* ── Partner strip ── */}
-      <section className="partners" aria-label="Facility partners across Ghana">
-        <div className="container">
-          <Reveal as="p" className="partners-label">
-            Verified facilities &amp; partners across Ghana
-          </Reveal>
-        </div>
-        <div className="partners-marquee" aria-hidden="true">
-          <div className="partners-track">
-            {/* The list is rendered twice so the -50% keyframe lands on an
-                identical frame and the loop has no visible seam. */}
-            {[...PARTNERS, ...PARTNERS].map((name, i) => (
-              <span className="partner-mark" key={`${name}-${i}`}>
-                <span className="dot" />
-                {name}
-              </span>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/*
+        The stats bar and the partner strip stood here. Both published
+        invented data as fact — "2,500+ Active Users", "150+ Verified
+        Facilities", "4.9 App Store Rating", and eight facility names that
+        belong to no real partner — so both are gone rather than restyled.
+        See the header of ./content.ts.
+      */}
 
       {/* ── Features grid ── */}
       <section className="features" id="features">
@@ -230,37 +207,13 @@ export default function Landing() {
       </section>
 
       {/* ── Testimonials ── */}
-      <section className="testimonials" id="testimonials">
-        <div className="container">
-          <Reveal className="section-header">
-            <h2>What Our Users Say</h2>
-          </Reveal>
-          <Reveal className="testimonials-grid">
-            {TESTIMONIALS.map(({ quote, name, location }) => (
-              <figure className="testimonial-card" key={name}>
-                <div className="quote-mark" aria-hidden="true">
-                  &ldquo;
-                </div>
-                {/* role="img" is required for the label: aria-label is
-                    prohibited on a div with no role. */}
-                <div className="stars" role="img" aria-label="Rated 5 out of 5">
-                  <StarRow className="icon-sm" />
-                </div>
-                <blockquote className="testimonial-text">{quote}</blockquote>
-                <figcaption className="testimonial-author">
-                  <div className="author-avatar" aria-hidden="true">
-                    {name.charAt(0)}
-                  </div>
-                  <div>
-                    <div className="author-name">{name}</div>
-                    <div className="author-loc">{location}</div>
-                  </div>
-                </figcaption>
-              </figure>
-            ))}
-          </Reveal>
-        </div>
-      </section>
+      {/*
+        A "What Our Users Say" section stood here with three testimonials.
+        All three were written as examples — "Ama, 28", "Kofi, 45" and a
+        "Dr. Mensah" who endorsed the symptom checker to his patients. Quotes
+        attributed to people who do not exist are not a styling problem, so
+        the section is removed until there are real ones to publish.
+      */}
 
       {/*
         ── Coming soon ──

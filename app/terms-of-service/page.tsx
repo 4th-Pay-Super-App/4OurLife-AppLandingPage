@@ -1,484 +1,259 @@
-"use client";
+import { createPageMetadata } from "@/lib/seo";
+import SiteShell from "@/components/landing/SiteShell";
+import { COMPANY, CONTACT } from "@/components/landing/content";
 
-import Link from "next/link";
-import {
-  FileText,
-  Users,
-  AlertTriangle,
-  ShieldOff,
-  XCircle,
-  Mail,
-  ArrowLeft,
-  ChevronRight,
-} from "lucide-react";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import AnimatedSection from "@/components/AnimatedSection";
+export const metadata = createPageMetadata({
+  title: "Terms of Service",
+  description:
+    "The terms governing your use of the 4 Our Life app and website, including the medical disclaimer, acceptable use and governing law.",
+  path: "/terms-of-service",
+});
 
-// ─── Sections Data ─────────────────────────────────────────────
-const SECTIONS = [
-  { id: "agreement", label: "The Agreement", icon: FileText },
-  { id: "eligibility", label: "Eligibility", icon: Users },
-  { id: "medical", label: "Medical Disclaimer", icon: AlertTriangle },
-  { id: "conduct", label: "User Conduct", icon: ShieldOff },
-  { id: "liability", label: "Liability", icon: XCircle },
-  { id: "termination", label: "Termination", icon: XCircle },
-  { id: "contact", label: "Contact Legal", icon: Mail },
-];
+const LAST_UPDATED = "October 29, 2026";
 
-const SECTION_CONTENT = [
-  {
-    id: "agreement",
-    num: 1,
-    icon: FileText,
-    title: "The Agreement",
-    accent: false,
-    body: (
-      <p
-        style={{
-          fontFamily: "var(--font-noto)",
-          color: "#475569",
-          lineHeight: 1.8,
-          fontSize: "0.95rem",
-        }}
-      >
-        By accessing or using the 4 Our Life App or website, you agree to be
-        bound by these Terms and Conditions. If you do not agree to all of these
-        terms, do not use the service. These terms form a legally binding
-        agreement between you and 4th Pay Ltd, operating as 4 Our Life.
-      </p>
-    ),
-  },
-  {
-    id: "eligibility",
-    num: 2,
-    icon: Users,
-    title: "Eligibility",
-    accent: false,
-    body: (
-      <p
-        style={{
-          fontFamily: "var(--font-noto)",
-          color: "#475569",
-          lineHeight: 1.8,
-          fontSize: "0.95rem",
-        }}
-      >
-        You must be at least 13 years old to use this App. Users between 13 and
-        18 years of age require guardian consent to access specific health
-        features. By using the App, you confirm that you meet these eligibility
-        requirements.
-      </p>
-    ),
-  },
-  {
-    id: "medical",
-    num: 3,
-    icon: AlertTriangle,
-    title: "Medical Disclaimer",
-    accent: true,
-    body: (
-      <div>
-        <p
-          className="font-bold italic mb-3"
-          style={{
-            fontFamily: "var(--font-noto)",
-            color: "#B91C1C",
-            fontSize: "0.9rem",
-          }}
-        >
-          IMPORTANT: 4 Our Life is an information tool, NOT a medical provider.
-        </p>
-        <p
-          style={{
-            fontFamily: "var(--font-noto)",
-            color: "#475569",
-            lineHeight: 1.8,
-            fontSize: "0.95rem",
-          }}
-        >
-          The App provides facility finders, medication reminders, and health
-          tracking tools but does not provide clinical diagnoses or medical
-          advice. Always seek the advice of a qualified healthcare provider in
-          Ghana for any medical condition. In an emergency, contact emergency
-          services immediately.
-        </p>
-      </div>
-    ),
-  },
-  {
-    id: "conduct",
-    num: 4,
-    icon: ShieldOff,
-    title: "User Conduct",
-    accent: false,
-    body: (
-      <div>
-        <p
-          className="mb-4"
-          style={{
-            fontFamily: "var(--font-noto)",
-            color: "#475569",
-            lineHeight: 1.8,
-            fontSize: "0.95rem",
-          }}
-        >
-          As a user of 4 Our Life, you agree not to:
-        </p>
-        <ul className="space-y-2.5">
-          {[
-            "Provide false, misleading, or inaccurate health information.",
-            "Attempt to breach, hack, or circumvent security protocols.",
-            "Reverse engineer, decompile, or disassemble any part of the App.",
-            "Use the App for any unlawful or fraudulent purpose.",
-            "Impersonate any person or entity or misrepresent your affiliation.",
-          ].map((item, i) => (
-            <li
-              key={i}
-              className="flex items-start gap-3"
-              style={{
-                fontFamily: "var(--font-noto)",
-                color: "#475569",
-                fontSize: "0.9rem",
-                lineHeight: 1.65,
-              }}
-            >
-              <span
-                className="flex-shrink-0 w-1.5 h-1.5 rounded-full mt-2"
-                style={{ background: "#0D9488" }}
-              />
-              {item}
-            </li>
-          ))}
-        </ul>
-      </div>
-    ),
-  },
-  {
-    id: "liability",
-    num: 5,
-    icon: XCircle,
-    title: "Limitation of Liability",
-    accent: false,
-    body: (
-      <p
-        style={{
-          fontFamily: "var(--font-noto)",
-          color: "#475569",
-          lineHeight: 1.8,
-          fontSize: "0.95rem",
-        }}
-      >
-        4 Our Life Limited (4th Pay Ltd) shall not be liable for any indirect,
-        incidental, special, or consequential damages resulting from your use of
-        the App, including but not limited to damages for loss of profits,
-        goodwill, use, data, or other intangible losses. Our total liability
-        shall not exceed the amount paid by you (if any) for accessing the
-        service in the twelve months preceding the claim.
-      </p>
-    ),
-  },
-  {
-    id: "termination",
-    num: 6,
-    icon: XCircle,
-    title: "Termination",
-    accent: false,
-    body: (
-      <p
-        style={{
-          fontFamily: "var(--font-noto)",
-          color: "#475569",
-          lineHeight: 1.8,
-          fontSize: "0.95rem",
-        }}
-      >
-        We reserve the right to terminate or suspend your account at our sole
-        discretion, without notice, for conduct that we believe violates these
-        Terms or is harmful to other users, us, or third parties. You may also
-        terminate your account at any time by contacting us at
-        disrupt@4th-pay.com.
-      </p>
-    ),
-  },
-];
+/**
+ * ── Why this page was rewritten (Oct 2026) ───────────────────────────────
+ * Two problems, both visible to anyone clicking "Terms of Service" in the
+ * footer.
+ *
+ * 1. It rendered inside `components/Navbar` + `components/Footer` — a
+ *    different design system from the rest of the site, with its own header,
+ *    its own footer and a fourth support address (hello@4ourlife.app). The
+ *    cookie policy, one link away, used SiteShell. Clicking between two
+ *    legal pages changed the entire chrome, which is what "it redirects to a
+ *    page with different info" described.
+ *
+ * 2. The operator was named inconsistently across the estate.
+ *
+ * Copy follows the signed-off reference in `static-landing/index.html`
+ * (#modal-terms). Where the reference states company details it is NOT
+ * followed: it says "4 Our Life Health Tech Ltd." and legal@4ourlife.health,
+ * neither of which is the registered operator. Those come from COMPANY and
+ * CONTACT in components/landing/content.ts, which match the app stores and
+ * the admin panel. A mockup is a layout, not a company registration.
+ */
 
 export default function TermsOfServicePage() {
   return (
-    <main className="bg-white overflow-x-hidden min-h-screen">
-      <Navbar />
-
-      {/* ── Hero ── */}
-      <section className="pt-32 pb-16 bg-slate-900 relative overflow-hidden">
-        <div className="absolute inset-0 grid-bg opacity-40" />
-        <div
-          className="absolute top-0 right-0 w-[500px] h-[400px] rounded-full blur-[100px]"
-          style={{ background: "rgba(13,148,136,0.08)" }}
-        />
-        <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
-          <AnimatedSection direction="up">
-            <div
-              className="inline-flex items-center gap-2 border rounded-full px-4 py-2 mb-6"
-              style={{
-                background: "rgba(13,148,136,0.15)",
-                borderColor: "rgba(13,148,136,0.3)",
-              }}
-            >
-              <FileText className="w-3.5 h-3.5 text-emerald-400" />
-              <span
-                className="text-xs font-semibold tracking-wide uppercase"
-                style={{
-                  fontFamily: "var(--font-inter)",
-                  color: "rgba(255,255,255,0.75)",
-                }}
-              >
-                Legal
-              </span>
-            </div>
-            <h1
-              className="font-black text-white mb-5 leading-tight"
-              style={{
-                fontFamily: "var(--font-figtree)",
-                fontSize: "clamp(2rem, 4.5vw, 3.5rem)",
-              }}
-            >
-              Terms &amp; <span className="gradient-text">Conditions</span>
-            </h1>
-            <p
-              className="text-lg max-w-2xl mx-auto leading-relaxed"
-              style={{
-                fontFamily: "var(--font-noto)",
-                color: "rgba(255,255,255,0.6)",
-              }}
-            >
-              Please read these terms carefully before using the 4 Our Life
-              application or website. By using our service you agree to these
-              terms.
-            </p>
-            <p
-              className="text-xs mt-4 font-semibold uppercase tracking-widest"
-              style={{
-                fontFamily: "var(--font-noto)",
-                color: "rgba(255,255,255,0.35)",
-              }}
-            >
-              Version 1.0 · January 2026
-            </p>
-          </AnimatedSection>
+    <SiteShell>
+      <section className="page-hero">
+        <div className="container">
+          <span className="eyebrow">Legal</span>
+          <h1>Terms of Service</h1>
+          <p>The agreement between you and {COMPANY.legalName} for use of the 4 Our Life app and website.</p>
         </div>
       </section>
 
-      {/* ── Content ── */}
-      <section className="py-20" style={{ background: "#F5F1EE" }}>
-        <div className="max-w-[1400px] mx-auto px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-[260px_1fr] gap-12">
-            {/* ── Sticky TOC ── */}
-            <aside className="hidden lg:block">
-              <div
-                className="sticky top-28 rounded-3xl p-6"
-                style={{
-                  background: "#FFFFFF",
-                  border: "1.5px solid #EDE8E3",
-                  boxShadow: "0 4px 24px rgba(15,23,42,0.06)",
-                }}
-              >
-                <p
-                  className="font-black text-xs uppercase tracking-widest mb-5"
-                  style={{
-                    fontFamily: "var(--font-figtree)",
-                    color: "#94a3b8",
-                  }}
-                >
-                  On This Page
-                </p>
-                <ul className="space-y-1">
-                  {SECTIONS.map(({ id, label, icon: Icon }) => (
-                    <li key={id}>
-                      <a
-                        href={`#${id}`}
-                        className="group flex items-center gap-3 px-3 py-2 rounded-xl transition-all duration-150"
-                        style={{ color: "#475569" }}
-                        onMouseEnter={(e) => {
-                          (e.currentTarget as HTMLElement).style.background =
-                            "#F0FDFA";
-                          (e.currentTarget as HTMLElement).style.color =
-                            "#0D9488";
-                        }}
-                        onMouseLeave={(e) => {
-                          (e.currentTarget as HTMLElement).style.background =
-                            "transparent";
-                          (e.currentTarget as HTMLElement).style.color =
-                            "#475569";
-                        }}
-                      >
-                        <Icon size={14} className="flex-shrink-0" />
-                        <span
-                          style={{
-                            fontFamily: "var(--font-noto)",
-                            fontSize: "0.85rem",
-                            fontWeight: 500,
-                          }}
-                        >
-                          {label}
-                        </span>
-                      </a>
-                    </li>
-                  ))}
-                </ul>
+      <section className="page-body">
+        <div className="container">
+          <p className="legal-date">
+            <strong>Last Updated:</strong> {LAST_UPDATED}
+          </p>
 
-                <div
-                  className="mt-6 pt-6"
-                  style={{ borderTop: "1px solid #EDE8E3" }}
-                >
-                  <Link
-                    href="/privacy-policy"
-                    className="flex items-center gap-2 transition-colors duration-150"
-                    style={{
-                      fontFamily: "var(--font-noto)",
-                      fontSize: "0.82rem",
-                      fontWeight: 600,
-                      color: "#0D9488",
-                    }}
-                  >
-                    <ChevronRight size={13} />
-                    Privacy Policy
-                  </Link>
-                </div>
-              </div>
-            </aside>
+          <p>
+            These Terms of Service (&ldquo;Terms&rdquo;) constitute a legally binding agreement
+            between you and {COMPANY.legalName}, trading as {COMPANY.tradingName} (&ldquo;4 Our
+            Life,&rdquo; &ldquo;we,&rdquo; &ldquo;us,&rdquo; or &ldquo;our&rdquo;), governing your
+            access to and use of the 4 Our Life mobile application, website, and related services
+            (collectively, the &ldquo;Services&rdquo;). By accessing or using our Services, you
+            agree to be bound by these Terms. If you do not agree, you must not use our Services.
+          </p>
 
-            {/* ── Main Content ── */}
-            <div className="space-y-8 max-w-[960px]">
-              {SECTION_CONTENT.map((section, delay_i) => {
-                const Icon = section.icon;
-                return (
-                  <AnimatedSection key={section.id} delay={delay_i * 0.07}>
-                    <div
-                      id={section.id}
-                      className="rounded-3xl p-8"
-                      style={{
-                        background: section.accent ? "#FFF5F5" : "#FFFFFF",
-                        border: `1.5px solid ${section.accent ? "rgba(239,68,68,0.2)" : "#EDE8E3"}`,
-                        boxShadow: section.accent
-                          ? "0 4px 24px rgba(239,68,68,0.06)"
-                          : "0 4px 24px rgba(15,23,42,0.05)",
-                      }}
-                    >
-                      <div className="flex items-center gap-4 mb-5">
-                        <div
-                          className="w-11 h-11 rounded-2xl flex items-center justify-center"
-                          style={{
-                            background: section.accent
-                              ? "rgba(239,68,68,0.1)"
-                              : "#CCFBF1",
-                          }}
-                        >
-                          <Icon
-                            size={20}
-                            style={{
-                              color: section.accent ? "#DC2626" : "#0D9488",
-                            }}
-                          />
-                        </div>
-                        <h2
-                          className="font-black uppercase tracking-wider"
-                          style={{
-                            fontFamily: "var(--font-figtree)",
-                            color: section.accent ? "#B91C1C" : "#0F172A",
-                            fontSize: "1rem",
-                          }}
-                        >
-                          {section.num}. {section.title}
-                        </h2>
-                      </div>
-                      {section.body}
-                    </div>
-                  </AnimatedSection>
-                );
-              })}
+          <h2>1. Eligibility</h2>
+          <p>
+            You must be at least 13 years old to use our Services. By using the Services, you
+            represent and warrant that you meet this age requirement and have the legal capacity to
+            enter into these Terms. If you are using the Services on behalf of an organization, you
+            represent that you have authority to bind that organization.
+          </p>
 
-              {/* Contact Legal */}
-              <AnimatedSection delay={0.42}>
-                <div
-                  id="contact"
-                  className="rounded-3xl p-8"
-                  style={{
-                    background: "#0F172A",
-                    boxShadow: "0 20px 60px rgba(15,23,42,0.25)",
-                  }}
-                >
-                  <h2
-                    className="font-black text-white mb-2"
-                    style={{
-                      fontFamily: "var(--font-figtree)",
-                      fontSize: "1.5rem",
-                    }}
-                  >
-                    Contact Legal
-                  </h2>
-                  <p
-                    className="mb-8"
-                    style={{
-                      fontFamily: "var(--font-noto)",
-                      color: "rgba(255,255,255,0.55)",
-                      lineHeight: 1.7,
-                      fontSize: "0.95rem",
-                    }}
-                  >
-                    Have questions about these terms? Reach our legal team
-                    directly.
-                  </p>
-                  <a
-                    href="mailto:disrupt@4th-pay.com"
-                    className="inline-flex items-center justify-center gap-2.5 py-3.5 px-8 rounded-2xl font-bold transition-all duration-200"
-                    style={{
-                      background: "#0D9488",
-                      color: "#FFFFFF",
-                      fontFamily: "var(--font-figtree)",
-                      fontSize: "0.9rem",
-                    }}
-                  >
-                    <Mail size={16} />
-                    Email Legal Team
-                  </a>
-                </div>
-              </AnimatedSection>
+          <h2>2. Medical Disclaimer</h2>
+          <p>
+            <strong>IMPORTANT:</strong> 4 Our Life is a health information and wellness platform,{" "}
+            <strong>not a medical service provider</strong>. The content provided through our
+            Services, including symptom checkers, disease information, fitness plans, and health
+            tips, is for informational and educational purposes only.
+          </p>
+          <ul>
+            <li>
+              Our Services <strong>do not constitute medical advice, diagnosis, or treatment</strong>.
+            </li>
+            <li>
+              Always seek the advice of a qualified healthcare professional for any medical
+              condition or concern.
+            </li>
+            <li>
+              Never disregard professional medical advice or delay seeking it because of
+              information you read on our platform.
+            </li>
+            <li>
+              In case of a medical emergency, contact emergency services or go to the nearest
+              hospital immediately.
+            </li>
+            <li>
+              Medication reminders are a scheduling tool only; we do not verify prescriptions or
+              dosages.
+            </li>
+          </ul>
+          <p>
+            We expressly disclaim any liability for adverse health outcomes resulting from reliance
+            on information provided through our Services.
+          </p>
 
-              {/* Back / cross-link */}
-              <div className="flex items-center justify-between pt-4">
-                <Link
-                  href="/"
-                  className="inline-flex items-center gap-2 transition-colors duration-150"
-                  style={{
-                    fontFamily: "var(--font-noto)",
-                    color: "#64748b",
-                    fontSize: "0.88rem",
-                    fontWeight: 500,
-                  }}
-                >
-                  <ArrowLeft size={14} />
-                  Back to Home
-                </Link>
-                <Link
-                  href="/privacy-policy"
-                  className="inline-flex items-center gap-2 transition-colors duration-150"
-                  style={{
-                    fontFamily: "var(--font-noto)",
-                    color: "#0D9488",
-                    fontSize: "0.88rem",
-                    fontWeight: 600,
-                  }}
-                >
-                  Privacy Policy
-                  <ChevronRight size={14} />
-                </Link>
-              </div>
-            </div>
-          </div>
+          <h2>3. User Accounts</h2>
+          <p>
+            When you create an account, you must provide accurate, current, and complete
+            information. You are responsible for:
+          </p>
+          <ul>
+            <li>Maintaining the confidentiality of your account credentials.</li>
+            <li>All activities that occur under your account.</li>
+            <li>Notifying us immediately of any unauthorized access or security breach.</li>
+          </ul>
+          <p>
+            We reserve the right to suspend or terminate accounts that violate these Terms or for
+            prolonged inactivity.
+          </p>
+
+          <h2>4. Acceptable Use</h2>
+          <p>You agree not to use our Services to:</p>
+          <ul>
+            <li>
+              Post, share, or transmit content that is unlawful, harmful, threatening, abusive,
+              harassing, defamatory, or discriminatory.
+            </li>
+            <li>
+              Impersonate any person or entity, or falsely state or misrepresent your affiliation.
+            </li>
+            <li>Upload or transmit viruses, malware, or other malicious code.</li>
+            <li>Interfere with or disrupt the integrity or performance of the Services.</li>
+            <li>
+              Attempt to gain unauthorized access to any part of the Services or related systems.
+            </li>
+            <li>Scrape, crawl, or otherwise extract data from the Services without authorization.</li>
+            <li>
+              Use group chats to distribute medical misinformation, promote unverified treatments,
+              or sell pharmaceuticals.
+            </li>
+          </ul>
+          <p>
+            Violation of these rules may result in immediate account suspension, legal action, and
+            reporting to relevant authorities.
+          </p>
+
+          <h2>5. Content and Intellectual Property</h2>
+          <p>
+            <strong>Our Content:</strong> All content provided by 4 Our Life, including articles,
+            videos, graphics, software, and trademarks, is owned by us or licensed to us and is
+            protected by copyright, trademark, and other intellectual property laws. You may not
+            reproduce, distribute, modify, or create derivative works without our written
+            permission.
+          </p>
+          <p>
+            <strong>Your Content:</strong> You retain ownership of content you submit (e.g., group
+            chat messages, reviews, profile information). By submitting content, you grant us a
+            worldwide, non-exclusive, royalty-free license to use, display, and distribute your
+            content for the purpose of operating and improving the Services.
+          </p>
+          <p>
+            <strong>Content Removal:</strong> We reserve the right to remove any user content that
+            violates these Terms or that we deem harmful, without prior notice.
+          </p>
+
+          <h2>6. Wellness Center Listings</h2>
+          <p>
+            Wellness centers, clinics, and pharmacies listed on our platform are verified through
+            partnerships with regulatory bodies such as HEFRA. However:
+          </p>
+          <ul>
+            <li>Listing does not constitute an endorsement or guarantee of service quality.</li>
+            <li>Users are encouraged to independently verify credentials before seeking treatment.</li>
+            <li>
+              We are not liable for the actions, omissions, or services provided by listed
+              facilities.
+            </li>
+            <li>Facility owners are responsible for the accuracy of their listing information.</li>
+          </ul>
+
+          <h2>7. Payments and Subscriptions</h2>
+          <p>Certain features may require payment or a subscription:</p>
+          <ul>
+            <li>All fees are quoted in Ghana Cedis (GHS) unless otherwise stated.</li>
+            <li>
+              Subscriptions automatically renew unless cancelled at least 24 hours before the
+              renewal date.
+            </li>
+            <li>
+              Refunds are provided at our discretion and in accordance with Ghanaian consumer
+              protection law.
+            </li>
+            <li>We may modify pricing with 30 days&rsquo; advance notice.</li>
+          </ul>
+
+          <h2>8. Limitation of Liability</h2>
+          <p>To the maximum extent permitted by Ghanaian law:</p>
+          <ul>
+            <li>
+              We provide the Services &ldquo;as is&rdquo; and &ldquo;as available&rdquo; without
+              warranties of any kind, either express or implied.
+            </li>
+            <li>
+              We do not warrant that the Services will be uninterrupted, timely, secure, or
+              error-free.
+            </li>
+            <li>
+              Our total liability to you for any claim arising from or relating to these Terms
+              shall not exceed the amount you paid us in the 12 months preceding the claim, or GHS
+              500, whichever is greater.
+            </li>
+            <li>
+              We are not liable for any indirect, incidental, special, consequential, or punitive
+              damages.
+            </li>
+          </ul>
+
+          <h2>9. Indemnification</h2>
+          <p>
+            You agree to indemnify, defend, and hold harmless {COMPANY.legalName}, its affiliates,
+            officers, directors, employees, and agents from and against any claims, liabilities,
+            damages, losses, and expenses (including legal fees) arising out of or in any way
+            connected with your access to or use of the Services, your violation of these Terms, or
+            your infringement of any third-party rights.
+          </p>
+
+          <h2>10. Termination</h2>
+          <p>
+            We may terminate or suspend your access to the Services immediately, without prior
+            notice or liability, for any reason, including breach of these Terms. Upon termination,
+            your right to use the Services ceases immediately. Provisions that by their nature
+            should survive termination shall survive.
+          </p>
+
+          <h2>11. Governing Law and Dispute Resolution</h2>
+          <p>
+            These Terms shall be governed by and construed in accordance with the laws of the
+            Republic of Ghana. Any dispute arising from these Terms shall first be attempted to be
+            resolved through good-faith negotiations. If unresolved within 60 days, disputes shall
+            be submitted to binding arbitration in Accra, Ghana, under the rules of the Ghana
+            Arbitration Centre.
+          </p>
+
+          <h2>12. Changes to These Terms</h2>
+          <p>
+            We may revise these Terms from time to time. Material changes will be notified via
+            email or in-app notice at least 14 days before taking effect. Your continued use of the
+            Services after changes constitutes acceptance of the revised Terms.
+          </p>
+
+          <h2>13. Contact Information</h2>
+          <p>For questions about these Terms, contact us at:</p>
+          <p>
+            <strong>Email:</strong> <a href={`mailto:${CONTACT.legal}`}>{CONTACT.legal}</a>
+            <br />
+            <strong>Address:</strong> {CONTACT.address}
+          </p>
         </div>
       </section>
-
-      <Footer />
-    </main>
+    </SiteShell>
   );
 }

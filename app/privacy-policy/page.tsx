@@ -1,658 +1,262 @@
-"use client";
+import { createPageMetadata } from "@/lib/seo";
+import SiteShell from "@/components/landing/SiteShell";
+import { COMPANY, CONTACT } from "@/components/landing/content";
 
-import Link from "next/link";
-import {
-  ShieldCheck,
-  Database,
-  Eye,
-  Lock,
-  Clock,
-  Mail,
-  Phone,
-  ArrowLeft,
-  ChevronRight,
-} from "lucide-react";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import AnimatedSection from "@/components/AnimatedSection";
+export const metadata = createPageMetadata({
+  title: "Privacy Policy",
+  description:
+    "How 4 Our Life collects, uses and protects your personal and health information under the Ghana Data Protection Act 2012 (Act 843).",
+  path: "/privacy-policy",
+});
 
-// ─── Sections Data ────────────────────────────────────────────
-const SECTIONS = [
-  { id: "introduction", label: "Introduction", icon: ShieldCheck },
-  { id: "collect", label: "Information We Collect", icon: Database },
-  { id: "usage", label: "How We Use Information", icon: Eye },
-  { id: "security", label: "Data Security", icon: Lock },
-  { id: "retention", label: "Data Retention", icon: Clock },
-  { id: "contact", label: "Contact Us", icon: Mail },
-];
+const LAST_UPDATED = "October 29, 2026";
+
+/**
+ * ── Why this page was rewritten (Oct 2026) ───────────────────────────────
+ * Same two problems as the Terms page: it rendered in a different design
+ * system from the rest of the site (components/Navbar + components/Footer,
+ * publishing hello@4ourlife.app), so moving between the three legal pages
+ * changed the entire chrome and the contact address with it.
+ *
+ * Copy follows the signed-off reference in `static-landing/index.html`
+ * (#modal-privacy). Three deliberate departures from it:
+ *
+ *   • Company details come from COMPANY/CONTACT in
+ *     components/landing/content.ts. The reference names "4 Our Life Health
+ *     Tech" at Accra Digital Center with privacy@4ourlife.health; the
+ *     registered operator the app stores and the admin panel both name is
+ *     4th Pay Ltd.
+ *   • The reference's "+233 24 000 0000" is dropped rather than published.
+ *     It is not a dialable number, and a privacy policy that invites people
+ *     to call a disconnected line is worse than one that lists only email.
+ *   • §4 no longer lists "analytics providers" among the parties we share
+ *     data with, and the marketing site is described as cookie-free,
+ *     because it is — see app/cookie-policy/page.tsx for the detail.
+ */
 
 export default function PrivacyPolicyPage() {
   return (
-    <main className="bg-white overflow-x-hidden min-h-screen">
-      <Navbar />
-
-      {/* ── Hero ─────────────────────────────────────────── */}
-      <section className="pt-32 pb-16 bg-slate-900 relative overflow-hidden">
-        <div className="absolute inset-0 grid-bg opacity-40" />
-        <div
-          className="absolute top-0 right-0 w-[500px] h-[400px] rounded-full blur-[100px]"
-          style={{ background: "rgba(13,148,136,0.08)" }}
-        />
-        <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
-          <AnimatedSection direction="up">
-            <div
-              className="inline-flex items-center gap-2 border rounded-full px-4 py-2 mb-6"
-              style={{
-                background: "rgba(13,148,136,0.15)",
-                borderColor: "rgba(13,148,136,0.3)",
-              }}
-            >
-              <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-              <span
-                className="text-xs font-semibold tracking-wide uppercase"
-                style={{
-                  fontFamily: "var(--font-inter)",
-                  color: "rgba(255,255,255,0.75)",
-                }}
-              >
-                Legal
-              </span>
-            </div>
-            <h1
-              className="font-black text-white mb-5 leading-tight"
-              style={{
-                fontFamily: "var(--font-figtree)",
-                fontSize: "clamp(2rem, 4.5vw, 3.5rem)",
-              }}
-            >
-              Privacy <span className="gradient-text">Policy</span>
-            </h1>
-            <p
-              className="text-lg max-w-2xl mx-auto leading-relaxed"
-              style={{
-                fontFamily: "var(--font-noto)",
-                color: "rgba(255,255,255,0.6)",
-              }}
-            >
-              4 Our Life is committed to protecting your privacy and the
-              security of your personal health data. This policy complies with
-              the{" "}
-              <span style={{ color: "#2dd4bf" }}>
-                Data Protection Act, 2012 (Act 843) of Ghana.
-              </span>
-            </p>
-            <p
-              className="text-xs mt-4 font-semibold uppercase tracking-widest"
-              style={{
-                fontFamily: "var(--font-noto)",
-                color: "rgba(255,255,255,0.35)",
-              }}
-            >
-              Last Updated: January 2026 · Version 1.0
-            </p>
-          </AnimatedSection>
+    <SiteShell>
+      <section className="page-hero">
+        <div className="container">
+          <span className="eyebrow">Legal</span>
+          <h1>Privacy Policy</h1>
+          <p>
+            How we collect, use and safeguard your personal and health information under the Ghana
+            Data Protection Act 2012.
+          </p>
         </div>
       </section>
 
-      {/* ── Content ──────────────────────────────────────── */}
-      <section className="py-20" style={{ background: "#F5F1EE" }}>
-        <div className="max-w-[1400px] mx-auto px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-[260px_1fr] gap-12">
-            {/* ── Sticky TOC ── */}
-            <aside className="hidden lg:block">
-              <div
-                className="sticky top-28 rounded-3xl p-6"
-                style={{
-                  background: "#FFFFFF",
-                  border: "1.5px solid #EDE8E3",
-                  boxShadow: "0 4px 24px rgba(15,23,42,0.06)",
-                }}
-              >
-                <p
-                  className="font-black text-xs uppercase tracking-widest mb-5"
-                  style={{
-                    fontFamily: "var(--font-figtree)",
-                    color: "#94a3b8",
-                  }}
-                >
-                  On This Page
-                </p>
-                <ul className="space-y-1">
-                  {SECTIONS.map(({ id, label, icon: Icon }) => (
-                    <li key={id}>
-                      <a
-                        href={`#${id}`}
-                        className="group flex items-center gap-3 px-3 py-2 rounded-xl transition-all duration-150"
-                        style={{ color: "#475569" }}
-                        onMouseEnter={(e) => {
-                          (e.currentTarget as HTMLElement).style.background =
-                            "#F0FDFA";
-                          (e.currentTarget as HTMLElement).style.color =
-                            "#0D9488";
-                        }}
-                        onMouseLeave={(e) => {
-                          (e.currentTarget as HTMLElement).style.background =
-                            "transparent";
-                          (e.currentTarget as HTMLElement).style.color =
-                            "#475569";
-                        }}
-                      >
-                        <Icon size={14} className="flex-shrink-0" />
-                        <span
-                          style={{
-                            fontFamily: "var(--font-noto)",
-                            fontSize: "0.85rem",
-                            fontWeight: 500,
-                          }}
-                        >
-                          {label}
-                        </span>
-                      </a>
-                    </li>
-                  ))}
-                </ul>
+      <section className="page-body">
+        <div className="container">
+          <p className="legal-date">
+            <strong>Last Updated:</strong> {LAST_UPDATED}
+          </p>
 
-                <div
-                  className="mt-6 pt-6"
-                  style={{ borderTop: "1px solid #EDE8E3" }}
-                >
-                  <Link
-                    href="/terms-of-service"
-                    className="group flex items-center gap-2 transition-colors duration-150"
-                    style={{
-                      fontFamily: "var(--font-noto)",
-                      fontSize: "0.82rem",
-                      fontWeight: 600,
-                      color: "#0D9488",
-                    }}
-                  >
-                    <ChevronRight size={13} />
-                    Terms of Service
-                  </Link>
-                </div>
-              </div>
-            </aside>
+          <p>
+            {COMPANY.legalName}, trading as {COMPANY.tradingName} (&ldquo;we,&rdquo;
+            &ldquo;our,&rdquo; or &ldquo;us&rdquo;), is committed to protecting your personal
+            information and your right to privacy. This Privacy Policy explains how we collect,
+            use, store, and safeguard your information when you use our website, mobile
+            application, and services (collectively, the &ldquo;Services&rdquo;).
+          </p>
 
-            {/* ── Main Content ── */}
-            <div className="space-y-8 max-w-[960px]">
-              {/* 1. Introduction */}
-              <AnimatedSection delay={0.05}>
-                <div
-                  id="introduction"
-                  className="rounded-3xl p-8"
-                  style={{
-                    background: "#FFFFFF",
-                    border: "1.5px solid #EDE8E3",
-                    boxShadow: "0 4px 24px rgba(15,23,42,0.05)",
-                  }}
-                >
-                  <div className="flex items-center gap-4 mb-5">
-                    <div
-                      className="w-11 h-11 rounded-2xl flex items-center justify-center"
-                      style={{ background: "#CCFBF1" }}
-                    >
-                      <ShieldCheck size={20} style={{ color: "#0D9488" }} />
-                    </div>
-                    <h2
-                      className="font-black uppercase tracking-wider"
-                      style={{
-                        fontFamily: "var(--font-figtree)",
-                        color: "#0F172A",
-                        fontSize: "1rem",
-                      }}
-                    >
-                      1. Introduction
-                    </h2>
-                  </div>
-                  <p
-                    style={{
-                      fontFamily: "var(--font-noto)",
-                      color: "#475569",
-                      lineHeight: 1.8,
-                      fontSize: "0.95rem",
-                    }}
-                  >
-                    4 Our Life is committed to protecting your privacy and
-                    ensuring the security of your personal information,
-                    particularly your health data. This Privacy Policy explains
-                    how 4th Pay Ltd (&ldquo;we,&rdquo; &ldquo;us,&rdquo; or &ldquo;our&rdquo;) collects, uses, and
-                    safeguards your information when you use the 4 Our Life
-                    mobile application and website. This policy complies with
-                    the Data Protection Act, 2012 (Act 843) of Ghana.
-                  </p>
-                </div>
-              </AnimatedSection>
+          <h2>1. Information We Collect</h2>
+          <p>
+            We collect information that you provide directly to us, information collected
+            automatically, and information from third-party sources.
+          </p>
+          <ul>
+            <li>
+              <strong>Account Information:</strong> Name, email address, phone number, date of
+              birth, gender, and password when you register.
+            </li>
+            <li>
+              <strong>Health Information:</strong> Symptoms checked, fitness goals, workout
+              history, medication schedules, weight, height, and any health data you voluntarily
+              enter.
+            </li>
+            <li>
+              <strong>Device Information:</strong> IP address, device type, operating system,
+              unique device identifiers, and mobile network information.
+            </li>
+            <li>
+              <strong>Usage Data:</strong> Features used, time spent, and app crash logs.
+            </li>
+            <li>
+              <strong>Location Data:</strong> With your consent, we collect precise or approximate
+              location to show nearby wellness centers and fitness facilities.
+            </li>
+            <li>
+              <strong>Communications:</strong> Messages sent in group chats, support tickets, and
+              feedback submissions.
+            </li>
+          </ul>
+          <p>
+            Our marketing website sets no analytics or advertising cookies and does not track
+            visitors. See our <a href="/cookie-policy">Cookie Policy</a>.
+          </p>
 
-              {/* 2. Information We Collect */}
-              <AnimatedSection delay={0.1}>
-                <div
-                  id="collect"
-                  className="rounded-3xl p-8"
-                  style={{
-                    background: "#FFFFFF",
-                    border: "1.5px solid #EDE8E3",
-                    boxShadow: "0 4px 24px rgba(15,23,42,0.05)",
-                  }}
-                >
-                  <div className="flex items-center gap-4 mb-5">
-                    <div
-                      className="w-11 h-11 rounded-2xl flex items-center justify-center"
-                      style={{ background: "#CCFBF1" }}
-                    >
-                      <Database size={20} style={{ color: "#0D9488" }} />
-                    </div>
-                    <h2
-                      className="font-black uppercase tracking-wider"
-                      style={{
-                        fontFamily: "var(--font-figtree)",
-                        color: "#0F172A",
-                        fontSize: "1rem",
-                      }}
-                    >
-                      2. Information We Collect
-                    </h2>
-                  </div>
-                  <div className="space-y-4">
-                    {[
-                      {
-                        title: "Identity Information",
-                        desc: "Name, email address, and phone number provided during registration.",
-                      },
-                      {
-                        title: "Health Information",
-                        desc: "Profile details, medication history, tracked symptoms, and facility interactions you choose to record.",
-                      },
-                      {
-                        title: "Device & Usage Data",
-                        desc: "Location (with your permission), app usage patterns, and automated technical logs to improve the service.",
-                      },
-                    ].map((item) => (
-                      <div
-                        key={item.title}
-                        className="flex gap-4 p-4 rounded-2xl"
-                        style={{
-                          background: "#F5F1EE",
-                          border: "1px solid #EDE8E3",
-                        }}
-                      >
-                        <div
-                          className="w-2 h-2 rounded-full mt-2 flex-shrink-0"
-                          style={{ background: "#0D9488" }}
-                        />
-                        <div>
-                          <p
-                            className="font-bold mb-1"
-                            style={{
-                              fontFamily: "var(--font-figtree)",
-                              color: "#0F172A",
-                              fontSize: "0.9rem",
-                            }}
-                          >
-                            {item.title}
-                          </p>
-                          <p
-                            style={{
-                              fontFamily: "var(--font-noto)",
-                              color: "#475569",
-                              fontSize: "0.88rem",
-                              lineHeight: 1.7,
-                            }}
-                          >
-                            {item.desc}
-                          </p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </AnimatedSection>
+          <h2>2. How We Use Your Information</h2>
+          <ul>
+            <li>To provide, maintain, and improve our Services.</li>
+            <li>
+              To personalize your experience, including fitness recommendations and health tips.
+            </li>
+            <li>To send medication reminders, appointment notifications, and wellness updates.</li>
+            <li>To verify and display wellness centers and healthcare facilities near you.</li>
+            <li>To moderate group chats and ensure community safety.</li>
+            <li>To analyze usage trends and improve app performance.</li>
+            <li>
+              To comply with legal obligations, including the Ghana Data Protection Act 2012 (Act
+              843).
+            </li>
+          </ul>
 
-              {/* 3. How We Use */}
-              <AnimatedSection delay={0.15}>
-                <div
-                  id="usage"
-                  className="rounded-3xl p-8"
-                  style={{
-                    background: "#FFFFFF",
-                    border: "1.5px solid #EDE8E3",
-                    boxShadow: "0 4px 24px rgba(15,23,42,0.05)",
-                  }}
-                >
-                  <div className="flex items-center gap-4 mb-5">
-                    <div
-                      className="w-11 h-11 rounded-2xl flex items-center justify-center"
-                      style={{ background: "#CCFBF1" }}
-                    >
-                      <Eye size={20} style={{ color: "#0D9488" }} />
-                    </div>
-                    <h2
-                      className="font-black uppercase tracking-wider"
-                      style={{
-                        fontFamily: "var(--font-figtree)",
-                        color: "#0F172A",
-                        fontSize: "1rem",
-                      }}
-                    >
-                      3. How We Use Your Information
-                    </h2>
-                  </div>
-                  <ul className="space-y-3">
-                    {[
-                      "Provide and improve the 4 Our Life app and its features.",
-                      "Support health tools like ovulation tracking, medication reminders, and facility discovery.",
-                      "Personalise your experience based on your health profile and usage patterns.",
-                      "Conduct research, analytics, and — with your consent — targeted marketing.",
-                      "Meet our legal and regulatory obligations under Ghanaian law.",
-                    ].map((point, i) => (
-                      <li
-                        key={i}
-                        className="flex items-start gap-3"
-                        style={{
-                          fontFamily: "var(--font-noto)",
-                          color: "#475569",
-                          fontSize: "0.92rem",
-                          lineHeight: 1.7,
-                        }}
-                      >
-                        <span
-                          className="flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-xs font-black mt-0.5"
-                          style={{
-                            background: "#CCFBF1",
-                            color: "#0D9488",
-                            fontFamily: "var(--font-figtree)",
-                          }}
-                        >
-                          {i + 1}
-                        </span>
-                        {point}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </AnimatedSection>
+          <h2>3. Legal Basis for Processing (Ghana DPA)</h2>
+          <p>
+            Under the Ghana Data Protection Act 2012, we process your personal data based on:
+          </p>
+          <ul>
+            <li>
+              <strong>Consent:</strong> When you explicitly agree to data collection (e.g.,
+              location sharing, health data input).
+            </li>
+            <li>
+              <strong>Contract:</strong> Processing necessary to provide the Services you
+              requested.
+            </li>
+            <li>
+              <strong>Legal Obligation:</strong> Compliance with health regulations and law
+              enforcement requests.
+            </li>
+            <li>
+              <strong>Legitimate Interests:</strong> Fraud prevention, network security, and
+              service improvement.
+            </li>
+          </ul>
 
-              {/* 4. Security */}
-              <AnimatedSection delay={0.2}>
-                <div
-                  id="security"
-                  className="rounded-3xl p-8"
-                  style={{
-                    background: "#FFFFFF",
-                    border: "1.5px solid #EDE8E3",
-                    boxShadow: "0 4px 24px rgba(15,23,42,0.05)",
-                  }}
-                >
-                  <div className="flex items-center gap-4 mb-5">
-                    <div
-                      className="w-11 h-11 rounded-2xl flex items-center justify-center"
-                      style={{ background: "#CCFBF1" }}
-                    >
-                      <Lock size={20} style={{ color: "#0D9488" }} />
-                    </div>
-                    <h2
-                      className="font-black uppercase tracking-wider"
-                      style={{
-                        fontFamily: "var(--font-figtree)",
-                        color: "#0F172A",
-                        fontSize: "1rem",
-                      }}
-                    >
-                      4. Data Security
-                    </h2>
-                  </div>
-                  <p
-                    style={{
-                      fontFamily: "var(--font-noto)",
-                      color: "#475569",
-                      lineHeight: 1.8,
-                      fontSize: "0.95rem",
-                      marginBottom: "1.25rem",
-                    }}
-                  >
-                    We take the security of your health data with the utmost
-                    seriousness. Our measures include:
-                  </p>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    {[
-                      {
-                        title: "AES-256 Encryption",
-                        desc: "In transit and at rest",
-                      },
-                      {
-                        title: "Multi-Factor Auth",
-                        desc: "Biometric & PIN protection",
-                      },
-                      {
-                        title: "Strict Access Controls",
-                        desc: "Role-based permissions",
-                      },
-                      {
-                        title: "Breach Notification",
-                        desc: "Within 72 hours per GDPR",
-                      },
-                    ].map((item) => (
-                      <div
-                        key={item.title}
-                        className="p-4 rounded-2xl"
-                        style={{
-                          background: "#F0FDFA",
-                          border: "1.5px solid rgba(13,148,136,0.15)",
-                        }}
-                      >
-                        <p
-                          className="font-bold mb-0.5"
-                          style={{
-                            fontFamily: "var(--font-figtree)",
-                            color: "#0D9488",
-                            fontSize: "0.88rem",
-                          }}
-                        >
-                          {item.title}
-                        </p>
-                        <p
-                          style={{
-                            fontFamily: "var(--font-noto)",
-                            color: "#475569",
-                            fontSize: "0.8rem",
-                          }}
-                        >
-                          {item.desc}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-                  <p
-                    className="mt-4"
-                    style={{
-                      fontFamily: "var(--font-noto)",
-                      color: "#64748b",
-                      fontSize: "0.85rem",
-                      lineHeight: 1.7,
-                    }}
-                  >
-                    Health data receives enhanced encryption and audited access
-                    logging. We never sell your personal or health data to third
-                    parties.
-                  </p>
-                </div>
-              </AnimatedSection>
+          <h2>4. How We Share Your Information</h2>
+          <p>
+            We do <strong>not</strong> sell your personal information. We may share data only in
+            the following circumstances:
+          </p>
+          <ul>
+            <li>
+              <strong>Service Providers:</strong> Supabase (cloud database) and Firebase (push
+              notifications), under strict confidentiality agreements.
+            </li>
+            <li>
+              <strong>Healthcare Partners:</strong> Verified wellness centers may see anonymized
+              demand data to improve services. No personally identifiable health data is shared
+              without your explicit consent.
+            </li>
+            <li>
+              <strong>Legal Requirements:</strong> When required by Ghanaian courts, regulators, or
+              to protect our rights and safety.
+            </li>
+            <li>
+              <strong>Business Transfers:</strong> In the event of a merger, acquisition, or sale
+              of assets, your data will remain protected under this Privacy Policy.
+            </li>
+          </ul>
 
-              {/* 5. Retention */}
-              <AnimatedSection delay={0.25}>
-                <div
-                  id="retention"
-                  className="rounded-3xl p-8"
-                  style={{
-                    background: "#FFFFFF",
-                    border: "1.5px solid #EDE8E3",
-                    boxShadow: "0 4px 24px rgba(15,23,42,0.05)",
-                  }}
-                >
-                  <div className="flex items-center gap-4 mb-5">
-                    <div
-                      className="w-11 h-11 rounded-2xl flex items-center justify-center"
-                      style={{ background: "#CCFBF1" }}
-                    >
-                      <Clock size={20} style={{ color: "#0D9488" }} />
-                    </div>
-                    <h2
-                      className="font-black uppercase tracking-wider"
-                      style={{
-                        fontFamily: "var(--font-figtree)",
-                        color: "#0F172A",
-                        fontSize: "1rem",
-                      }}
-                    >
-                      5. Data Retention
-                    </h2>
-                  </div>
-                  <div className="space-y-3">
-                    {[
-                      {
-                        type: "Account Data",
-                        period: "Life of account + 2 years",
-                      },
-                      {
-                        type: "Health Data",
-                        period: "Life of account + 3 years",
-                      },
-                      { type: "Marketing Data", period: "Until you opt-out" },
-                      {
-                        type: "Technical Logs",
-                        period: "90 days rolling window",
-                      },
-                    ].map((row) => (
-                      <div
-                        key={row.type}
-                        className="flex items-center justify-between p-4 rounded-2xl"
-                        style={{
-                          background: "#F5F1EE",
-                          border: "1px solid #EDE8E3",
-                        }}
-                      >
-                        <span
-                          style={{
-                            fontFamily: "var(--font-figtree)",
-                            fontWeight: 700,
-                            color: "#334155",
-                            fontSize: "0.88rem",
-                          }}
-                        >
-                          {row.type}
-                        </span>
-                        <span
-                          style={{
-                            fontFamily: "var(--font-noto)",
-                            color: "#0D9488",
-                            fontWeight: 600,
-                            fontSize: "0.82rem",
-                          }}
-                        >
-                          {row.period}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </AnimatedSection>
+          <h2>5. Data Security</h2>
+          <p>We implement industry-standard security measures:</p>
+          <ul>
+            <li>All data in transit is encrypted using TLS 1.3.</li>
+            <li>Health data at rest is encrypted with AES-256.</li>
+            <li>
+              Supabase Row-Level Security (RLS) ensures users can only access their own records.
+            </li>
+            <li>Regular penetration testing and vulnerability assessments.</li>
+            <li>Staff access to user data is restricted and logged.</li>
+          </ul>
 
-              {/* 6. Contact */}
-              <AnimatedSection delay={0.3}>
-                <div
-                  id="contact"
-                  className="rounded-3xl p-8"
-                  style={{
-                    background: "#0D9488",
-                    boxShadow: "0 20px 60px rgba(13,148,136,0.25)",
-                  }}
-                >
-                  <h2
-                    className="font-black text-white mb-2"
-                    style={{
-                      fontFamily: "var(--font-figtree)",
-                      fontSize: "1.5rem",
-                    }}
-                  >
-                    Contact Us
-                  </h2>
-                  <p
-                    className="mb-8"
-                    style={{
-                      fontFamily: "var(--font-noto)",
-                      color: "rgba(255,255,255,0.75)",
-                      lineHeight: 1.7,
-                      fontSize: "0.95rem",
-                    }}
-                  >
-                    4th Pay Ltd · Kwashieman Ofankor Road, Accra, Ghana
-                  </p>
-                  <div className="flex flex-col sm:flex-row gap-3">
-                    <a
-                      href="mailto:disrupt@4th-pay.com"
-                      className="flex items-center justify-center gap-2.5 py-3.5 px-6 rounded-2xl font-bold transition-all duration-200"
-                      style={{
-                        background: "#FFFFFF",
-                        color: "#0D9488",
-                        fontFamily: "var(--font-figtree)",
-                        fontSize: "0.9rem",
-                      }}
-                    >
-                      <Mail size={16} />
-                      disrupt@4th-pay.com
-                    </a>
-                    <a
-                      href="tel:+233554506861"
-                      className="flex items-center justify-center gap-2.5 py-3.5 px-6 rounded-2xl font-bold transition-all duration-200"
-                      style={{
-                        background: "rgba(255,255,255,0.18)",
-                        border: "1.5px solid rgba(255,255,255,0.25)",
-                        color: "#FFFFFF",
-                        fontFamily: "var(--font-figtree)",
-                        fontSize: "0.9rem",
-                      }}
-                    >
-                      <Phone size={16} />
-                      +233 55 450 6861
-                    </a>
-                  </div>
-                </div>
-              </AnimatedSection>
+          <h2>6. Data Retention</h2>
+          <p>
+            We retain your personal information for as long as your account is active or as needed
+            to provide you with Services. Health data is retained for 7 years after account
+            deletion to comply with Ghanaian medical record regulations, after which it is securely
+            destroyed. You may request earlier deletion by contacting us.
+          </p>
 
-              {/* Back link */}
-              <div className="flex items-center justify-between pt-4">
-                <Link
-                  href="/"
-                  className="inline-flex items-center gap-2 transition-colors duration-150"
-                  style={{
-                    fontFamily: "var(--font-noto)",
-                    color: "#64748b",
-                    fontSize: "0.88rem",
-                    fontWeight: 500,
-                  }}
-                >
-                  <ArrowLeft size={14} />
-                  Back to Home
-                </Link>
-                <Link
-                  href="/terms-of-service"
-                  className="inline-flex items-center gap-2 transition-colors duration-150"
-                  style={{
-                    fontFamily: "var(--font-noto)",
-                    color: "#0D9488",
-                    fontSize: "0.88rem",
-                    fontWeight: 600,
-                  }}
-                >
-                  Terms of Service
-                  <ChevronRight size={14} />
-                </Link>
-              </div>
-            </div>
-          </div>
+          <h2>7. Your Rights Under the Ghana Data Protection Act</h2>
+          <p>You have the following rights regarding your personal data:</p>
+          <ul>
+            <li>
+              <strong>Right to Access:</strong> Request a copy of all data we hold about you.
+            </li>
+            <li>
+              <strong>Right to Rectification:</strong> Correct inaccurate or incomplete data.
+            </li>
+            <li>
+              <strong>Right to Erasure:</strong> Request deletion of your data (&ldquo;right to be
+              forgotten&rdquo;), subject to legal retention requirements.
+            </li>
+            <li>
+              <strong>Right to Restrict Processing:</strong> Limit how we use your data in certain
+              circumstances.
+            </li>
+            <li>
+              <strong>Right to Object:</strong> Opt out of direct marketing and certain automated
+              decision-making.
+            </li>
+            <li>
+              <strong>Right to Data Portability:</strong> Receive your data in a structured,
+              machine-readable format.
+            </li>
+          </ul>
+          <p>
+            To exercise any of these rights, email{" "}
+            <a href={`mailto:${CONTACT.privacy}`}>
+              <strong>{CONTACT.privacy}</strong>
+            </a>{" "}
+            or use the in-app data request feature. We will respond within 30 days as required by
+            law.
+          </p>
+
+          <h2>8. Children&rsquo;s Privacy</h2>
+          <p>
+            Our Services are not intended for children under 13. We do not knowingly collect data
+            from children under 13. If you believe we have collected data from a child under 13,
+            please contact us immediately and we will delete the information.
+          </p>
+
+          <h2>9. International Data Transfers</h2>
+          <p>
+            Your data is primarily stored on Supabase servers. Some service providers (e.g.,
+            Firebase, Sentry) may process data outside Ghana. All international transfers are
+            protected by standard contractual clauses and adequacy decisions compliant with Ghana
+            Data Protection Act requirements.
+          </p>
+
+          <h2>10. Changes to This Policy</h2>
+          <p>
+            We may update this Privacy Policy periodically. We will notify you of material changes
+            via email or in-app notification at least 14 days before they take effect. The
+            &ldquo;Last Updated&rdquo; date at the top of this page reflects the most recent
+            revision.
+          </p>
+
+          <h2>11. Contact Us</h2>
+          <p>
+            If you have questions or concerns about this Privacy Policy or our data practices,
+            please contact us:
+          </p>
+          <p>
+            <strong>Email:</strong> <a href={`mailto:${CONTACT.privacy}`}>{CONTACT.privacy}</a>
+            <br />
+            <strong>Address:</strong> {CONTACT.address}
+          </p>
+          <p>
+            You also have the right to lodge a complaint with the{" "}
+            <strong>Data Protection Commission of Ghana</strong> if you believe we have violated
+            your data protection rights.
+          </p>
         </div>
       </section>
-
-      <Footer />
-    </main>
+    </SiteShell>
   );
 }

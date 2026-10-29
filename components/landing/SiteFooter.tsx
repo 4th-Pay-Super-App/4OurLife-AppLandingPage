@@ -1,6 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
-import { CONTACT, FOOTER_FEATURE_LINKS, FOOTER_LEGAL_LINKS, SOCIAL_LINKS } from "./content";
+import {
+  COMPANY,
+  CONTACT,
+  FOOTER_COMPANY_LINKS,
+  FOOTER_FEATURE_LINKS,
+  FOOTER_LEGAL_LINKS,
+  SOCIAL_LINKS,
+} from "./content";
 import { FacebookIcon, InstagramIcon, LinkedInIcon, TwitterIcon } from "./icons";
 
 const SOCIAL_ICONS = {
@@ -52,32 +59,43 @@ export default function SiteFooter() {
             <p className="footer-contact">
               <a href={`mailto:${CONTACT.general}`}>{CONTACT.general}</a>
             </p>
-            <div className="socials">
-              {SOCIAL_LINKS.map(({ href, label }) => {
-                const Icon = SOCIAL_ICONS[label as keyof typeof SOCIAL_ICONS];
-                return (
-                  <a
-                    key={label}
-                    href={href}
-                    className="social"
-                    aria-label={label}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <Icon />
-                  </a>
-                );
-              })}
-            </div>
+            {/*
+              Renders nothing until SOCIAL_LINKS has real profile URLs. The
+              row used to link to the platforms' own front pages, which is
+              worse than no icon at all: it looks like a profile and goes
+              nowhere. Fill the list in content.ts and this comes back.
+            */}
+            {SOCIAL_LINKS.length > 0 && (
+              <div className="socials">
+                {SOCIAL_LINKS.map(({ href, label }) => {
+                  const Icon = SOCIAL_ICONS[label as keyof typeof SOCIAL_ICONS];
+                  return (
+                    <a
+                      key={label}
+                      href={href}
+                      className="social"
+                      aria-label={label}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Icon />
+                    </a>
+                  );
+                })}
+              </div>
+            )}
           </div>
 
           <FooterColumn heading="Features" links={FOOTER_FEATURE_LINKS} />
+          <FooterColumn heading="Company" links={FOOTER_COMPANY_LINKS} />
           <FooterColumn heading="Legal" links={FOOTER_LEGAL_LINKS} />
         </div>
 
+        {/* The operator named here must match the one in the legal pages and
+            the app stores — see COMPANY in ./content.ts. */}
         <div className="footer-bottom">
-          &copy; {new Date().getFullYear()} 4 Our Life Health Tech. All rights reserved. Made with
-          care for Ghana.
+          &copy; {new Date().getFullYear()} {COMPANY.legalName}, trading as {COMPANY.tradingName}.
+          All rights reserved. Made with care for Ghana.
         </div>
       </div>
     </footer>

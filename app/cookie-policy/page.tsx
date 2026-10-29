@@ -1,51 +1,40 @@
 import { createPageMetadata } from "@/lib/seo";
 import SiteShell from "@/components/landing/SiteShell";
-import { CONTACT } from "@/components/landing/content";
+import { COMPANY, CONTACT } from "@/components/landing/content";
 
 export const metadata = createPageMetadata({
   title: "Cookie Policy",
   description:
-    "How 4 Our Life uses cookies and similar tracking technologies, which categories we set, and how to control them.",
+    "4ourlife.com sets no analytics, advertising or tracking cookies. What the site and the mobile app actually store, and how to control it.",
   path: "/cookie-policy",
 });
 
-const LAST_UPDATED = "June 24, 2026";
+const LAST_UPDATED = "October 29, 2026";
 
-type CookieRow = { name: string; purpose: string; duration: string };
-
-const STRICTLY_NECESSARY: readonly CookieRow[] = [
-  { name: "supabase-auth-token", purpose: "Maintains your login session", duration: "Session" },
-  {
-    name: "csrf-token",
-    purpose: "Prevents cross-site request forgery attacks",
-    duration: "Session",
-  },
-] as const;
-
-const FUNCTIONAL: readonly CookieRow[] = [
-  { name: "user-preferences", purpose: "Remembers your app settings and theme", duration: "1 year" },
-  { name: "lang", purpose: "Stores your selected language", duration: "1 year" },
-] as const;
-
-const ANALYTICS: readonly CookieRow[] = [
-  { name: "_ga (Google Analytics)", purpose: "Distinguishes unique users", duration: "2 years" },
-  { name: "_gid", purpose: "Distinguishes users for 24 hours", duration: "24 hours" },
-  { name: "_gat", purpose: "Throttles request rate", duration: "1 minute" },
-  {
-    name: "posthog_session",
-    purpose: "Tracks user sessions for product analytics",
-    duration: "1 year",
-  },
-] as const;
-
-const MARKETING: readonly CookieRow[] = [
-  { name: "fb_pixel", purpose: "Tracks conversions from Facebook ads", duration: "3 months" },
-  {
-    name: "google_ads_id",
-    purpose: "Tracks Google Ads campaign performance",
-    duration: "13 months",
-  },
-] as const;
+/**
+ * ── Why this page was rewritten (Oct 2026) ───────────────────────────────
+ * The previous version described a site that does not exist. It listed
+ * Google Analytics (_ga, _gid, _gat), PostHog, a Facebook pixel and a Google
+ * Ads identifier in four cookie tables, named Meta as an advertising
+ * partner, and told visitors that "when you first visit our website or
+ * install our app, you will see a cookie consent banner".
+ *
+ * None of it was true. There is no analytics script, no advertising pixel
+ * and no consent banner anywhere in this codebase — `grep` for gtag,
+ * posthog, fbq or any consent component returns nothing outside that page's
+ * own prose. It also listed a `supabase-auth-token` cookie; the marketing
+ * site has no Supabase client and never signs anyone in.
+ *
+ * A cookie policy that over-declares is not a harmless safety margin. Under
+ * the Ghana Data Protection Act it is a published statement about how
+ * personal data is handled, and it told every visitor we were tracking them
+ * for advertising when we were not.
+ *
+ * So: this page now describes only what actually happens. If analytics or
+ * advertising are ever added, BOTH halves change together — the tooling and
+ * this page, in the same pull request — and the consent banner lands with
+ * them. See the note in §4.
+ */
 
 const BROWSER_GUIDES: readonly { label: string; href: string }[] = [
   { label: "Google Chrome", href: "https://support.google.com/chrome/answer/95647" },
@@ -63,33 +52,6 @@ const BROWSER_GUIDES: readonly { label: string; href: string }[] = [
   },
 ] as const;
 
-/** Wrapped in a scroll container so a four-column table never forces the
- *  whole page sideways on a phone. */
-function CookieTable({ rows }: { rows: readonly CookieRow[] }) {
-  return (
-    <div className="table-scroll">
-      <table className="cookie-table">
-        <thead>
-          <tr>
-            <th scope="col">Cookie Name</th>
-            <th scope="col">Purpose</th>
-            <th scope="col">Duration</th>
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map((row) => (
-            <tr key={row.name}>
-              <td>{row.name}</td>
-              <td>{row.purpose}</td>
-              <td>{row.duration}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
-}
-
 export default function CookiePolicyPage() {
   return (
     <SiteShell>
@@ -98,8 +60,8 @@ export default function CookiePolicyPage() {
           <span className="eyebrow">Legal</span>
           <h1>Cookie Policy</h1>
           <p>
-            How we use cookies and similar tracking technologies across our website and mobile
-            application.
+            What this website and the 4 Our Life app store on your device — and, just as
+            importantly, what they do not.
           </p>
         </div>
       </section>
@@ -109,134 +71,104 @@ export default function CookiePolicyPage() {
           <p className="legal-date">
             <strong>Last Updated:</strong> {LAST_UPDATED}
           </p>
+
           <p>
-            This Cookie Policy explains how 4 Our Life Health Tech (&ldquo;we,&rdquo;
-            &ldquo;us,&rdquo; or &ldquo;our&rdquo;) uses cookies and similar tracking technologies
-            when you visit our website or use our mobile application. This Policy should be read
-            alongside our Privacy Policy.
+            This Cookie Policy explains how {COMPANY.legalName}, trading as {COMPANY.tradingName}{" "}
+            (&ldquo;we,&rdquo; &ldquo;us,&rdquo; or &ldquo;our&rdquo;), uses cookies and similar
+            technologies on this website and in our mobile app. It should be read alongside our{" "}
+            <a href="/privacy-policy">Privacy Policy</a>.
           </p>
 
-          <h2>1. What Are Cookies?</h2>
+          <h2>1. The short version</h2>
           <p>
-            Cookies are small text files that are stored on your device (computer, tablet, or
-            mobile) when you visit a website or use an app. They help the site recognize your device
-            and remember information about your visit, such as your preferences and settings.
-            &ldquo;Similar technologies&rdquo; include local storage, web beacons, and pixel tags.
+            <strong>
+              This website sets no analytics cookies, no advertising cookies and no third-party
+              tracking of any kind.
+            </strong>{" "}
+            We do not use Google Analytics, we do not run an advertising pixel, and we do not sell
+            or share browsing data. Because nothing non-essential is stored, there is no consent
+            banner to click through — there is nothing to consent to.
           </p>
 
-          <h2>2. Types of Cookies We Use</h2>
-          <p>We use the following categories of cookies:</p>
-
-          <h3>2.1 Strictly Necessary Cookies</h3>
+          <h2>2. What are cookies?</h2>
           <p>
-            These cookies are essential for the Services to function properly. They enable core
-            features such as account authentication, security, and session management. You cannot
-            opt out of these cookies.
+            Cookies are small text files a website stores on your device so it can recognize that
+            device on a later visit. Related technologies include browser local storage, web
+            beacons and pixel tags, and — on phones — advertising and device identifiers.
           </p>
-          <CookieTable rows={STRICTLY_NECESSARY} />
 
-          <h3>2.2 Functional Cookies</h3>
+          <h2>3. This website (4ourlife.com)</h2>
           <p>
-            These cookies enable enhanced functionality and personalization, such as remembering
-            your preferences, language settings, and display choices.
+            This is a brochure site. It has no login, no shopping basket and no account area, so it
+            has nothing it needs to remember about you between pages. In normal use it writes{" "}
+            <strong>no cookies at all</strong>.
           </p>
-          <CookieTable rows={FUNCTIONAL} />
-
-          <h3>2.3 Analytics Cookies</h3>
-          <p>
-            These cookies help us understand how visitors interact with our Services by collecting
-            and reporting information anonymously. This data helps us improve our platform.
-          </p>
-          <CookieTable rows={ANALYTICS} />
-
-          <h3>2.4 Marketing Cookies</h3>
-          <p>
-            These cookies are used to deliver advertisements more relevant to you and your
-            interests. They also help measure the effectiveness of advertising campaigns.
-          </p>
-          <CookieTable rows={MARKETING} />
-
-          <h2>3. How We Use Cookies</h2>
+          <p>The only thing it stores on your device is the page itself:</p>
           <ul>
             <li>
-              <strong>Authentication:</strong> To recognize you when you log in and keep you signed
-              in.
+              <strong>Standard browser caching</strong> of pages, fonts and images, so the site
+              loads faster on a second visit. This is handled by your browser, is not a cookie, and
+              carries no identifier.
             </li>
             <li>
-              <strong>Security:</strong> To detect suspicious activity and protect your account.
-            </li>
-            <li>
-              <strong>Preferences:</strong> To remember your settings and personalize your
-              experience.
-            </li>
-            <li>
-              <strong>Analytics:</strong> To analyze traffic patterns, feature usage, and app
-              performance.
-            </li>
-            <li>
-              <strong>Marketing:</strong> To deliver relevant health tips and app promotion
-              campaigns.
-            </li>
-          </ul>
-
-          <h2>4. Third-Party Cookies</h2>
-          <p>
-            Some cookies are placed by third parties that provide services on our behalf. These
-            include:
-          </p>
-          <ul>
-            <li>
-              <strong>Google Analytics:</strong> For website and app usage analytics.
-            </li>
-            <li>
-              <strong>Firebase:</strong> For crash reporting and push notification delivery.
-            </li>
-            <li>
-              <strong>PostHog:</strong> For product analytics and feature usage tracking.
-            </li>
-            <li>
-              <strong>Facebook/Meta:</strong> For advertising conversion tracking.
-            </li>
-            <li>
-              <strong>Supabase:</strong> For authentication and database session management.
+              <strong>Your hosting provider&rsquo;s network logs,</strong> which record IP addresses
+              and request times for security and abuse prevention, as any web server does. These
+              are not cookies and are not used to build a profile of you.
             </li>
           </ul>
           <p>
-            These third parties have their own privacy and cookie policies. We encourage you to
-            review them.
+            Links out to the App Store and Google Play are plain links. We do not add tracking
+            parameters to them, so we cannot see who followed one.
           </p>
 
-          <h2>5. Cookie Consent and Management</h2>
+          <h2>4. If that ever changes</h2>
           <p>
-            When you first visit our website or install our app, you will see a cookie consent
-            banner allowing you to:
+            If we add analytics or advertising in future, we will publish a consent banner{" "}
+            <em>before</em> any non-essential cookie is set, offering at minimum: accept all, reject
+            everything non-essential, and a per-category choice. Rejecting will be as easy as
+            accepting, and the choice will be changeable at any time. This page will be updated in
+            the same release, not afterwards.
+          </p>
+
+          <h2>5. The mobile app</h2>
+          <p>
+            The 4 Our Life app is not a browser and does not use cookies. It does store two things
+            on your phone:
           </p>
           <ul>
             <li>
-              <strong>Accept All:</strong> Consent to all cookie categories.
+              <strong>Your sign-in token,</strong> held in the operating system&rsquo;s secure
+              storage (Keychain on iOS, Keystore on Android) so you are not signed out between
+              sessions. Signing out removes it.
             </li>
             <li>
-              <strong>Reject Non-Essential:</strong> Allow only strictly necessary cookies.
-            </li>
-            <li>
-              <strong>Customize:</strong> Select which cookie categories you accept.
+              <strong>A push notification token,</strong> issued by Apple or Google so medication
+              and appointment reminders can reach your device. Turning off notifications for the app
+              stops it being used.
             </li>
           </ul>
           <p>
-            You can change your cookie preferences at any time through your browser settings or by
-            contacting us. Note that disabling certain cookies may affect the functionality of our
-            Services.
+            Both are strictly necessary for features you have asked for. Neither is used for
+            advertising, and neither is shared with advertising networks.
           </p>
-
-          <h2>6. How to Control Cookies</h2>
-          <p>Most web browsers allow you to control cookies through their settings. You can:</p>
+          <p>
+            You can reset the advertising identifier your phone exposes to all apps at any time:
+          </p>
           <ul>
-            <li>Delete all cookies already stored on your device.</li>
-            <li>Block all cookies from being set.</li>
-            <li>Block third-party cookies while allowing first-party cookies.</li>
-            <li>Set your browser to notify you when a website tries to set a cookie.</li>
+            <li>
+              <strong>iOS:</strong> Settings &rarr; Privacy &amp; Security &rarr; Tracking
+            </li>
+            <li>
+              <strong>Android:</strong> Settings &rarr; Privacy &rarr; Ads
+            </li>
           </ul>
-          <p>Please refer to your browser&rsquo;s help documentation for specific instructions:</p>
+
+          <h2>6. Controlling cookies yourself</h2>
+          <p>
+            There is nothing on this site to switch off, but you can manage cookies for any site
+            from your browser settings — deleting what is stored, blocking cookies outright, or
+            asking to be prompted each time:
+          </p>
           <ul>
             {BROWSER_GUIDES.map(({ label, href }) => (
               <li key={label}>
@@ -247,38 +179,23 @@ export default function CookiePolicyPage() {
             ))}
           </ul>
 
-          <h2>7. Mobile App Tracking</h2>
+          <h2>7. Updates to this policy</h2>
           <p>
-            Our mobile app may use device identifiers and mobile analytics in addition to browser
-            cookies. You can control some of this tracking through your device settings:
-          </p>
-          <ul>
-            <li>
-              <strong>iOS:</strong> Settings &rarr; Privacy &amp; Security &rarr; Tracking
-            </li>
-            <li>
-              <strong>Android:</strong> Settings &rarr; Privacy &rarr; Ads &rarr; Opt out of Ads
-              Personalization
-            </li>
-          </ul>
-
-          <h2>8. Updates to This Policy</h2>
-          <p>
-            We may update this Cookie Policy from time to time to reflect changes in the cookies we
-            use or for operational, legal, or regulatory reasons. We will notify you of material
-            changes via email or in-app notification. Please check this page periodically for
-            updates.
+            We will update this page whenever what we store changes, and the &ldquo;Last
+            Updated&rdquo; date above will tell you when that last happened.
           </p>
 
-          <h2>9. Contact Us</h2>
+          <h2>8. Contact us</h2>
+          <p>If you have questions about this Policy, please contact us:</p>
           <p>
-            If you have questions about our use of cookies or this Policy, please contact us:
-          </p>
-          <p>
-            <strong>Email:</strong>{" "}
-            <a href={`mailto:${CONTACT.privacy}`}>{CONTACT.privacy}</a>
+            <strong>Email:</strong> <a href={`mailto:${CONTACT.privacy}`}>{CONTACT.privacy}</a>
             <br />
             <strong>Address:</strong> {CONTACT.address}
+          </p>
+          <p>
+            You also have the right to lodge a complaint with the{" "}
+            <strong>Data Protection Commission of Ghana</strong> if you believe we have mishandled
+            your personal data.
           </p>
         </div>
       </section>
