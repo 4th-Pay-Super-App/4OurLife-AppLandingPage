@@ -12,27 +12,43 @@ function isInviteToken(value: string): boolean {
   return /^[A-Za-z0-9_-]{6,128}$/.test(value);
 }
 
-export const dynamic = 'force-dynamic';
+// This page uses no per-request data. Caching it avoids making link crawlers
+// wait on a server render before they can see its Open Graph tags.
+export const dynamic = 'force-static';
+export const revalidate = 604800;
 
 export function generateMetadata(): Metadata {
   return {
-    title: 'You’re invited to a group | 4 Our Life',
-    description: 'Open 4 Our Life to view your group invitation.',
+    // Keep this deliberately generic: the token alone must not disclose a
+    // group name, its membership, or whether the invite is still live. These
+    // are the same public details the former Office-hosted preview exposed,
+    // without leaking the admin hostname.
+    title: 'Join a group · 4OurLife',
+    description: '4OurLife health platform',
     alternates: {canonical: INVITE_ORIGIN + '/j'},
     openGraph: {
-      title: 'You’re invited to a group on 4 Our Life',
-      description: 'Open 4 Our Life to view the invitation and join the conversation.',
+      title: 'Join a group · 4OurLife',
+      description: '4OurLife health platform',
       url: INVITE_ORIGIN + '/j',
-      siteName: '4 Our Life',
+      siteName: '4OurLife',
       type: 'website',
       images: [
         {
-          url: INVITE_ORIGIN + '/hero-section.png',
-          width: 1466,
-          height: 700,
-          alt: '4 Our Life',
+          // A single static, lightweight asset shared by every invite. This
+          // is much faster for Telegram/WhatsApp/iMessage to fetch than an
+          // invite-specific server render or the full-size landing-page hero.
+          url: INVITE_ORIGIN + '/opengraph-image',
+          width: 1200,
+          height: 630,
+          alt: '4OurLife — Join a group',
         },
       ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: 'Join a group · 4OurLife',
+      description: '4OurLife health platform',
+      images: [INVITE_ORIGIN + '/opengraph-image'],
     },
     robots: {index: false, follow: false, nocache: true},
   };
