@@ -1,12 +1,37 @@
 import Image from 'next/image';
 import type {Metadata} from 'next';
 import {CONSUMER_STORE_URLS} from '@/lib/app-links';
+import {SITE_URL} from '@/lib/seo';
 
 type InvitePageProps = {
   params: Promise<{token: string}>;
 };
 
-const INVITE_ORIGIN = 'https://4ourlife.com';
+/**
+ * Every absolute URL below is built from SITE_URL — the CANONICAL host,
+ * `https://www.4ourlife.com`.
+ *
+ * This file used to hardcode the apex, `https://4ourlife.com`, and that one
+ * character was the whole bug. Vercel serves the apex as a 307 redirect to
+ * www, for every path, so the apex version of this page AND of the Open Graph
+ * image both answered a crawler with a redirect instead of content:
+ *
+ *     GET https://4ourlife.com/j/<token>     → 307 → www
+ *     GET https://4ourlife.com/opengraph-image → 307 → www
+ *
+ * A preview crawler will usually follow the redirect for the PAGE, which is
+ * why the title and description eventually appeared — after a visible delay,
+ * since every fetch cost an extra round trip. Most crawlers will NOT follow a
+ * redirect for `og:image`, which is why the card never had a thumbnail.
+ *
+ * So: resolve against SITE_URL and the crawler fetches content on the first
+ * request, with no redirect on the image.
+ */
+function inviteUrl(path: string): string {
+  return new URL(path, SITE_URL).toString();
+}
+
+const OG_IMAGE_URL = inviteUrl('/opengraph-image');
 
 function isInviteToken(value: string): boolean {
   return /^[A-Za-z0-9_-]{6,128}$/.test(value);
@@ -17,19 +42,31 @@ function isInviteToken(value: string): boolean {
 export const dynamic = 'force-static';
 export const revalidate = 604800;
 
-export function generateMetadata(): Metadata {
+export async function generateMetadata({
+  params,
+}: InvitePageProps): Promise<Metadata> {
+  const {token} = await params;
+  // `og:url` must be a URL that actually resolves. It previously pointed at
+  // `/j`, which is not a route here — there is only `/j/[token]` — so a
+  // crawler that re-fetched it got a 404. Point at this invite's own page.
+  // The token is no secret from the person holding the link; it is already in
+  // the URL they were sent.
+  const canonicalUrl = isInviteToken(token)
+    ? inviteUrl(`/j/${encodeURIComponent(token)}`)
+    : inviteUrl('/');
+
   return {
     // Keep this deliberately generic: the token alone must not disclose a
     // group name, its membership, or whether the invite is still live. These
     // are the same public details the former Office-hosted preview exposed,
     // without leaking the admin hostname.
     title: 'Join a group · 4OurLife',
-    description: '4OurLife health platform',
-    alternates: {canonical: INVITE_ORIGIN + '/j'},
+    description: 'You have been invited to a group on 4 Our Life.',
+    alternates: {canonical: canonicalUrl},
     openGraph: {
       title: 'Join a group · 4OurLife',
-      description: '4OurLife health platform',
-      url: INVITE_ORIGIN + '/j',
+      description: 'You have been invited to a group on 4 Our Life.',
+      url: canonicalUrl,
       siteName: '4OurLife',
       type: 'website',
       images: [
@@ -37,9 +74,13 @@ export function generateMetadata(): Metadata {
           // A single static, lightweight asset shared by every invite. This
           // is much faster for Telegram/WhatsApp/iMessage to fetch than an
           // invite-specific server render or the full-size landing-page hero.
-          url: INVITE_ORIGIN + '/opengraph-image',
+          url: OG_IMAGE_URL,
+          secureUrl: OG_IMAGE_URL,
           width: 1200,
           height: 630,
+          // WhatsApp and some older crawlers only render a thumbnail when the
+          // type is declared, so state it rather than letting them sniff.
+          type: 'image/png',
           alt: '4OurLife — Join a group',
         },
       ],
@@ -47,9 +88,12 @@ export function generateMetadata(): Metadata {
     twitter: {
       card: 'summary_large_image',
       title: 'Join a group · 4OurLife',
-      description: '4OurLife health platform',
-      images: [INVITE_ORIGIN + '/opengraph-image'],
+      description: 'You have been invited to a group on 4 Our Life.',
+      images: [OG_IMAGE_URL],
     },
+    // noindex keeps invite tokens out of search results. Preview crawlers
+    // (Telegram, WhatsApp, iMessage, Slack) do not consult this — they render
+    // the card regardless — so it costs nothing here.
     robots: {index: false, follow: false, nocache: true},
   };
 }
